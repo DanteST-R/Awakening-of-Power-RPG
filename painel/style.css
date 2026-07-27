@@ -12,6 +12,35 @@
     font-style: normal;
 }
 
+/* Orbitron — fallback PT-BR completo */
+@font-face {
+    font-family: 'Orbitron';
+    src: url('assets/fonts/Orbitron-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Orbitron';
+    src: url('assets/fonts/Orbitron-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Orbitron';
+    src: url('assets/fonts/Orbitron-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Orbitron';
+    src: url('assets/fonts/Orbitron-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
 :root {
     --bg-primary: #050505;
     --bg-secondary: #111111;
@@ -25,7 +54,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'AmazingSpiderMan', 'Courier New', Courier, monospace;
+    /* Amazing Spider-Man para o estilo visual; Orbitron como fallback PT-BR */
+    font-family: 'AmazingSpiderMan', 'Orbitron', sans-serif;
 }
 
 body {
@@ -45,7 +75,7 @@ body {
     color: var(--text-main);
     text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
     letter-spacing: 2px;
-    font-family: 'AmazingSpiderManSlant', monospace;
+    font-family: 'AmazingSpiderManSlant', 'Orbitron', sans-serif;
 }
 
 .carmine-text {
@@ -109,7 +139,7 @@ body {
     gap: 1rem;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
-    font-family: 'AmazingSpiderMan', monospace;
+    font-family: 'AmazingSpiderMan', 'Orbitron', sans-serif;
     letter-spacing: 1px;
 }
 
@@ -169,7 +199,7 @@ body {
     border-bottom: 1px solid var(--support-crimson);
     padding-bottom: 0.5rem;
     display: inline-block;
-    font-family: 'AmazingSpiderManSlant', monospace;
+    font-family: 'AmazingSpiderManSlant', 'Orbitron', sans-serif;
     letter-spacing: 3px;
 }
 
