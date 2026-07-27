@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awakening RPG - Terminal Wintech</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- Overlay Mobile -->
+    <div id="mobile-overlay" class="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Sidebar / Menu Lateral -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/AwakeningRPG.png" alt="Awakening RPG Logo" class="sidebar-logo">
+            <button class="close-btn mobile-only" onclick="toggleMenu()">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" onclick="navigate('mapa', this)">
+                <i data-lucide="map"></i> Mapa
+            </button>
+            <button class="nav-btn" onclick="navigate('sistema', this)">
+                <i data-lucide="cpu"></i> Sistema
+            </button>
+            <button class="nav-btn" onclick="navigate('poderes', this)">
+                <i data-lucide="zap"></i> Poderes Usados
+            </button>
+            <button class="nav-btn" onclick="navigate('treinamentos', this)">
+                <i data-lucide="dumbbell"></i> Treinamentos
+            </button>
+            <button class="nav-btn" onclick="navigate('personagens', this)">
+                <i data-lucide="users"></i> Personagens / NPCs
+            </button>
+            <button class="nav-btn" onclick="navigate('historia', this)">
+                <i data-lucide="book-open"></i> História
+            </button>
+            <button class="nav-btn" onclick="navigate('missoes', this)">
+                <i data-lucide="crosshair"></i> Missões Disponíveis
+            </button>
+            <button class="nav-btn" onclick="navigate('organizacoes', this)">
+                <i data-lucide="shield"></i> Organizações
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar Mobile -->
+        <header class="topbar mobile-only">
+            <button class="menu-btn" onclick="toggleMenu()">
+                <i data-lucide="menu"></i>
+            </button>
+            <img src="assets/AwakeningRPG.png" alt="Awakening RPG" class="mobile-logo">
+        </header>
+
+        <!-- Pages Container -->
+        <div id="content-area" class="content-area">
+            <!-- As páginas serão injetadas via JavaScript aqui -->
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

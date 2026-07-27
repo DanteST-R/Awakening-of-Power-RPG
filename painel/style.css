@@ -1,0 +1,213 @@
+:root {
+    --bg-primary: #050505;
+    --bg-secondary: #111111;
+    --neon-red: #FF003C;
+    --support-crimson: #8B0000;
+    --text-main: #FFFFFF;
+    --text-muted: #A0A0A0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace; /* Trazendo um tom mais terminal futurista */
+}
+
+body {
+    background-color: var(--bg-primary);
+    background-image: url('assets/AwakeningRPGPCScreen.jpg'); /* Fundo do PC */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--text-main);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Tipografia e Efeitos */
+.neon-text {
+    color: var(--text-main);
+    text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
+    letter-spacing: 2px;
+}
+
+.carmine-text {
+    color: var(--neon-red);
+    font-size: 0.8em;
+}
+
+.sidebar-logo {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 5px var(--neon-red));
+}
+
+.mobile-logo {
+    height: 30px;
+    filter: drop-shadow(0 0 5px var(--neon-red));
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-secondary);
+    border-right: 2px solid var(--support-crimson);
+    box-shadow: 2px 0 15px rgba(255, 0, 60, 0.2);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 2rem 1.5rem;
+    border-bottom: 1px solid var(--support-crimson);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0;
+    gap: 0.5rem;
+    overflow-y: auto;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-btn:hover {
+    color: var(--text-main);
+    background-color: rgba(139, 0, 0, 0.2); /* Crimson com opacidade */
+    border-left: 3px solid var(--support-crimson);
+}
+
+.nav-btn.active {
+    color: var(--text-main);
+    background-color: rgba(255, 0, 60, 0.1);
+    border-left: 3px solid var(--neon-red);
+    box-shadow: inset 5px 0 10px rgba(255, 0, 60, 0.1);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Area de Conteúdo */
+.main-content {
+    margin-left: 280px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-area {
+    padding: 2rem;
+    flex: 1;
+}
+
+/* Topbar (Mobile) */
+.topbar {
+    display: none;
+    background-color: var(--bg-secondary);
+    border-bottom: 2px solid var(--support-crimson);
+    padding: 1rem;
+    align-items: center;
+    gap: 1rem;
+}
+
+.menu-btn, .close-btn {
+    background: transparent;
+    border: none;
+    color: var(--neon-red);
+    cursor: pointer;
+}
+
+/* Pages Styling */
+.page-container {
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--support-crimson);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.placeholder-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--support-crimson);
+    padding: 2rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+}
+
+.placeholder-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividade Mobile */
+.mobile-only {
+    display: none;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 90;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .topbar, .mobile-only {
+        display: flex;
+    }
+
+    .overlay.active {
+        display: block;
+    }
+
+    body {
+        background-image: url('assets/AwakeningRPGMobileScreen.jpg'); /* Fundo do Mobile */
+        background-position: top center;
+    }
+}
