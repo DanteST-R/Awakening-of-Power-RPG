@@ -54,8 +54,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Amazing Spider-Man para o estilo visual; Orbitron como fallback PT-BR */
-    font-family: 'AmazingSpiderMan', 'Orbitron', sans-serif;
+    font-family: 'Orbitron', sans-serif;
 }
 
 body {
@@ -74,8 +73,10 @@ body {
 .neon-text {
     color: var(--text-main);
     text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
-    letter-spacing: 2px;
-    font-family: 'AmazingSpiderManSlant', 'Orbitron', sans-serif;
+    letter-spacing: 3px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .carmine-text {
@@ -139,8 +140,8 @@ body {
     gap: 1rem;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
-    font-family: 'AmazingSpiderMan', 'Orbitron', sans-serif;
-    letter-spacing: 1px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.5px;
 }
 
 .nav-btn:hover {
@@ -199,8 +200,10 @@ body {
     border-bottom: 1px solid var(--support-crimson);
     padding-bottom: 0.5rem;
     display: inline-block;
-    font-family: 'AmazingSpiderManSlant', 'Orbitron', sans-serif;
-    letter-spacing: 3px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
 }
 
 .placeholder-card {
