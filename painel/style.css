@@ -1,3 +1,17 @@
+@font-face {
+    font-family: 'AmazingSpiderManSlant';
+    src: url('assets/fonts/AmazingSpiderManSlant.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AmazingSpiderMan';
+    src: url('assets/fonts/AmazingSpiderMan.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --bg-primary: #050505;
     --bg-secondary: #111111;
@@ -11,7 +25,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Courier New', Courier, monospace; /* Trazendo um tom mais terminal futurista */
+    font-family: 'AmazingSpiderMan', 'Courier New', Courier, monospace;
 }
 
 body {
@@ -31,6 +45,7 @@ body {
     color: var(--text-main);
     text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
     letter-spacing: 2px;
+    font-family: 'AmazingSpiderManSlant', monospace;
 }
 
 .carmine-text {
@@ -87,13 +102,15 @@ body {
     color: var(--text-muted);
     padding: 1rem 1.5rem;
     text-align: left;
-    font-size: 1rem;
+    font-size: 0.95rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 1rem;
     transition: all 0.3s ease;
     border-left: 3px solid transparent;
+    font-family: 'AmazingSpiderMan', monospace;
+    letter-spacing: 1px;
 }
 
 .nav-btn:hover {
@@ -152,6 +169,8 @@ body {
     border-bottom: 1px solid var(--support-crimson);
     padding-bottom: 0.5rem;
     display: inline-block;
+    font-family: 'AmazingSpiderManSlant', monospace;
+    letter-spacing: 3px;
 }
 
 .placeholder-card {
