@@ -772,6 +772,28 @@ function toggleMenu() {
 //          SISTEMA DE AUTENTICAÇÃO — AWAKENING RPG
 // ══════════════════════════════════════════════════════
 
+// Configuração oficial do Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "awakening-rpg.firebaseapp.com",
+  projectId: "awakening-rpg",
+  storageBucket: "awakening-rpg.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef..."
+};
+
+// Inicialização segura do Firebase
+let db = null;
+try {
+    if (typeof firebase !== 'undefined') {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        console.log("🔥 Firebase inicializado com sucesso!");
+    }
+} catch (e) {
+    console.warn("⚠️ Firebase rodando em modo offline / fallback local:", e);
+}
+
 // Mestres Supremos (acesso automático como Admin Principal ao se registrar)
 const SUPREME_MASTERS = ['DanteSTR', 'ghusAWK'];
 
@@ -782,15 +804,22 @@ const MASTER_DEFAULT_PASSWORD = 'AwakeningMaster2025';
 const KEY_USERS    = 'awrpg_users';
 const KEY_SESSION  = 'awrpg_session';
 
-// Retorna lista de usuários do localStorage
+// Retorna lista de usuários do localStorage (e sincroniza com Firebase se disponível)
 function getUsers() {
     try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
     catch { return []; }
 }
 
-// Salva lista de usuários
+// Salva lista de usuários localmente e envia para a nuvem no Firestore
 function saveUsers(users) {
     localStorage.setItem(KEY_USERS, JSON.stringify(users));
+    if (db) {
+        users.forEach(u => {
+            db.collection('users').doc(u.username.toLowerCase()).set(u, { merge: true }).catch(err => {
+                console.warn("Erro ao sincronizar com Firestore:", err);
+            });
+        });
+    }
 }
 
 // Retorna sessão atual
