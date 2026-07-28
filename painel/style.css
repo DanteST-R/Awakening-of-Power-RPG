@@ -661,7 +661,7 @@ body {
     border: 1px solid rgba(255,0,60,0.3);
     border-radius: 6px;
     box-shadow: 0 0 60px rgba(255,0,60,0.08), inset 0 0 40px rgba(0,0,0,0.5);
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Lados — cada um rola independentemente */
@@ -1000,9 +1000,10 @@ body {
         overflow: visible;
     }
     .auth-side {
-        overflow-y: visible;
-        max-height: none;
-    }
+    overflow-y: auto;
+    max-height: calc(100vh - 150px);
+    /* Enables scrolling on mobile for player/master sides */
+}
     .auth-player {
         border-right: none;
         border-bottom: 1px solid rgba(255,0,60,0.2);

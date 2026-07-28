@@ -942,7 +942,8 @@ function handlePlayerRegister(e) {
     }
 
     // Determina role: Mestres Supremos têm prioridade
-    const role = SUPREME_MASTERS.includes(username) ? 'supreme' : 'player';
+    const isSupreme = SUPREME_MASTERS.some(m => m.toLowerCase() === username.toLowerCase());
+    const role = isSupreme ? 'supreme' : 'player';
 
     const newUser = {
         username,
@@ -971,7 +972,7 @@ function handleMasterLogin(e) {
 
     // Mestres Supremos entram pela lista de usuários registrados
     const users = getUsers();
-    const user  = users.find(u => u.username === username);
+    const user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
     if (user && (user.role === 'supreme' || user.role === 'master')) {
         if (user.password !== btoa(password)) {
@@ -982,7 +983,7 @@ function handleMasterLogin(e) {
 
     // Acesso via senha padrão de mestre (para admins não registrados ainda)
     if (password === MASTER_DEFAULT_PASSWORD) {
-        const isSup = SUPREME_MASTERS.includes(username);
+        const isSup = SUPREME_MASTERS.some(m => m.toLowerCase() === username.toLowerCase());
         return enterApp({ username, role: isSup ? 'supreme' : 'master' });
     }
 
