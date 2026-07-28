@@ -15,23 +15,23 @@ const pages = {
                     <img src="assets/AwakeningRPGMap.png" alt="Mapa de Unicity" id="unicity-map-img">
                     
                     <svg class="map-svg-overlay" viewBox="0 0 1000 750" preserveAspectRatio="none">
-                        <!-- Delly (Vermelho - Topo Esquerdo) -->
-                        <polygon points="50,40 450,40 450,450 50,450" class="map-region" onclick="openBairroModal('delly')" title="Delly (Distrito do Poder)"></polygon>
+                        <!-- Delly (Vermelho - Noroeste) -->
+                        <polygon points="40,110 300,100 300,380 180,380 40,300" class="map-region" onclick="openBairroModal('delly')" title="Delly (Distrito do Poder)"></polygon>
                         
-                        <!-- Amberling (Amarelo - Centro Esquerdo) -->
-                        <polygon points="450,40 600,40 600,450 450,450" class="map-region" onclick="openBairroModal('amberling')" title="Amberling (Centro Intelectual)"></polygon>
+                        <!-- Amberling (Amarelo - Centro-Norte) -->
+                        <polygon points="300,100 520,100 520,380 300,380" class="map-region" onclick="openBairroModal('amberling')" title="Amberling (Centro Intelectual)"></polygon>
                         
-                        <!-- Sammill (Azul - Baixo Esquerdo) -->
-                        <polygon points="50,450 450,450 450,700 50,700" class="map-region" onclick="openBairroModal('sammill')" title="Sammill (Onde Tradição Encontra Modernidade)"></polygon>
+                        <!-- Sammill (Azul - Sudoeste) -->
+                        <polygon points="40,300 180,380 480,380 480,560 200,560 40,420" class="map-region" onclick="openBairroModal('sammill')" title="Sammill (Onde Tradição Encontra Modernidade)"></polygon>
                         
-                        <!-- Dawn Hill (Verde - Topo Direito) -->
-                        <polygon points="600,40 980,40 980,280 600,280" class="map-region" onclick="openBairroModal('dawn-hill')" title="Dawn Hill (O Bairro Verde)"></polygon>
+                        <!-- Dawn Hill (Verde - Nordeste) -->
+                        <polygon points="530,70 960,70 960,200 660,200 530,170" class="map-region" onclick="openBairroModal('dawn-hill')" title="Dawn Hill (O Bairro Verde)"></polygon>
                         
-                        <!-- Central Sunset (Laranja - Centro-Baixo Direito) -->
-                        <polygon points="600,280 980,280 980,550 600,550" class="map-region" onclick="openBairroModal('central-sunset')" title="Central Sunset (Coração Pulsante)"></polygon>
+                        <!-- Central Sunset (Laranja - Sudeste) -->
+                        <polygon points="660,200 960,200 960,420 780,420 660,340" class="map-region" onclick="openBairroModal('central-sunset')" title="Central Sunset (Coração Pulsante)"></polygon>
                         
-                        <!-- Vienner (Roxo - Arquipélago Sul Direito) -->
-                        <polygon points="500,550 980,550 980,720 500,720" class="map-region" onclick="openBairroModal('vienner')" title="Vienner (A Cidade Que Nunca Dorme)"></polygon>
+                        <!-- Vienner (Roxo - Arquipélago Sul) -->
+                        <polygon points="460,420 960,420 960,560 760,560 620,530 460,530" class="map-region" onclick="openBairroModal('vienner')" title="Vienner (A Cidade Que Nunca Dorme)"></polygon>
                     </svg>
                 </div>
             </div>

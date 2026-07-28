@@ -199,7 +199,7 @@ body {
 }
 
 .sidebar-header {
-    padding: 2rem 1.5rem;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--support-crimson);
     display: flex;
     justify-content: space-between;
@@ -209,9 +209,29 @@ body {
 .sidebar-nav {
     display: flex;
     flex-direction: column;
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     gap: 0.5rem;
     overflow-y: auto;
+}
+
+/* Scrollbar personalizada da Sidebar (Fundo Preto com Vermelho Neon) */
+.sidebar-nav::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: #000000;
+    border-left: 1px solid var(--support-crimson);
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: var(--neon-red);
+    border-radius: 3px;
+    box-shadow: 0 0 8px var(--neon-red);
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: #ff3366;
 }
 
 .nav-btn {
