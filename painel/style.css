@@ -598,9 +598,25 @@ body {
     align-items: center;
     justify-content: flex-start;
     background: #050505;
-    overflow-y: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100vh;
     padding: 2rem 1rem 3rem;
     font-family: 'Orbitron', monospace;
+    /* Scrollbar customizada neon vermelha */
+    scrollbar-width: thin;
+    scrollbar-color: #FF003C #000000;
+}
+.auth-screen::-webkit-scrollbar {
+    width: 6px;
+}
+.auth-screen::-webkit-scrollbar-track {
+    background: #000;
+}
+.auth-screen::-webkit-scrollbar-thumb {
+    background: #FF003C;
+    border-radius: 3px;
+    box-shadow: 0 0 6px #FF003C;
 }
 
 /* Grid animado de fundo */
