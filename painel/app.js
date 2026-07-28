@@ -997,6 +997,8 @@ window.onload = () => {
         document.getElementById('app-root').style.display    = 'none';
         lucide.createIcons();
     }
+};
+
 // ══════════════════════════════════════════════════════
 //          MÓDULO DE PERFIL & PERSONAGENS (MEU PERFIL)
 // ══════════════════════════════════════════════════════
