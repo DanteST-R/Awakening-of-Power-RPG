@@ -554,7 +554,7 @@ const bairrosData = {
             'Parque Sammill',
             'Estádio Municipal',
             'Mercado Público',
-             me Porto Antigo',
+            'Porto Antigo',
             'Aquário de Unicity',
             'Estação Central do Metrô'
         ]
