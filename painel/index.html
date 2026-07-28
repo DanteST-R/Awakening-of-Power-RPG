@@ -10,61 +10,201 @@
 </head>
 <body>
 
+    <!-- ══════════════════════════════════════════ -->
+    <!--           TELA DE AUTENTICAÇÃO             -->
+    <!-- ══════════════════════════════════════════ -->
+    <div id="auth-screen" class="auth-screen">
+
+        <!-- Partículas decorativas de fundo -->
+        <div class="auth-bg-grid"></div>
+        <div class="auth-scanline"></div>
+
+        <!-- Logo centralizado no topo -->
+        <div class="auth-logo-wrap">
+            <img src="assets/AwakeningRPG.png" alt="Awakening RPG" class="auth-logo">
+        </div>
+
+        <!-- Painel principal dividido em dois lados -->
+        <div class="auth-panel">
+
+            <!-- ═══ LADO ESQUERDO: JOGADOR ═══ -->
+            <div class="auth-side auth-player">
+                <div class="auth-side-tag">ACESSO DO JOGADOR</div>
+                <h2 class="auth-title">ENTRAR NO CAMPO</h2>
+                <p class="auth-subtitle">Identifique-se para acessar o terminal.</p>
+
+                <!-- TABS: Entrar / Alistar-se -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">ENTRAR</button>
+                    <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">ALISTAR-SE</button>
+                </div>
+
+                <!-- FORMULÁRIO: LOGIN JOGADOR -->
+                <form id="form-login" class="auth-form" onsubmit="handlePlayerLogin(event)">
+                    <div class="auth-field">
+                        <label>NOME DE JOGADOR</label>
+                        <input type="text" id="login-username" placeholder="Seu codinome..." autocomplete="username" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>SENHA</label>
+                        <div class="auth-password-wrap">
+                            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required>
+                            <button type="button" class="auth-eye-btn hidden-mode" onclick="togglePassword('login-password', this)"></button>
+                        </div>
+                    </div>
+                    <div id="login-error" class="auth-error" style="display:none;"></div>
+                    <button type="submit" class="auth-submit-btn">ACESSAR TERMINAL</button>
+                </form>
+
+                <!-- FORMULÁRIO: REGISTRO JOGADOR -->
+                <form id="form-register" class="auth-form" style="display:none;" onsubmit="handlePlayerRegister(event)">
+                    <div class="auth-field">
+                        <label>NOME DE JOGADOR</label>
+                        <input type="text" id="reg-username" placeholder="Escolha seu codinome..." autocomplete="username" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>IDADE</label>
+                        <input type="number" id="reg-age" placeholder="Sua idade..." min="13" max="99" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>DISPONIBILIDADE</label>
+                        <div class="auth-availability">
+                            <button type="button" class="avail-btn" data-period="manha" onclick="selectAvail(this)">MANHÃ</button>
+                            <button type="button" class="avail-btn" data-period="tarde" onclick="selectAvail(this)">TARDE</button>
+                            <button type="button" class="avail-btn" data-period="noite" onclick="selectAvail(this)">NOITE</button>
+                        </div>
+                        <input type="hidden" id="reg-availability" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>SENHA</label>
+                        <div class="auth-password-wrap">
+                            <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password" required>
+                            <button type="button" class="auth-eye-btn hidden-mode" onclick="togglePassword('reg-password', this)"></button>
+                        </div>
+                    </div>
+                    <div class="auth-field">
+                        <label>CONFIRMAR SENHA</label>
+                        <div class="auth-password-wrap">
+                            <input type="password" id="reg-confirm" placeholder="••••••••" autocomplete="new-password" required>
+                            <button type="button" class="auth-eye-btn hidden-mode" onclick="togglePassword('reg-confirm', this)"></button>
+                        </div>
+                    </div>
+                    <div id="register-error" class="auth-error" style="display:none;"></div>
+                    <button type="submit" class="auth-submit-btn">ALISTAR-SE</button>
+                </form>
+            </div>
+
+            <!-- Divisor central -->
+            <div class="auth-divider">
+                <div class="auth-divider-line"></div>
+                <span class="auth-divider-label">OU</span>
+                <div class="auth-divider-line"></div>
+            </div>
+
+            <!-- ═══ LADO DIREITO: MESTRE ═══ -->
+            <div class="auth-side auth-master">
+                <div class="auth-side-tag master-tag">ACESSO RESTRITO</div>
+                <h2 class="auth-title">LOGAR COMO MESTRE</h2>
+                <p class="auth-subtitle">Área exclusiva para administradores.</p>
+
+                <form id="form-master" class="auth-form" onsubmit="handleMasterLogin(event)">
+                    <div class="auth-field">
+                        <label>NOME DO ADMINISTRADOR</label>
+                        <input type="text" id="master-username" placeholder="ID do Mestre..." autocomplete="username" required>
+                    </div>
+                    <div class="auth-field">
+                        <label>SENHA MESTRE</label>
+                        <div class="auth-password-wrap">
+                            <input type="password" id="master-password" placeholder="••••••••" autocomplete="current-password" required>
+                            <button type="button" class="auth-eye-btn hidden-mode" onclick="togglePassword('master-password', this)"></button>
+                        </div>
+                    </div>
+                    <div id="master-error" class="auth-error" style="display:none;"></div>
+                    <button type="submit" class="auth-submit-btn master-btn">ACESSO MESTRE</button>
+                </form>
+
+                <!-- Selos dos Mestres Supremos -->
+                <div class="auth-supremes">
+                    <div class="supreme-label">MESTRES SUPREMOS</div>
+                    <div class="supreme-tags">
+                        <span class="supreme-tag">⚔️ DanteSTR</span>
+                        <span class="supreme-tag">⚔️ ghusAWK</span>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /auth-panel -->
+    </div>
+    <!-- ══════════════════════════════════════════ -->
+
+
     <!-- Overlay Mobile -->
     <div id="mobile-overlay" class="overlay" onclick="toggleMenu()"></div>
 
-    <!-- Sidebar / Menu Lateral -->
-    <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <img src="assets/AwakeningRPG.png" alt="Awakening RPG Logo" class="sidebar-logo">
-            <button class="close-btn mobile-only" onclick="toggleMenu()">
-                <i data-lucide="x"></i>
-            </button>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <button class="nav-btn active" onclick="navigate('mapa', this)">
-                <i data-lucide="map"></i> Mapa
-            </button>
-            <button class="nav-btn" onclick="navigate('sistema', this)">
-                <i data-lucide="cpu"></i> Sistema
-            </button>
-            <button class="nav-btn" onclick="navigate('poderes', this)">
-                <i data-lucide="zap"></i> Poderes Usados
-            </button>
-            <button class="nav-btn" onclick="navigate('treinamentos', this)">
-                <i data-lucide="dumbbell"></i> Treinamentos
-            </button>
-            <button class="nav-btn" onclick="navigate('personagens', this)">
-                <i data-lucide="users"></i> Personagens / NPCs
-            </button>
-            <button class="nav-btn" onclick="navigate('historia', this)">
-                <i data-lucide="book-open"></i> História
-            </button>
-            <button class="nav-btn" onclick="navigate('missoes', this)">
-                <i data-lucide="crosshair"></i> Missões Disponíveis
-            </button>
-            <button class="nav-btn" onclick="navigate('organizacoes', this)">
-                <i data-lucide="shield"></i> Organizações
-            </button>
-        </nav>
-    </aside>
+    <!-- APP PRINCIPAL (oculto até login) -->
+    <div id="app-root" style="display:none;">
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Topbar Mobile -->
-        <header class="topbar mobile-only">
-            <button class="menu-btn" onclick="toggleMenu()">
-                <i data-lucide="menu"></i>
-            </button>
-            <img src="assets/AwakeningRPG.png" alt="Awakening RPG" class="mobile-logo">
-        </header>
+        <!-- Sidebar / Menu Lateral -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/AwakeningRPG.png" alt="Awakening RPG Logo" class="sidebar-logo">
+                <button class="close-btn mobile-only" onclick="toggleMenu()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" onclick="navigate('mapa', this)">
+                    <i data-lucide="map"></i> Mapa
+                </button>
+                <button class="nav-btn" onclick="navigate('sistema', this)">
+                    <i data-lucide="cpu"></i> Sistema
+                </button>
+                <button class="nav-btn" onclick="navigate('poderes', this)">
+                    <i data-lucide="zap"></i> Poderes Usados
+                </button>
+                <button class="nav-btn" onclick="navigate('treinamentos', this)">
+                    <i data-lucide="dumbbell"></i> Treinamentos
+                </button>
+                <button class="nav-btn" onclick="navigate('personagens', this)">
+                    <i data-lucide="users"></i> Personagens / NPCs
+                </button>
+                <button class="nav-btn" onclick="navigate('historia', this)">
+                    <i data-lucide="book-open"></i> História
+                </button>
+                <button class="nav-btn" onclick="navigate('missoes', this)">
+                    <i data-lucide="crosshair"></i> Missões Disponíveis
+                </button>
+                <button class="nav-btn" onclick="navigate('organizacoes', this)">
+                    <i data-lucide="shield"></i> Organizações
+                </button>
+            </nav>
 
-        <!-- Pages Container -->
-        <div id="content-area" class="content-area">
-            <!-- As páginas serão injetadas via JavaScript aqui -->
-        </div>
-    </main>
+            <!-- Info do usuário logado -->
+            <div class="sidebar-user" id="sidebar-user-info">
+                <div class="sidebar-user-name" id="sidebar-user-label">—</div>
+                <div class="sidebar-user-role" id="sidebar-user-role">—</div>
+                <button class="auth-logout-btn" onclick="handleLogout()">SAIR</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar Mobile -->
+            <header class="topbar mobile-only">
+                <button class="menu-btn" onclick="toggleMenu()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <img src="assets/AwakeningRPG.png" alt="Awakening RPG" class="mobile-logo">
+            </header>
+
+            <!-- Pages Container -->
+            <div id="content-area" class="content-area">
+                <!-- As páginas serão injetadas via JavaScript aqui -->
+            </div>
+        </main>
+
+    </div><!-- /app-root -->
 
     <script src="app.js"></script>
 </body>

@@ -75,6 +75,13 @@ body {
     overflow-x: hidden;
 }
 
+/* App root — ocupa toda a viewport quando visível */
+#app-root {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
 /* Tipografia e Efeitos */
 .neon-text {
     color: var(--text-main);
@@ -577,3 +584,406 @@ body {
         background-position: top center;
     }
 }
+
+/* ════════════════════════════════════════════════════════
+   TELA DE AUTENTICAÇÃO — AWAKENING RPG
+   ════════════════════════════════════════════════════════ */
+
+.auth-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: #050505;
+    overflow-y: auto;
+    padding: 2rem 1rem 3rem;
+    font-family: 'Orbitron', monospace;
+}
+
+/* Grid animado de fundo */
+.auth-bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,0,60,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,60,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Linha de scan animada */
+.auth-scanline {
+    position: fixed;
+    top: -10%;
+    left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(255,0,60,0.35), transparent);
+    animation: scanline 5s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+@keyframes scanline {
+    0%   { top: -2%; }
+    100% { top: 102%; }
+}
+
+/* Logo */
+.auth-logo-wrap {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.auth-logo {
+    width: 180px;
+    filter: drop-shadow(0 0 18px rgba(255,0,60,0.55));
+}
+
+/* Painel principal */
+.auth-panel {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    width: 100%;
+    max-width: 900px;
+    background: rgba(10,10,10,0.95);
+    border: 1px solid rgba(255,0,60,0.3);
+    border-radius: 6px;
+    box-shadow: 0 0 60px rgba(255,0,60,0.08), inset 0 0 40px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+/* Lados */
+.auth-side {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.auth-player {
+    border-right: 1px solid rgba(255,0,60,0.2);
+}
+.auth-master {
+    background: rgba(255,0,60,0.025);
+}
+
+/* Tag de acesso */
+.auth-side-tag {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--neon-red);
+    border: 1px solid rgba(255,0,60,0.4);
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 0.4rem;
+    width: fit-content;
+}
+.master-tag {
+    color: #ff6b35;
+    border-color: rgba(255,107,53,0.5);
+}
+
+/* Títulos */
+.auth-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    margin: 0;
+    text-shadow: 0 0 12px rgba(255,0,60,0.4);
+}
+.auth-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0 0 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+/* Tabs Entrar / Alistar-se */
+.auth-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(255,0,60,0.2);
+}
+.auth-tab {
+    flex: 1;
+    padding: 0.55rem 0;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.auth-tab:hover { color: #fff; }
+.auth-tab.active {
+    color: var(--neon-red);
+    border-bottom-color: var(--neon-red);
+}
+
+/* Formulários */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+/* Campo */
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.auth-field label {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--neon-red);
+}
+.auth-field input[type="text"],
+.auth-field input[type="password"],
+.auth-field input[type="number"] {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,0,60,0.25);
+    border-radius: 3px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+.auth-field input:focus {
+    border-color: var(--neon-red);
+    box-shadow: 0 0 8px rgba(255,0,60,0.2);
+}
+.auth-field input::placeholder { color: rgba(255,255,255,0.2); }
+
+/* Wrapper de senha + botão olho */
+.auth-password-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.auth-password-wrap input {
+    padding-right: 2.8rem !important;
+}
+
+/* Botão olho — PRETO quando oculto, BRANCO quando revelando */
+.auth-eye-btn {
+    position: absolute;
+    right: 0.6rem;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+.auth-eye-btn.hidden-mode {
+    background: #000;
+}
+.auth-eye-btn.reveal-mode {
+    background: #fff;
+}
+
+/* Disponibilidade */
+.auth-availability {
+    display: flex;
+    gap: 0.5rem;
+}
+.avail-btn {
+    flex: 1;
+    padding: 0.5rem 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,0,60,0.2);
+    border-radius: 3px;
+    color: var(--text-muted);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.avail-btn:hover {
+    border-color: var(--neon-red);
+    color: #fff;
+}
+.avail-btn.active {
+    background: var(--neon-red);
+    border-color: var(--neon-red);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255,0,60,0.4);
+}
+
+/* Botão principal */
+.auth-submit-btn {
+    padding: 0.75rem;
+    background: var(--neon-red);
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 0.4rem;
+    box-shadow: 0 0 12px rgba(255,0,60,0.3);
+}
+.auth-submit-btn:hover {
+    background: #cc0030;
+    box-shadow: 0 0 22px rgba(255,0,60,0.55);
+    transform: translateY(-1px);
+}
+.master-btn {
+    background: transparent;
+    border: 1px solid #ff6b35;
+    color: #ff6b35;
+    box-shadow: 0 0 10px rgba(255,107,53,0.2);
+}
+.master-btn:hover {
+    background: #ff6b35;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255,107,53,0.45);
+}
+
+/* Mensagem de erro */
+.auth-error {
+    font-size: 0.72rem;
+    color: #ff4466;
+    border-left: 2px solid #ff4466;
+    padding-left: 8px;
+    animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Divisor central */
+.auth-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0.6rem;
+    gap: 0.5rem;
+}
+.auth-divider-line {
+    flex: 1;
+    width: 1px;
+    background: rgba(255,0,60,0.15);
+}
+.auth-divider-label {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 2px;
+}
+
+/* Selos dos Mestres Supremos */
+.auth-supremes {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,107,53,0.15);
+}
+.supreme-label {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: rgba(255,107,53,0.6);
+    margin-bottom: 0.6rem;
+}
+.supreme-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.supreme-tag {
+    font-size: 0.72rem;
+    color: #ff6b35;
+    border: 1px solid rgba(255,107,53,0.25);
+    border-radius: 2px;
+    padding: 4px 10px;
+    width: fit-content;
+    background: rgba(255,107,53,0.05);
+}
+
+/* ── Info do usuário no sidebar ─── */
+.sidebar-user {
+    margin-top: auto;
+    padding: 1rem;
+    border-top: 1px solid rgba(255,0,60,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.sidebar-user-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: 1px;
+}
+.sidebar-user-role {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+.auth-logout-btn {
+    margin-top: 0.6rem;
+    padding: 0.4rem 0;
+    background: transparent;
+    border: 1px solid rgba(255,0,60,0.3);
+    border-radius: 3px;
+    color: var(--neon-red);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.auth-logout-btn:hover {
+    background: rgba(255,0,60,0.1);
+    border-color: var(--neon-red);
+}
+
+/* ── Responsivo para mobile ─── */
+@media (max-width: 680px) {
+    .auth-panel {
+        flex-direction: column;
+    }
+    .auth-player {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,0,60,0.2);
+    }
+    .auth-divider {
+        flex-direction: row;
+        padding: 0.6rem 1rem;
+    }
+    .auth-divider-line {
+        flex: 1;
+        width: auto;
+        height: 1px;
+    }
+    .auth-logo {
+        width: 140px;
+    }
+    .auth-title {
+        font-size: 1rem;
+    }
+}
+

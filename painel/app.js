@@ -753,7 +753,237 @@ function toggleMenu() {
     overlay.classList.toggle('active');
 }
 
-// Inicia na aba Mapa
-window.onload = () => {
+// ══════════════════════════════════════════════════════
+//          SISTEMA DE AUTENTICAÇÃO — AWAKENING RPG
+// ══════════════════════════════════════════════════════
+
+// Mestres Supremos (acesso automático como Admin Principal ao se registrar)
+const SUPREME_MASTERS = ['DanteSTR', 'ghusAWK'];
+
+// Senha mestre padrão (pode ser alterada)
+const MASTER_DEFAULT_PASSWORD = 'AwakeningMaster2025';
+
+// Chaves no localStorage
+const KEY_USERS    = 'awrpg_users';
+const KEY_SESSION  = 'awrpg_session';
+
+// Retorna lista de usuários do localStorage
+function getUsers() {
+    try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
+    catch { return []; }
+}
+
+// Salva lista de usuários
+function saveUsers(users) {
+    localStorage.setItem(KEY_USERS, JSON.stringify(users));
+}
+
+// Retorna sessão atual
+function getSession() {
+    try { return JSON.parse(localStorage.getItem(KEY_SESSION)); }
+    catch { return null; }
+}
+
+// Salva sessão
+function saveSession(data) {
+    localStorage.setItem(KEY_SESSION, JSON.stringify(data));
+}
+
+// Encerra sessão
+function clearSession() {
+    localStorage.removeItem(KEY_SESSION);
+}
+
+// ── Alternar aba Login / Alistar-se ─────────────────────
+function switchAuthTab(tab) {
+    const formLogin    = document.getElementById('form-login');
+    const formRegister = document.getElementById('form-register');
+    const tabLogin     = document.getElementById('tab-login');
+    const tabRegister  = document.getElementById('tab-register');
+
+    if (tab === 'login') {
+        formLogin.style.display    = 'flex';
+        formRegister.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+    } else {
+        formLogin.style.display    = 'none';
+        formRegister.style.display = 'flex';
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+    }
+    // Limpa erros
+    ['login-error','register-error'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.style.display = 'none'; el.textContent = ''; }
+    });
+}
+
+// ── Selecionar disponibilidade ─────────────────────────
+function selectAvail(btn) {
+    document.querySelectorAll('.avail-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('reg-availability').value = btn.dataset.period;
+}
+
+// ── Toggle mostrar/ocultar senha ───────────────────────
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.classList.toggle('hidden-mode', !isHidden);
+    btn.classList.toggle('reveal-mode', isHidden);
+}
+
+// ── Mostrar erro no formulário ─────────────────────────
+function showAuthError(elementId, msg) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+}
+
+// ── Entrar no app após login ────────────────────────────
+function enterApp(session) {
+    saveSession(session);
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app-root').style.display    = 'flex';
+
+    // Atualiza info do usuário no sidebar
+    const labelEl = document.getElementById('sidebar-user-label');
+    const roleEl  = document.getElementById('sidebar-user-role');
+    if (labelEl) labelEl.textContent = session.username;
+    if (roleEl) {
+        if (session.role === 'supreme') roleEl.textContent = '⚔️ MESTRE SUPREMO';
+        else if (session.role === 'master') roleEl.textContent = '🛡️ MESTRE';
+        else roleEl.textContent = '👤 JOGADOR';
+    }
+
+    lucide.createIcons();
     renderPage('mapa');
+}
+
+// ── Logout ─────────────────────────────────────────────
+function handleLogout() {
+    clearSession();
+    document.getElementById('app-root').style.display    = 'none';
+    document.getElementById('auth-screen').style.display = 'flex';
+    // Limpa campos de senha por segurança
+    ['login-password','reg-password','reg-confirm','master-password'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+}
+
+// ── LOGIN DE JOGADOR ───────────────────────────────────
+function handlePlayerLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errorId  = 'login-error';
+
+    if (!username || !password) {
+        return showAuthError(errorId, 'Preencha todos os campos.');
+    }
+
+    const users = getUsers();
+    const user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+    if (!user) {
+        return showAuthError(errorId, 'Jogador não encontrado. Aliste-se primeiro.');
+    }
+    if (user.password !== btoa(password)) {
+        return showAuthError(errorId, 'Senha incorreta.');
+    }
+
+    enterApp({ username: user.username, role: user.role, age: user.age, availability: user.availability });
+}
+
+// ── REGISTRO DE JOGADOR ────────────────────────────────
+function handlePlayerRegister(e) {
+    e.preventDefault();
+    const username     = document.getElementById('reg-username').value.trim();
+    const age          = document.getElementById('reg-age').value;
+    const availability = document.getElementById('reg-availability').value;
+    const password     = document.getElementById('reg-password').value;
+    const confirm      = document.getElementById('reg-confirm').value;
+    const errorId      = 'register-error';
+
+    if (!username || !age || !availability || !password || !confirm) {
+        return showAuthError(errorId, 'Preencha todos os campos e selecione sua disponibilidade.');
+    }
+    if (password !== confirm) {
+        return showAuthError(errorId, 'As senhas não coincidem.');
+    }
+    if (password.length < 6) {
+        return showAuthError(errorId, 'A senha deve ter pelo menos 6 caracteres.');
+    }
+
+    const users = getUsers();
+    const exists = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+    if (exists) {
+        return showAuthError(errorId, 'Esse nome de jogador já está em uso.');
+    }
+
+    // Determina role: Mestres Supremos têm prioridade
+    const role = SUPREME_MASTERS.includes(username) ? 'supreme' : 'player';
+
+    const newUser = {
+        username,
+        age: parseInt(age),
+        availability,
+        password: btoa(password), // armazenamento simples (base64)
+        role
+    };
+
+    users.push(newUser);
+    saveUsers(users);
+
+    enterApp({ username: newUser.username, role: newUser.role, age: newUser.age, availability: newUser.availability });
+}
+
+// ── LOGIN DE MESTRE ────────────────────────────────────
+function handleMasterLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('master-username').value.trim();
+    const password = document.getElementById('master-password').value;
+    const errorId  = 'master-error';
+
+    if (!username || !password) {
+        return showAuthError(errorId, 'Preencha todos os campos.');
+    }
+
+    // Mestres Supremos entram pela lista de usuários registrados
+    const users = getUsers();
+    const user  = users.find(u => u.username === username);
+
+    if (user && (user.role === 'supreme' || user.role === 'master')) {
+        if (user.password !== btoa(password)) {
+            return showAuthError(errorId, 'Senha incorreta.');
+        }
+        return enterApp({ username: user.username, role: user.role });
+    }
+
+    // Acesso via senha padrão de mestre (para admins não registrados ainda)
+    if (password === MASTER_DEFAULT_PASSWORD) {
+        const isSup = SUPREME_MASTERS.includes(username);
+        return enterApp({ username, role: isSup ? 'supreme' : 'master' });
+    }
+
+    return showAuthError(errorId, 'Credenciais inválidas ou acesso não autorizado.');
+}
+
+// ── Inicialização — verifica sessão existente ──────────
+window.onload = () => {
+    const session = getSession();
+    if (session && session.username) {
+        enterApp(session);
+    } else {
+        // Garante que a tela de auth está visível
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('app-root').style.display    = 'none';
+        lucide.createIcons();
+    }
 };
+
