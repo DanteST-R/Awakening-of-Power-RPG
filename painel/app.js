@@ -3,6 +3,14 @@ lucide.createIcons();
 
 // Dados das páginas simulando um roteamento
 const pages = {
+    perfil: {
+        title: "Meu Perfil",
+        content: `
+            <div id="perfil-container">
+                <!-- O conteúdo do perfil será injetado dinamicamente via JS (renderPerfil()) -->
+            </div>
+        `
+    },
     mapa: {
         title: "Mapa de Unicity",
         content: `
@@ -406,6 +414,10 @@ function renderPage(pageId) {
             </div>
         </div>
     `;
+
+    if (pageId === 'perfil') {
+        renderPerfil();
+    }
 
     // Re-renderiza os ícones do Lucide que foram inseridos dinamicamente
     lucide.createIcons();
@@ -985,5 +997,624 @@ window.onload = () => {
         document.getElementById('app-root').style.display    = 'none';
         lucide.createIcons();
     }
-};
+// ══════════════════════════════════════════════════════
+//          MÓDULO DE PERFIL & PERSONAGENS (MEU PERFIL)
+// ══════════════════════════════════════════════════════
+
+const KEY_CHARACTERS = 'awrpg_characters';
+const KEY_APPROVALS  = 'awrpg_approvals';
+
+// Retorna personagens do localStorage
+function getCharacters() {
+    try { return JSON.parse(localStorage.getItem(KEY_CHARACTERS)) || {}; }
+    catch { return {}; }
+}
+
+// Salva personagens no localStorage
+function saveCharacters(chars) {
+    localStorage.setItem(KEY_CHARACTERS, JSON.stringify(chars));
+}
+
+// Retorna fila de aprovações pendentes
+function getApprovals() {
+    try { return JSON.parse(localStorage.getItem(KEY_APPROVALS)) || []; }
+    catch { return []; }
+}
+
+// Salva fila de aprovações
+function saveApprovals(apps) {
+    localStorage.setItem(KEY_APPROVALS, JSON.stringify(apps));
+}
+
+// Estado local da aba de perfil
+let activeCharSlot = 1;
+
+// Renderização principal do Perfil
+function renderPerfil() {
+    const session = getSession();
+    const container = document.getElementById('perfil-container');
+    if (!container || !session) return;
+
+    const isSupreme = session.role === 'supreme' || session.role === 'master' || SUPREME_MASTERS.includes(session.username);
+    const allChars = getCharacters();
+    const userChars = allChars[session.username] || { char1: null, char2: null, avatar: null };
+
+    container.innerHTML = `
+        <div class="perfil-header-box">
+            <div class="perfil-avatar-wrap">
+                <img id="perfil-avatar-img" src="${userChars.avatar || 'https://via.placeholder.com/150/111111/FF003C?text=PERFIL'}" alt="Avatar">
+                <label class="perfil-avatar-upload-btn" title="Alterar Foto de Perfil">
+                    📷 <input type="file" accept="image/*" onchange="uploadAvatar(event)" style="display:none;">
+                </label>
+            </div>
+            <div class="perfil-info-wrap">
+                <h2 style="margin: 0; color: #fff; display: flex; align-items: center; gap: 10px;">
+                    ${session.username}
+                    ${isSupreme ? '<span class="supreme-badge">⚔️ MESTRE SUPREMO</span>' : '<span class="player-badge">👤 JOGADOR</span>'}
+                </h2>
+                <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 5px;">
+                    Disponibilidade: <strong>${session.availability ? session.availability.toUpperCase() : 'NÃO INFORMADA'}</strong> | Idade: <strong>${session.age || 'N/A'} anos</strong>
+                </p>
+            </div>
+        </div>
+
+        ${isSupreme ? `
+            <div class="perfil-master-tabs" style="margin-top: 1.5rem;">
+                <button class="perfil-subtab ${activePerfilSection === 'fichas' ? 'active' : ''}" onclick="switchPerfilSection('fichas')">👤 MEUS PERSONAGENS</button>
+                <button class="perfil-subtab ${activePerfilSection === 'aprovacoes' ? 'active' : ''}" onclick="switchPerfilSection('aprovacoes')">⚡ CENTRAL DE APROVAÇÃO DOS MESTRES</button>
+            </div>
+        ` : ''}
+
+        <div id="perfil-section-content" style="margin-top: 1.5rem;">
+        </div>
+    `;
+
+    renderPerfilSection();
+}
+
+let activePerfilSection = 'fichas';
+
+function switchPerfilSection(sec) {
+    activePerfilSection = sec;
+    renderPerfil();
+}
+
+function uploadAvatar(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        const session = getSession();
+        const allChars = getCharacters();
+        if (!allChars[session.username]) allChars[session.username] = { char1: null, char2: null };
+        allChars[session.username].avatar = evt.target.result;
+        saveCharacters(allChars);
+        renderPerfil();
+    };
+    reader.readAsDataURL(file);
+}
+
+function renderPerfilSection() {
+    const container = document.getElementById('perfil-section-content');
+    if (!container) return;
+
+    if (activePerfilSection === 'aprovacoes') {
+        renderApprovalsSection(container);
+    } else {
+        renderCharactersSection(container);
+    }
+}
+
+// Renderiza a seção de Fichas dos Personagens (Slot 1 e Slot 2)
+function renderCharactersSection(container) {
+    const session = getSession();
+    const allChars = getCharacters();
+    const userChars = allChars[session.username] || { char1: null, char2: null };
+
+    const currentChar = userChars[`char${activeCharSlot}`] || getDefaultCharData();
+
+    container.innerHTML = `
+        <!-- SUB-ABAS DOS PERSONAGENS -->
+        <div class="char-slots-bar">
+            <button class="char-slot-btn ${activeCharSlot === 1 ? 'active' : ''}" onclick="switchCharSlot(1)">
+                SLOT 1: ${userChars.char1 ? userChars.char1.nome : 'NOVO PERSONAGEM'}
+            </button>
+            <button class="char-slot-btn ${activeCharSlot === 2 ? 'active' : ''}" onclick="switchCharSlot(2)">
+                SLOT 2: ${userChars.char2 ? userChars.char2.nome : 'NOVO PERSONAGEM'}
+            </button>
+        </div>
+
+        <div class="ficha-card-scroll">
+            <h3 class="neon-text" style="font-size: 1.2rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <span>FICHA DO PERSONAGEM — (SLOT ${activeCharSlot})</span>
+                <span class="status-badge status-${currentChar.status || 'rascunho'}">${(currentChar.status || 'RASCUNHO').toUpperCase()}</span>
+            </h3>
+
+            <form id="ficha-form" onsubmit="saveFicha(event)">
+                <!-- DADOS BÁSICOS -->
+                <div class="ficha-grid-2">
+                    <div class="ficha-field">
+                        <label>NOME DO PERSONAGEM *</label>
+                        <input type="text" id="fc-nome" value="${currentChar.nome || ''}" required placeholder="Ex: Lucas Vance">
+                    </div>
+                    <div class="ficha-field">
+                        <label>CODINOME (OPCIONAL)</label>
+                        <input type="text" id="fc-codinome" value="${currentChar.codinome || ''}" placeholder="Ex: Shadowblade">
+                    </div>
+                    <div class="ficha-field">
+                        <label>IDADE DO PERSONAGEM *</label>
+                        <input type="number" id="fc-idade" value="${currentChar.idade || ''}" required placeholder="Ex: 22">
+                    </div>
+                    <div class="ficha-field">
+                        <label>GÊNERO *</label>
+                        <select id="fc-genero" required>
+                            <option value="Masculino" ${currentChar.genero === 'Masculino' ? 'selected' : ''}>Masculino</option>
+                            <option value="Feminino" ${currentChar.genero === 'Feminino' ? 'selected' : ''}>Feminino</option>
+                            <option value="Hermafrodita" ${currentChar.genero === 'Hermafrodita' ? 'selected' : ''}>Hermafrodita</option>
+                        </select>
+                    </div>
+                    <div class="ficha-field">
+                        <label>ALTURA (100 cm a 210 cm) *</label>
+                        <input type="number" id="fc-altura" min="100" max="210" value="${currentChar.altura || 175}" onchange="validateHeight(this)" required>
+                    </div>
+                    <div class="ficha-field">
+                        <label>PESO (Máximo 200 Kg) *</label>
+                        <input type="number" id="fc-peso" min="1" max="200" value="${currentChar.peso || 70}" onchange="validateWeight(this)" required>
+                    </div>
+                    <div class="ficha-field">
+                        <label>CLASSE *</label>
+                        <select id="fc-classe" required onchange="updateRankByClass(this.value)">
+                            <option value="Herói" ${currentChar.classe === 'Herói' ? 'selected' : ''}>Herói</option>
+                            <option value="Anti-Herói" ${currentChar.classe === 'Anti-Herói' ? 'selected' : ''}>Anti-Herói</option>
+                            <option value="Vilão" ${currentChar.classe === 'Vilão' ? 'selected' : ''}>Vilão</option>
+                        </select>
+                    </div>
+                    <div class="ficha-field">
+                        <label>RANQUE (Baseado na Classe)</label>
+                        <input type="text" id="fc-ranque" value="${currentChar.ranque || 'Iniciante'}" readonly style="background: rgba(255,255,255,0.02);">
+                    </div>
+                </div>
+
+                <!-- EXP E GP -->
+                <div class="ficha-box-highlight" style="margin-top: 1rem;">
+                    <div class="ficha-grid-2">
+                        <div class="ficha-field">
+                            <label>EXP (EXPERIÊNCIA)</label>
+                            <div class="resource-control">
+                                <input type="number" id="fc-exp" value="${currentChar.exp || 0}" ${isSupreme() ? '' : 'readonly'}>
+                                ${isSupreme() ? `
+                                    <button type="button" class="res-btn" onclick="modResource('fc-exp', 50)">+50</button>
+                                    <button type="button" class="res-btn" onclick="modResource('fc-exp', -50)">-50</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <div class="ficha-field">
+                            <label>GP (GEAR POINTS ⚙️)</label>
+                            <div class="resource-control">
+                                <input type="number" id="fc-gp" value="${currentChar.gp || 0}" readonly>
+                                ${isSupreme() ? `
+                                    <button type="button" class="res-btn" onclick="modResource('fc-gp', 100)">+100</button>
+                                ` : ''}
+                                <button type="button" class="res-btn remove-btn" onclick="modResource('fc-gp', -50)">Gastar -50</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- META-PODER / ESPECIALIDADE -->
+                <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">META-PODER OU ESPECIALIDADE</h4>
+                <div class="ficha-grid-2">
+                    <div class="ficha-field">
+                        <label>CATEGORIA</label>
+                        <select id="fc-categoria-poder" onchange="togglePoderTipo(this.value)">
+                            <option value="Meta-Poder" ${currentChar.categoriaPoder !== 'Especialidade' ? 'selected' : ''}>Meta-Poder</option>
+                            <option value="Especialidade" ${currentChar.categoriaPoder === 'Especialidade' ? 'selected' : ''}>Especialidade</option>
+                        </select>
+                    </div>
+                    <div class="ficha-field">
+                        <label>NOME DO META-PODER / ESPECIALIDADE</label>
+                        <input type="text" id="fc-nome-poder" value="${currentChar.nomePoder || ''}" placeholder="Ex: Pirocinese Nanotécnica">
+                    </div>
+                    <div class="ficha-field" id="wrap-tipo-poder" style="${currentChar.categoriaPoder === 'Especialidade' ? 'display:none;' : ''}">
+                        <label>TIPO DE META-PODER</label>
+                        <select id="fc-tipo-poder">
+                            <option value="Emissão" ${currentChar.tipoPoder === 'Emissão' ? 'selected' : ''}>Emissão</option>
+                            <option value="Mutação" ${currentChar.tipoPoder === 'Mutação' ? 'selected' : ''}>Mutação</option>
+                            <option value="Transformação" ${currentChar.tipoPoder === 'Transformação' ? 'selected' : ''}>Transformação</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="ficha-field" style="margin-top: 0.8rem;">
+                    <label>DESCRIÇÃO DO PODER / ESPECIALIDADE</label>
+                    <textarea id="fc-desc-poder" rows="3" placeholder="Descreva o funcionamento do seu poder ou especialidade...">${currentChar.descPoder || ''}</textarea>
+                </div>
+
+                <!-- HABILIDADES / MAESTRIAS -->
+                <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;" id="title-hab-maestria">
+                    ${currentChar.categoriaPoder === 'Especialidade' ? 'MAESTRIAS' : 'HABILIDADES'}
+                </h4>
+                <div id="hab-container">
+                    ${renderHabilidadesInputs(currentChar.habilidades || [{}])}
+                </div>
+                <button type="button" class="view-levels-btn" onclick="addHabilidadeInput()" style="margin-top: 0.5rem;">+ Adicionar Nova Habilidade/Maestria</button>
+
+                <!-- HISTÓRIA DO PERSONAGEM -->
+                <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">HISTÓRIA DO PERSONAGEM</h4>
+                <div class="ficha-field">
+                    <textarea id="fc-historia" rows="5" placeholder="Conte a trajetória, origem e motivações do seu personagem em Unicity...">${currentChar.historia || ''}</textarea>
+                </div>
+
+                <!-- ATRIBUTOS -->
+                <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">ATRIBUTOS DOS PERSONAGENS</h4>
+                <div class="ficha-grid-2">
+                    <div class="ficha-field">
+                        <label>FORÇA (Nv. 1 ao 6)</label>
+                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                    </div>
+                    <div class="ficha-field">
+                        <label>RESISTÊNCIA (Nv. 1 ao 6)</label>
+                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                    </div>
+                    <div class="ficha-field">
+                        <label>VELOCIDADE (Nv. 1 ao 6)</label>
+                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                    </div>
+                    <div class="ficha-field">
+                        <label>AGILIDADE (Nv. 1 ao 6)</label>
+                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                    </div>
+                    <div class="ficha-field" style="grid-column: span 2;">
+                        <label>PODER / ESPECIALIDADE (Nv. 1 ao 6)</label>
+                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                    </div>
+                </div>
+
+                <!-- TRAJES E EQUIPAMENTOS -->
+                <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">EQUIPAMENTOS E TRAJES (SLOTS LIBERADOS POR NÍVEL DE PODER)</h4>
+                
+                <div style="margin-bottom: 1rem;">
+                    <strong style="color: var(--neon-red); font-size: 0.9em;">TRAJES:</strong>
+                    <div id="trajes-container" style="margin-top: 0.5rem;">
+                        ${renderTrajesInputs(currentChar.trajes || [{}])}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <strong style="color: var(--neon-red); font-size: 0.9em;">EQUIPAMENTOS:</strong>
+                    <div id="equips-container" style="margin-top: 0.5rem;">
+                        ${renderEquipsInputs(currentChar.equips || [{}])}
+                    </div>
+                </div>
+
+                <!-- BOTOES DE AÇÃO DA FICHA -->
+                <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                    <button type="submit" class="auth-submit-btn" style="flex:1;">💾 SALVAR FICHA DO PERSONAGEM</button>
+                    ${!isSupreme() ? `
+                        <button type="button" class="auth-submit-btn master-btn" onclick="submitForApproval()" style="flex:1;">⚡ ENVIAR FICHA PARA APROVAÇÃO DO MESTRE</button>
+                    ` : ''}
+                </div>
+            </form>
+        </div>
+    `;
+}
+
+// Renderiza Painel de Aprovações do Mestre Supremo
+function renderApprovalsSection(container) {
+    const approvals = getApprovals();
+
+    container.innerHTML = `
+        <div class="ficha-card-scroll">
+            <h3 class="neon-text" style="font-size: 1.2rem; margin-bottom: 1rem;">CENTRAL DE APROVAÇÃO DOS MESTRES SUPREMOS</h3>
+            <p style="color: var(--text-muted); font-size: 0.85em; margin-bottom: 1.5rem;">
+                Aqui os administradores podem analisar, aprovar, recusar, nerfar ou melhorar fichas, trajes e equipamentos submetidos pelos jogadores de Unicity.
+            </p>
+
+            ${approvals.length === 0 ? `
+                <div style="padding: 2rem; text-align: center; border: 1px dashed var(--support-crimson); color: var(--text-muted);">
+                    Nenhuma solicitação pendente no momento.
+                </div>
+            ` : `
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${approvals.map((app, index) => `
+                        <div class="approval-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <strong style="color: #fff; font-size: 1.1rem;">${app.charData.nome} (${app.charData.codinome || 'Sem codinome'})</strong>
+                                <span class="supreme-tag">Enviado por: ${app.username}</span>
+                            </div>
+                            <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 6px;">
+                                Classe: <strong>${app.charData.classe}</strong> | Poder: <strong>${app.charData.nomePoder} (${app.charData.tipoPoder || 'Especialidade'})</strong>
+                            </p>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="res-btn" style="background: green; color: #fff;" onclick="approveFicha(${index})">✅ APROVAR FICHA</button>
+                                <button class="res-btn" style="background: #ffaa00; color: #000;" onclick="nerfFicha(${index})">⚠️ PEDIR NERF / EDICÃO</button>
+                                <button class="res-btn remove-btn" onclick="rejectFicha(${index})">❌ RECUSAR</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `}
+        </div>
+    `;
+}
+
+// Funções auxiliares da Ficha
+function getDefaultCharData() {
+    return {
+        nome: '',
+        codinome: '',
+        idade: '',
+        genero: 'Masculino',
+        altura: 175,
+        peso: 70,
+        classe: 'Herói',
+        ranque: 'Iniciante',
+        exp: 0,
+        gp: 0,
+        categoriaPoder: 'Meta-Poder',
+        nomePoder: '',
+        tipoPoder: 'Emissão',
+        descPoder: '',
+        habilidades: [{}],
+        trajes: [{}],
+        equips: [{}],
+        historia: '',
+        status: 'rascunho'
+    };
+}
+
+function isSupreme() {
+    const s = getSession();
+    return s && (s.role === 'supreme' || s.role === 'master' || SUPREME_MASTERS.includes(s.username));
+}
+
+function switchCharSlot(slot) {
+    activeCharSlot = slot;
+    renderPerfil();
+}
+
+function validateHeight(input) {
+    let val = parseInt(input.value);
+    if (val < 100) input.value = 100;
+    if (val > 210) input.value = 210;
+}
+
+function validateWeight(input) {
+    let val = parseInt(input.value);
+    if (val > 200) input.value = 200;
+    if (val < 1) input.value = 1;
+}
+
+function updateRankByClass(classe) {
+    const ranqueInput = document.getElementById('fc-ranque');
+    if (!ranqueInput) return;
+    if (classe === 'Herói') ranqueInput.value = 'Ranque C (Iniciante)';
+    else if (classe === 'Anti-Herói') ranqueInput.value = 'Vigilante Independente';
+    else if (classe === 'Vilão') ranqueInput.value = 'Ameaça Nível I';
+}
+
+function togglePoderTipo(cat) {
+    const wrap = document.getElementById('wrap-tipo-poder');
+    const title = document.getElementById('title-hab-maestria');
+    if (wrap) wrap.style.display = (cat === 'Especialidade') ? 'none' : 'block';
+    if (title) title.innerText = (cat === 'Especialidade') ? 'MAESTRIAS' : 'HABILIDADES';
+}
+
+function modResource(id, delta) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    let val = parseInt(input.value) || 0;
+    val += delta;
+    if (val < 0) val = 0;
+    input.value = val;
+}
+
+function renderHabilidadesInputs(habs) {
+    return habs.map((h, i) => `
+        <div style="background: rgba(255,255,255,0.02); padding: 0.8rem; border: 1px solid var(--support-crimson); margin-bottom: 0.6rem; border-radius: 4px;">
+            <div class="ficha-grid-2">
+                <div class="ficha-field">
+                    <label>NOME DA HABILIDADE / MAESTRIA #${i+1}</label>
+                    <input type="text" class="hab-nome" value="${h.nome || ''}" placeholder="Ex: Explosão Concentrada">
+                </div>
+                <div class="ficha-field">
+                    <label>TEMPO DE RECARGA (COOLDOWN)</label>
+                    <input type="text" class="hab-recarga" value="${h.recarga || '1 Turno'}" placeholder="Ex: 2 Turnos / Instantâneo">
+                </div>
+            </div>
+            <div class="ficha-field" style="margin-top: 0.5rem;">
+                <label>DESCRIÇÃO</label>
+                <input type="text" class="hab-desc" value="${h.desc || ''}" placeholder="Efeito técnico em combate...">
+            </div>
+        </div>
+    `).join('');
+}
+
+function addHabilidadeInput() {
+    const container = document.getElementById('hab-container');
+    if (!container) return;
+    const count = container.children.length + 1;
+    const div = document.createElement('div');
+    div.style.cssText = "background: rgba(255,255,255,0.02); padding: 0.8rem; border: 1px solid var(--support-crimson); margin-bottom: 0.6rem; border-radius: 4px;";
+    div.innerHTML = `
+        <div class="ficha-grid-2">
+            <div class="ficha-field">
+                <label>NOME DA HABILIDADE / MAESTRIA #${count}</label>
+                <input type="text" class="hab-nome" placeholder="Ex: Nova Habilidade">
+            </div>
+            <div class="ficha-field">
+                <label>TEMPO DE RECARGA (COOLDOWN)</label>
+                <input type="text" class="hab-recarga" value="1 Turno" placeholder="Ex: 2 Turnos">
+            </div>
+        </div>
+        <div class="ficha-field" style="margin-top: 0.5rem;">
+            <label>DESCRIÇÃO</label>
+            <input type="text" class="hab-desc" placeholder="Efeito técnico em combate...">
+        </div>
+    `;
+    container.appendChild(div);
+}
+
+function renderTrajesInputs(trajes) {
+    return trajes.map((t, i) => `
+        <div class="ficha-grid-2" style="background: rgba(255,0,60,0.03); padding: 0.6rem; border: 1px solid var(--support-crimson); margin-bottom: 0.4rem;">
+            <input type="text" class="trj-nome" value="${t.nome || ''}" placeholder="Nome do Traje">
+            <select class="trj-classe">
+                <option value="Comum ⭐" ${t.classe === 'Comum ⭐' ? 'selected' : ''}>Comum ⭐</option>
+                <option value="Avançado ⭐⭐" ${t.classe === 'Avançado ⭐⭐' ? 'selected' : ''}>Avançado ⭐⭐</option>
+                <option value="Super ⭐⭐⭐" ${t.classe === 'Super ⭐⭐⭐' ? 'selected' : ''}>Super ⭐⭐⭐</option>
+            </select>
+            <input type="text" class="trj-funcao" value="${t.funcao || ''}" placeholder="Função do Traje" style="grid-column: span 2;">
+        </div>
+    `).join('');
+}
+
+function renderEquipsInputs(equips) {
+    return equips.map((e, i) => `
+        <div class="ficha-grid-2" style="background: rgba(255,0,60,0.03); padding: 0.6rem; border: 1px solid var(--support-crimson); margin-bottom: 0.4rem;">
+            <input type="text" class="eqp-nome" value="${e.nome || ''}" placeholder="Nome do Equipamento">
+            <select class="eqp-classe">
+                <option value="Comum ⭐" ${e.classe === 'Comum ⭐' ? 'selected' : ''}>Comum ⭐</option>
+                <option value="Avançado ⭐⭐" ${e.classe === 'Avançado ⭐⭐' ? 'selected' : ''}>Avançado ⭐⭐</option>
+                <option value="Super ⭐⭐⭐" ${e.classe === 'Super ⭐⭐⭐' ? 'selected' : ''}>Super ⭐⭐⭐</option>
+            </select>
+            <input type="text" class="eqp-funcao" value="${e.funcao || ''}" placeholder="Função do Equipamento" style="grid-column: span 2;">
+        </div>
+    `).join('');
+}
+
+// Salva Ficha no localStorage
+function saveFicha(e) {
+    if (e) e.preventDefault();
+    const session = getSession();
+    if (!session) return;
+
+    const allChars = getCharacters();
+    if (!allChars[session.username]) allChars[session.username] = { char1: null, char2: null };
+
+    // Coleta Habilidades
+    const habNodes = document.querySelectorAll('#hab-container > div');
+    const habilidades = Array.from(habNodes).map(node => ({
+        nome: node.querySelector('.hab-nome')?.value || '',
+        recarga: node.querySelector('.hab-recarga')?.value || '1 Turno',
+        desc: node.querySelector('.hab-desc')?.value || ''
+    }));
+
+    // Coleta Trajes
+    const trjNodes = document.querySelectorAll('#trajes-container > div');
+    const trajes = Array.from(trjNodes).map(node => ({
+        nome: node.querySelector('.trj-nome')?.value || '',
+        classe: node.querySelector('.trj-classe')?.value || 'Comum ⭐',
+        funcao: node.querySelector('.trj-funcao')?.value || ''
+    }));
+
+    // Coleta Equips
+    const eqpNodes = document.querySelectorAll('#equips-container > div');
+    const equips = Array.from(eqpNodes).map(node => ({
+        nome: node.querySelector('.eqp-nome')?.value || '',
+        classe: node.querySelector('.eqp-classe')?.value || 'Comum ⭐',
+        funcao: node.querySelector('.eqp-funcao')?.value || ''
+    }));
+
+    const charData = {
+        nome: document.getElementById('fc-nome').value,
+        codinome: document.getElementById('fc-codinome').value,
+        idade: document.getElementById('fc-idade').value,
+        genero: document.getElementById('fc-genero').value,
+        altura: document.getElementById('fc-altura').value,
+        peso: document.getElementById('fc-peso').value,
+        classe: document.getElementById('fc-classe').value,
+        ranque: document.getElementById('fc-ranque').value,
+        exp: parseInt(document.getElementById('fc-exp').value) || 0,
+        gp: parseInt(document.getElementById('fc-gp').value) || 0,
+        categoriaPoder: document.getElementById('fc-categoria-poder').value,
+        nomePoder: document.getElementById('fc-nome-poder').value,
+        tipoPoder: document.getElementById('fc-tipo-poder')?.value || 'Emissão',
+        descPoder: document.getElementById('fc-desc-poder').value,
+        habilidades,
+        trajes,
+        equips,
+        historia: document.getElementById('fc-historia').value,
+        status: allChars[session.username][`char${activeCharSlot}`]?.status || 'rascunho'
+    };
+
+    allChars[session.username][`char${activeCharSlot}`] = charData;
+    saveCharacters(allChars);
+    alert('Ficha do personagem salva com sucesso!');
+    renderPerfil();
+}
+
+function submitForApproval() {
+    saveFicha(null);
+    const session = getSession();
+    const allChars = getCharacters();
+    const charData = allChars[session.username]?.[`char${activeCharSlot}`];
+    if (!charData || !charData.nome) return alert('Preencha a ficha antes de enviar.');
+
+    charData.status = 'pendente';
+    allChars[session.username][`char${activeCharSlot}`] = charData;
+    saveCharacters(allChars);
+
+    const approvals = getApprovals();
+    approvals.push({ username: session.username, slot: activeCharSlot, charData });
+    saveApprovals(approvals);
+
+    alert('Ficha enviada para a Central de Aprovação dos Mestres Supremos!');
+    renderPerfil();
+}
+
+function approveFicha(index) {
+    const approvals = getApprovals();
+    const app = approvals[index];
+    if (!app) return;
+
+    const allChars = getCharacters();
+    if (allChars[app.username] && allChars[app.username][`char${app.slot}`]) {
+        allChars[app.username][`char${app.slot}`].status = 'aprovado';
+        saveCharacters(allChars);
+    }
+
+    approvals.splice(index, 1);
+    saveApprovals(approvals);
+    alert('Ficha APROVADA com sucesso!');
+    renderPerfilSection();
+}
+
+function rejectFicha(index) {
+    const approvals = getApprovals();
+    const app = approvals[index];
+    if (!app) return;
+
+    const allChars = getCharacters();
+    if (allChars[app.username] && allChars[app.username][`char${app.slot}`]) {
+        allChars[app.username][`char${app.slot}`].status = 'recusado';
+        saveCharacters(allChars);
+    }
+
+    approvals.splice(index, 1);
+    saveApprovals(approvals);
+    alert('Ficha RECUSADA.');
+    renderPerfilSection();
+}
+
+function nerfFicha(index) {
+    const feedback = prompt('Digite as observações de alteração/nerf para o jogador:');
+    if (!feedback) return;
+
+    const approvals = getApprovals();
+    const app = approvals[index];
+    if (!app) return;
+
+    const allChars = getCharacters();
+    if (allChars[app.username] && allChars[app.username][`char${app.slot}`]) {
+        allChars[app.username][`char${app.slot}`].status = 'revisao';
+        allChars[app.username][`char${app.slot}`].feedback = feedback;
+        saveCharacters(allChars);
+    }
+
+    approvals.splice(index, 1);
+    saveApprovals(approvals);
+    alert('Ficha enviada de volta para revisão!');
+    renderPerfilSection();
+}
+
 

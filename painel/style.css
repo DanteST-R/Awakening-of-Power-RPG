@@ -1024,7 +1024,255 @@ body {
     }
 }
 
-        font-size: 1rem;
+
+/* ════════════════════════════════════════════════════════
+   ESTILOS DA ABA MEU PERFIL & FICHA DE PERSONAGEM
+   ════════════════════════════════════════════════════════ */
+
+.perfil-header-box {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(10,10,10,0.9);
+    border: 1px solid var(--support-crimson);
+    border-left: 4px solid var(--neon-red);
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(255,0,60,0.1);
+}
+
+.perfil-avatar-wrap {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid var(--neon-red);
+    box-shadow: 0 0 12px var(--neon-red);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.perfil-avatar-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.perfil-avatar-upload-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 3px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.perfil-avatar-upload-btn:hover {
+    background: var(--neon-red);
+}
+
+.supreme-badge {
+    font-size: 0.65rem;
+    background: rgba(255, 107, 53, 0.2);
+    border: 1px solid #ff6b35;
+    color: #ff6b35;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: normal;
+}
+
+.player-badge {
+    font-size: 0.65rem;
+    background: rgba(255, 0, 60, 0.2);
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: normal;
+}
+
+.perfil-master-tabs {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.perfil-subtab {
+    padding: 0.6rem 1.2rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--support-crimson);
+    color: var(--text-muted);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.78rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.perfil-subtab.active, .perfil-subtab:hover {
+    background: var(--neon-red);
+    color: #fff;
+    border-color: var(--neon-red);
+    box-shadow: 0 0 10px var(--neon-red);
+}
+
+.char-slots-bar {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+}
+
+.char-slot-btn {
+    flex: 1;
+    padding: 0.8rem;
+    background: rgba(10,10,10,0.8);
+    border: 1px solid var(--support-crimson);
+    border-left: 3px solid var(--text-muted);
+    color: var(--text-muted);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.char-slot-btn.active {
+    background: rgba(255,0,60,0.1);
+    border-color: var(--neon-red);
+    border-left-color: var(--neon-red);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255,0,60,0.2);
+}
+
+.ficha-card-scroll {
+    background: rgba(10,10,10,0.95);
+    border: 1px solid var(--support-crimson);
+    border-radius: 4px;
+    padding: 1.5rem;
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-red) #000;
+}
+
+.ficha-card-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.ficha-card-scroll::-webkit-scrollbar-track {
+    background: #000;
+}
+.ficha-card-scroll::-webkit-scrollbar-thumb {
+    background: var(--neon-red);
+    border-radius: 3px;
+}
+
+.ficha-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.ficha-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.ficha-field label {
+    font-size: 0.7rem;
+    color: var(--neon-red);
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.ficha-field input, .ficha-field select, .ficha-field textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,0,60,0.25);
+    border-radius: 3px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.82rem;
+    padding: 0.6rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.ficha-field input:focus, .ficha-field select:focus, .ficha-field textarea:focus {
+    border-color: var(--neon-red);
+    box-shadow: 0 0 8px rgba(255,0,60,0.25);
+}
+
+.ficha-box-highlight {
+    background: rgba(255,0,60,0.04);
+    border: 1px solid var(--support-crimson);
+    border-left: 3px solid var(--neon-red);
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.resource-control {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.resource-control input {
+    flex: 1;
+}
+
+.res-btn {
+    padding: 0.4rem 0.8rem;
+    background: var(--neon-red);
+    border: none;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.res-btn.remove-btn {
+    background: #440011;
+    border: 1px solid var(--neon-red);
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+.status-rascunho { background: #333; color: #aaa; }
+.status-pendente { background: #aa6600; color: #fff; }
+.status-aprovado { background: #00aa44; color: #fff; }
+.status-recusado { background: #aa0022; color: #fff; }
+.status-revisao { background: #cc8800; color: #fff; }
+
+.approval-card {
+    background: rgba(20,20,20,0.9);
+    border: 1px solid var(--support-crimson);
+    border-left: 4px solid var(--neon-red);
+    padding: 1.2rem;
+    border-radius: 4px;
+}
+
+@media (max-width: 680px) {
+    .ficha-grid-2 {
+        grid-template-columns: 1fr;
+    }
+    .perfil-header-box {
+        flex-direction: column;
+        text-align: center;
+    }
+    .perfil-master-tabs, .char-slots-bar {
+        flex-direction: column;
     }
 }
+
 
