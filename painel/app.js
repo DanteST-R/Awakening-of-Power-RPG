@@ -83,6 +83,7 @@ const pages = {
             <div class="tabs-container" style="border-bottom: 1px solid var(--support-crimson); margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
                 <button id="tab-btn-atributos" class="sub-tab-btn active" onclick="switchSubTab('atributos')">Atributos e Evolução</button>
                 <button id="tab-btn-equipamentos" class="sub-tab-btn" onclick="switchSubTab('equipamentos')">Equipamentos e Trajes</button>
+                <button id="tab-btn-pontuacoes" class="sub-tab-btn" onclick="switchSubTab('pontuacoes')">Pontuações e Recursos</button>
             </div>
             
             <!-- SUB-ABA 1: ATRIBUTOS E EVOLUÇÃO -->
@@ -331,16 +332,62 @@ const pages = {
                     <p>• Só é possível usar <strong>1 traje por vez</strong>, a menos que possua sistema de equipagem automática ou substituição em tempo real.</p>
                     <p>• <strong>Equipamentos em Pares:</strong> Par de katanas não ocupa 2 espaços, mas não podem ser utilizados mais de três (3) equipamentos em pares por ação e não se pode ter mais de 3 pares no kit.</p>
                     <p>• <strong>Consumíveis / Arremessáveis:</strong> Recarregados ao fim de missões. Não consomem unidade de slot, mas a quantidade em ação é fixada na ficha de criação.</p>
-                    <p>• <strong>Sem Reembolso:</strong> Não há reembolso de GP ao descartar, vender ou doar. Doar abre o slot apenas se o recebedor tiver slot disponível.</p>
-                </div>
-
-                <!-- COMANDOS DA FICHA -->
-                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--neon-red); border-left: 4px solid var(--neon-red); border-radius: 4px;">
-                    <p style="font-family: monospace; font-size: 0.9em; margin: 0;">
+                    <div style="margin-top: 2rem; padding: 1.2rem; background: rgba(10,10,10,0.8); border: 1px solid var(--support-crimson); border-radius: 4px; font-size: 0.9em; text-align: center;">
+                    <p style="font-family: monospace; color: var(--text-muted); margin: 0;">
                         <span style="color: var(--text-muted);">❗ • PARA RECEBER A FICHA DE CRIAÇÃO DE TRAJE OU EQUIPAMENTOS USE OS COMANDOS ABAIXO:</span><br>
                         <strong style="color: var(--text-main); font-size: 1.1em; display: inline-block; margin-top: 8px;">//ficha-traje</strong> &nbsp;|&nbsp; 
                         <strong style="color: var(--text-main); font-size: 1.1em; display: inline-block; margin-top: 8px;">//ficha-equip</strong>
                     </p>
+                </div>
+            </div>
+
+            <!-- SUB-ABA 3: PONTUAÇÕES E RECURSOS -->
+            <div id="subtab-pontuacoes" class="content-section" style="display: none; line-height: 1.6; text-align: justify;">
+                <div style="text-align: center; margin-bottom: 1.8rem;">
+                    <div style="font-size: 1.5rem; color: var(--neon-red); font-family: 'Orbitron', monospace; letter-spacing: 2px;">
+                        　𓐑　 — PONTUAÇÕES E RECURSOS — 　𓐑　
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.6rem; font-style: italic;">
+                        O Awakening of Power-RPG conta com diversos sistemas evolutivos e que funcionam à base de pontuações ou acumulação e gasto de recursos por quantidades e valores. Aqui vai uma lista explicativa de cada tipo de pontuação e recurso existentes no RPG:
+                    </p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <!-- EXPERIÊNCIA -->
+                    <div style="padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid #ffcc00; border-radius: 4px; box-shadow: 0 0 15px rgba(255,204,0,0.05);">
+                        <h4 style="color: #ffcc00; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;">
+                            ✨ EXPERIÊNCIA ( Exp. // ✨ )
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
+                            A <strong>Experiência</strong> (ou <em>Exp. // ✨</em>) é a principal fonte de evolução quando se trata de nivelamento e desenvolvimento de personagem. Basicamente, quase todas as atividades do RPG tendem a ceder Exp. e o mesmo é utilizado para a progressão de seu personagem, o tornando essencialmente mais forte.
+                        </p>
+                        <div style="margin-top: 1rem; padding: 0.8rem 1rem; background: rgba(255,204,0,0.06); border: 1px solid rgba(255,204,0,0.3); border-radius: 3px; font-size: 0.88rem; color: var(--text-main);">
+                            ⚡ <strong>Regra de Evolução:</strong> A Experiência é utilizada para subir o nível dos atributos. O Exp. é obtido ao realizar treinamentos e outras atividades como missões. Definindo desde já, ao subir o nível de algum atributo, o Exp. zera.
+                        </div>
+                    </div>
+
+                    <!-- PONTOS DE RANK -->
+                    <div style="padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid #00ccff; border-radius: 4px; box-shadow: 0 0 15px rgba(0,204,255,0.05);">
+                        <h4 style="color: #00ccff; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;">
+                            🎖️ PONTOS DE RANK ( PR // 🎖️ )
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
+                            Os <strong>Pontos de Rank</strong> (<em>PR // 🎖️</em>) são a principal forma de subir de rank no RPG. Você pode obtê-los por meio de algumas atividades existentes no RPG, além das missões narradas que são basicamente a melhor maneira de conseguir PR devido à alta quantidade garantida, embora seja variável e dependa do desempenho do jogador de acordo com seus <strong>Atos de Classe</strong>.
+                        </p>
+                        <div style="margin-top: 1rem; padding: 0.8rem 1rem; background: rgba(0,204,255,0.06); border: 1px solid rgba(0,204,255,0.3); border-radius: 3px; font-size: 0.88rem; color: var(--text-main);">
+                            🛡️ <strong>Atos de Classe:</strong> É um método de avaliação do qual a administração leva em consideração quando se deve ceder Pontos de Rank, e refere-se à quantidade de ações que são características da respectiva classe do personagem (<em>Herói, Vilão, Anti-Herói</em>).
+                        </div>
+                    </div>
+
+                    <!-- GEAR POINTS -->
+                    <div style="padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 4px; box-shadow: 0 0 15px rgba(255,0,60,0.05);">
+                        <h4 style="color: var(--neon-red); font-size: 1.2rem; display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;">
+                            ⚙️ GEAR POINTS ( GP // ⚙️ )
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
+                            Os <strong>Gear Points</strong> (<em>GP // ⚙️</em>) são a moeda de troca para evolução exclusivamente de itens como equipamentos, trajes e utilitários. Com GP é possível criar, melhorar, reparar e acessar outras funcionalidades referentes aos itens de suporte aos personagens, sejam eles Heróis, Vilões ou Anti-Heróis.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -441,25 +488,36 @@ function navigate(pageId, btnElement) {
     }
 }
 
-// Alterna sub-abas (Atributos e Evolução / Equipamentos e Trajes)
+// Alterna sub-abas (Atributos e Evolução / Equipamentos e Trajes / Pontuações e Recursos)
 function switchSubTab(subTabId) {
     const atributosSec = document.getElementById('subtab-atributos');
     const equipamentosSec = document.getElementById('subtab-equipamentos');
+    const pontuacoesSec = document.getElementById('subtab-pontuacoes');
+    
     const btnAtributos = document.getElementById('tab-btn-atributos');
     const btnEquipamentos = document.getElementById('tab-btn-equipamentos');
+    const btnPontuacoes = document.getElementById('tab-btn-pontuacoes');
 
-    if (!atributosSec || !equipamentosSec) return;
+    if (!atributosSec || !equipamentosSec || !pontuacoesSec) return;
+
+    // Reset visibilidade
+    atributosSec.style.display = 'none';
+    equipamentosSec.style.display = 'none';
+    pontuacoesSec.style.display = 'none';
+
+    btnAtributos.classList.remove('active');
+    btnEquipamentos.classList.remove('active');
+    btnPontuacoes.classList.remove('active');
 
     if (subTabId === 'atributos') {
         atributosSec.style.display = 'block';
-        equipamentosSec.style.display = 'none';
         btnAtributos.classList.add('active');
-        btnEquipamentos.classList.remove('active');
     } else if (subTabId === 'equipamentos') {
-        atributosSec.style.display = 'none';
         equipamentosSec.style.display = 'block';
-        btnAtributos.classList.remove('active');
         btnEquipamentos.classList.add('active');
+    } else if (subTabId === 'pontuacoes') {
+        pontuacoesSec.style.display = 'block';
+        btnPontuacoes.classList.add('active');
     }
 }
 
