@@ -1232,6 +1232,9 @@ function renderCharactersSection(container) {
                 <div class="ficha-field" style="margin-top: 0.8rem;">
                     <label>DESCRIÇÃO DO PODER / ESPECIALIDADE</label>
                     <textarea id="fc-desc-poder" rows="3" placeholder="Descreva o funcionamento do seu poder ou especialidade...">${currentChar.descPoder || ''}</textarea>
+                    <button type="button" class="view-levels-btn" onclick="runPowerBalancer()" style="margin-top: 0.5rem; align-self: flex-start;">
+                        ⚡ BALANCEAR PODER / ESPECIALIDADE (IA LOCAL)
+                    </button>
                 </div>
 
                 <!-- HABILIDADES / MAESTRIAS -->
@@ -1621,5 +1624,17 @@ function nerfFicha(index) {
     alert('Ficha enviada de volta para revisão!');
     renderPerfilSection();
 }
+
+// Aciona a Matriz de Balanceamento Local de Poderes
+function runPowerBalancer() {
+    const nome = document.getElementById('fc-nome-poder')?.value || '';
+    const categoria = document.getElementById('fc-categoria-poder')?.value || 'Meta-Poder';
+    const tipo = document.getElementById('fc-tipo-poder')?.value || 'Emissão';
+    const descricao = document.getElementById('fc-desc-poder')?.value || '';
+
+    const result = analyzePowerBalance(nome, categoria, tipo, descricao, 1);
+    showBalancerModal(result);
+}
+
 
 
