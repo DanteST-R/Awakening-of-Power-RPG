@@ -269,7 +269,7 @@ const pages = {
                     <div class="level-modal-combos">
                         <strong style="color: var(--neon-red); display: block; margin-bottom: 0.3rem;">🔄 Combos Possíveis:</strong>
                         <div id="modal-level-combos" style="background: rgba(0,0,0,0.3); padding: 0.8rem; border: 1px dashed var(--support-crimson); border-radius: 4px; font-family: monospace; font-size: 0.85em; color: var(--text-main);">
-                            — Combo possível — [ 1 par / 1 unidade de equip. ]
+                            [ 1 par / 1 unidade de equip. ]
                         </div>
                     </div>
                 </div>
