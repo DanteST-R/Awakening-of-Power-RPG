@@ -13,53 +13,6 @@ const pages = {
             <div class="map-container-wrapper">
                 <div class="map-image-wrapper">
                     <img src="assets/AwakeningRPGMap.png" alt="Mapa de Unicity" id="unicity-map-img">
-                    
-                    <svg class="map-svg-overlay" viewBox="0 0 1000 750" preserveAspectRatio="none">
-                        <!-- Delly (Vermelho - Noroeste) -->
-                        <polygon points="30,80 70,70 120,90 280,100 290,120 285,385 190,385 180,410 80,410 50,330 30,280 40,160" class="map-region" onclick="openBairroModal('delly')" title="Delly (Distrito do Poder)"></polygon>
-                        
-                        <!-- Amberling (Amarelo - Centro-Norte) -->
-                        <polygon points="290,100 520,100 520,385 285,385" class="map-region" onclick="openBairroModal('amberling')" title="Amberling (Centro Intelectual)"></polygon>
-                        
-                        <!-- Sammill (Azul - Sudoeste) -->
-                        <polygon points="50,410 180,410 285,385 500,385 500,560 410,570 380,520 240,560 180,560 90,470" class="map-region" onclick="openBairroModal('sammill')" title="Sammill (Onde Tradição Encontra Modernidade)"></polygon>
-                        
-                        <!-- Dawn Hill (Verde - Nordeste) -->
-                        <polygon points="530,60 960,60 960,210 660,210 530,170" class="map-region" onclick="openBairroModal('dawn-hill')" title="Dawn Hill (O Bairro Verde)"></polygon>
-                        
-                        <!-- Central Sunset (Laranja - Sudeste) -->
-                        <polygon points="660,210 960,210 960,420 780,420 660,340" class="map-region" onclick="openBairroModal('central-sunset')" title="Central Sunset (Coração Pulsante)"></polygon>
-                        
-                        <!-- Vienner (Roxo - Arquipélago Sul) -->
-                        <polygon points="460,420 960,420 960,580 760,580 620,540 460,540" class="map-region" onclick="openBairroModal('vienner')" title="Vienner (A Cidade Que Nunca Dorme)"></polygon>
-                    </svg>
-
-                    <!-- Ícones dos Pontos de Interesse distribuídos pelo Mapa (Cores originais mantidas) -->
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 12;">
-                        <!-- Delly (Vermelho): WinTech & Finanças -->
-                        <span style="position: absolute; top: 22%; left: 16%; font-size: 1.1rem;" title="Torre WinTech (Delly)">🏢</span>
-                        <span style="position: absolute; top: 32%; left: 10%; font-size: 1.1rem;" title="Bolsa de Valores & Governo (Delly)">⚖️</span>
-
-                        <!-- Amberling (Amarelo): Éksodos & Universidades -->
-                        <span style="position: absolute; top: 25%; left: 38%; font-size: 1.1rem;" title="Instituto Éksodos (Amberling)">🎓</span>
-                        <span style="position: absolute; top: 35%; left: 44%; font-size: 1.1rem;" title="Biblioteca Central (Amberling)">📚</span>
-
-                        <!-- Sammill (Azul): Porto & Lazer -->
-                        <span style="position: absolute; top: 58%; left: 18%; font-size: 1.1rem;" title="Porto Antigo & Estádio (Sammill)">⚓</span>
-                        <span style="position: absolute; top: 62%; left: 32%; font-size: 1.1rem;" title="Aquário & Parque (Sammill)">🐠</span>
-
-                        <!-- Dawn Hill (Verde): Natureza & Observatório -->
-                        <span style="position: absolute; top: 15%; left: 75%; font-size: 1.1rem;" title="Parque Nacional Dawn (Dawn Hill)">🌲</span>
-                        <span style="position: absolute; top: 20%; left: 88%; font-size: 1.1rem;" title="Observatório Astronômico (Dawn Hill)">🔭</span>
-
-                        <!-- Central Sunset (Laranja): Gasai & Comércio -->
-                        <span style="position: absolute; top: 38%; left: 76%; font-size: 1.1rem;" title="Gasai Industries (Central Sunset)">🤖</span>
-                        <span style="position: absolute; top: 46%; left: 85%; font-size: 1.1rem;" title="Sunset Plaza & Cassino (Central Sunset)">🎰</span>
-
-                        <!-- Vienner (Roxo): Marinas & Vida Noturna -->
-                        <span style="position: absolute; top: 68%; left: 58%; font-size: 1.1rem;" title="Marina & Vida Noturna (Vienner)">⛵</span>
-                        <span style="position: absolute; top: 72%; left: 78%; font-size: 1.1rem;" title="Cassino Vienner & Farol (Vienner)">🗼</span>
-                    </div>
                 </div>
             </div>
 

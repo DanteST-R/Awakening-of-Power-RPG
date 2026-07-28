@@ -225,23 +225,24 @@ body {
     overflow-y: auto;
 }
 
-/* Scrollbar personalizada da Sidebar (Fundo Preto com Vermelho Neon) */
-.sidebar-nav::-webkit-scrollbar {
-    width: 6px;
+/* Scrollbar personalizada Global e de todas as Abas (Fundo Preto com Vermelho Neon) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
-.sidebar-nav::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #000000;
     border-left: 1px solid var(--support-crimson);
 }
 
-.sidebar-nav::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: var(--neon-red);
-    border-radius: 3px;
+    border-radius: 4px;
     box-shadow: 0 0 8px var(--neon-red);
 }
 
-.sidebar-nav::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #ff3366;
 }
 
