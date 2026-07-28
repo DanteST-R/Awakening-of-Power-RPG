@@ -935,22 +935,25 @@ function handlePlayerRegister(e) {
         return showAuthError(errorId, 'A senha deve ter pelo menos 6 caracteres.');
     }
 
+    // Bloqueia se tentar se cadastrar com nome reservado dos Mestres Supremos
+    const isSupremeName = SUPREME_MASTERS.some(m => m.toLowerCase() === username.toLowerCase());
+    if (isSupremeName) {
+        return showAuthError(errorId, 'Esse codinome é reservado para a Administração/Mestre.');
+    }
+
     const users = getUsers();
     const exists = users.find(u => u.username.toLowerCase() === username.toLowerCase());
     if (exists) {
         return showAuthError(errorId, 'Esse nome de jogador já está em uso.');
     }
 
-    // Determina role: Mestres Supremos têm prioridade
-    const isSupreme = SUPREME_MASTERS.some(m => m.toLowerCase() === username.toLowerCase());
-    const role = isSupreme ? 'supreme' : 'player';
-
+    // Todo novo registro de usuário pelo formulário comum COMEÇA APENAS COMO JOGADOR
     const newUser = {
         username,
         age: parseInt(age),
         availability,
         password: btoa(password), // armazenamento simples (base64)
-        role
+        role: 'player'
     };
 
     users.push(newUser);
