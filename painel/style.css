@@ -50,11 +50,17 @@
     --text-muted: #A0A0A0;
 }
 
+/* Cursor Customizado Neon (Vermelho-Neon duplo com Sombra Escura conforme Imagem 1) */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Orbitron', sans-serif;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><filter id='glow'><feDropShadow dx='0' dy='0' stdDeviation='2' flood-color='%23FF003C'/></filter><path d='M3 3 L25 15 L14 18 L24 28 L19 30 L10 19 L3 24 Z' fill='%23FF003C' stroke='%238B0000' stroke-width='1.5' filter='url(%23glow)'/><path d='M6 6 L18 13 L12 15 L17 21 L14 22 L10 16 L6 19 Z' fill='%23FF003C'/></svg>"), auto;
+}
+
+button, a, input, select, textarea, .map-region, .level-btn, .bairro-btn {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><filter id='glow'><feDropShadow dx='0' dy='0' stdDeviation='3' flood-color='%23FF003C'/></filter><path d='M3 3 L25 15 L14 18 L24 28 L19 30 L10 19 L3 24 Z' fill='%23FF003C' stroke='%23FFFFFF' stroke-width='1.5' filter='url(%23glow)'/><path d='M6 6 L18 13 L12 15 L17 21 L14 22 L10 16 L6 19 Z' fill='%23FF003C'/></svg>"), pointer !important;
 }
 
 body {
@@ -87,7 +93,12 @@ body {
 /* Regra Padrão do Projeto: Emojis Pretos com Contorno Vermelho Neon */
 .emoji-icon, span[role="img"] {
     display: inline-block;
-    filter: drop-shadow(1px 0 0 var(--neon-red)) drop-shadow(-1px 0 0 var(--neon-red)) drop-shadow(0 1px 0 var(--neon-red)) drop-shadow(0 -1px 0 var(--neon-red)) brightness(0.2) contrast(2);
+    filter: drop-shadow(1px 0 0 var(--neon-red)) drop-shadow(-1px 0 0 var(--neon-red)) drop-shadow(0 1px 0 var(--neon-red)) drop-shadow(0 -1px 0 var(--neon-red)) brightness(0) contrast(10);
+}
+
+/* Exceção: Emojis dentro do Mapa mantém as cores originais do mapa colorido */
+.map-container-wrapper .emoji-icon, .map-container-wrapper span[role="img"] {
+    filter: none !important;
 }
 
 /* Mapa Interativo de Unicity */
