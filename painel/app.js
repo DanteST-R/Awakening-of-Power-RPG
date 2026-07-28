@@ -22,7 +22,10 @@ const pages = {
                 <p>De tal maneira, é possível dizer que os atributos são importantes e cruciais para definir não só o desenvolvimento de um personagem, mas o jeito que o jogo e a ambientação o afetam. Os jogadores possuem total liberdade para montar <strong class="carmine-text" style="font-size: 1em;">builds</strong> e <em style="color: var(--text-main);">auto classificar</em> seus personagens de acordo com o que lhes convém definir e de acordo com a vontade do momento. Isso vai do jogador, para que não haja rótulos ou limitações além das que o próprio deseje impor.</p>
                 
                 <h3 class="neon-text" style="margin-top: 2.5rem; margin-bottom: 0.8rem; font-size: 1.3rem;">Níveis e Experiência (EXP)</h3>
-                <p style="color: var(--neon-red); font-size: 0.85rem; margin-bottom: 1rem;">👇 <em>Clique em qualquer nível para ver a recompensa liberada do atributo <strong>Poder / Especialidade</strong>:</em></p>
+                <p style="color: var(--neon-red); font-size: 0.85rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="corner-down-right" style="color: var(--neon-red); width: 16px; height: 16px;"></i> 
+                    <em>Clique em qualquer nível para ver a recompensa liberada do atributo <strong>Poder / Especialidade</strong>:</em>
+                </p>
 
                 <div class="level-grid">
                     <div class="level-btn" onclick="openLevelModal(1)">
@@ -364,32 +367,32 @@ const levelRewardsData = {
     1: {
         title: "NÍVEL I",
         reward: "1 EQUIPAMENTO + 1 TRAJE",
-        combos: "— Combo possível — [ 1 par / 1 unidade de equip. ]"
+        combos: "[ 1 par / 1 unidade de equip. ]"
     },
     2: {
         title: "NÍVEL II",
         reward: "2 EQUIPAMENTOS",
-        combos: "— Combos possíveis — [ 1 par + 1 unidade / 2 unidades ]"
+        combos: "[ 1 par + 1 unidade / 2 unidades ]"
     },
     3: {
         title: "NÍVEL III",
         reward: "3 EQUIPAMENTOS + 1 TRAJE",
-        combos: "— Combos possíveis — [ 2 pares + 1 unidade / 2 unidades + 1 par ]"
+        combos: "[ 2 pares + 1 unidade / 2 unidades + 1 par ]"
     },
     4: {
         title: "NÍVEL IV",
         reward: "4 EQUIPAMENTOS",
-        combos: "— Combos possíveis — [ 2 pares + 2 unidades / 3 pares + 1 unidade / 3 unidades + 1 par ]"
+        combos: "[ 2 pares + 2 unidades / 3 pares + 1 unidade / 3 unidades + 1 par ]"
     },
     5: {
         title: "NÍVEL V",
         reward: "5 EQUIPAMENTOS + 1 TRAJE",
-        combos: "— Combos possíveis — [ 2 pares + 3 unidades / 3 pares + unidades ]"
+        combos: "[ 2 pares + 3 unidades / 3 pares + unidades ]"
     },
     6: {
         title: "NÍVEL VI",
         reward: "6 EQUIPAMENTOS",
-        combos: "— Combos possíveis — [ 3 pares é o máximo de pares que se pode ter, nesse caso, no último nível, você pode ter 3 unidades de equipamentos e 3 pares ]"
+        combos: "[ 3 pares é o máximo de pares que se pode ter, nesse caso, no último nível, você pode ter 3 unidades de equipamentos e 3 pares ]"
     }
 };
 
