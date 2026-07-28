@@ -188,9 +188,6 @@ const pages = {
                     <div style="max-height: 440px; overflow-y: auto; padding-right: 8px;" id="attribute-modal-body">
                     </div>
                 </div>
-            </div>ont-size: 1.2em; display: inline-block; margin-top: 5px;">//nivelamento-atributo</strong>
-                    </p>
-                </div>
             </div>
 
             <!-- SUB-ABA 2: EQUIPAMENTOS E TRAJES -->
@@ -299,11 +296,11 @@ const pages = {
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
                         <div style="padding: 1rem; background: rgba(139,0,0,0.25); border-left: 4px solid var(--neon-red); flex: 1; min-width: 200px;">
                             <strong style="font-size: 1rem; color: var(--text-main);">COMUM ➔ AVANÇADO</strong><br>
-                            <span class="carmine-text" style="font-family: monospace; font-weight: bold; font-size: 1.15rem; display: inline-block; margin-top: 6px;">Custa 400 GP</span>
+                            <span class="carmine-text" style="font-family: monospace; font-weight: bold; font-size: 1.45rem; display: inline-block; margin-top: 6px;">Custa 400 GP</span>
                         </div>
                         <div style="padding: 1rem; background: rgba(139,0,0,0.25); border-left: 4px solid var(--neon-red); flex: 1; min-width: 200px;">
                             <strong style="font-size: 1rem; color: var(--text-main);">AVANÇADO ➔ SUPER</strong><br>
-                            <span class="carmine-text" style="font-family: monospace; font-weight: bold; font-size: 1.15rem; display: inline-block; margin-top: 6px;">Custa 1250 GP</span>
+                            <span class="carmine-text" style="font-family: monospace; font-weight: bold; font-size: 1.45rem; display: inline-block; margin-top: 6px;">Custa 1250 GP</span>
                         </div>
                     </div>
 
