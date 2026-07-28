@@ -1136,6 +1136,22 @@ function renderCharactersSection(container) {
             </h3>
 
             <form id="ficha-form" onsubmit="saveFicha(event)">
+                <!-- FOTO DO PERSONAGEM COMPRIMIDA -->
+                <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1rem; background: rgba(255,0,60,0.03); border: 1px solid var(--support-crimson); border-radius: 4px;">
+                    <div style="position: relative; width: 80px; height: 80px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; flex-shrink: 0; background: #050505;">
+                        <img id="char-photo-preview" src="${currentChar.foto || 'https://via.placeholder.com/150/111111/FF003C?text=PERSONAGEM'}" alt="Foto do Personagem" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div>
+                        <strong style="color: #fff; font-size: 0.9rem; display: block; margin-bottom: 4px;">FOTO DO PERSONAGEM</strong>
+                        <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 8px;">A imagem será redimensionada e comprimida automaticamente para consumo otimizado de memória.</span>
+                        <label class="res-btn" style="display: inline-block; padding: 5px 12px; cursor: pointer;">
+                            📷 Selecionar Foto
+                            <input type="file" accept="image/*" onchange="uploadCharPhoto(event)" style="display:none;">
+                        </label>
+                        <input type="hidden" id="fc-foto-data" value="${currentChar.foto || ''}">
+                    </div>
+                </div>
+
                 <!-- DADOS BÁSICOS -->
                 <div class="ficha-grid-2">
                     <div class="ficha-field">
@@ -1491,6 +1507,48 @@ function renderEquipsInputs(equips) {
 }
 
 // Salva Ficha no localStorage
+// Comprime e redimensiona a foto do personagem usando HTML5 Canvas (max 300px, JPEG 75%)
+function uploadCharPhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 300; // Tamanho máximo de 300px
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_SIZE) {
+                    height *= MAX_SIZE / width;
+                    width = MAX_SIZE;
+                }
+            } else {
+                if (height > MAX_SIZE) {
+                    width *= MAX_SIZE / height;
+                    height = MAX_SIZE;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Exporta como JPEG comprimido a 75% de qualidade (poucos KB de memória)
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+
+            document.getElementById('char-photo-preview').src = compressedDataUrl;
+            document.getElementById('fc-foto-data').value = compressedDataUrl;
+        };
+        img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 function saveFicha(e) {
     if (e) e.preventDefault();
     const session = getSession();
@@ -1524,6 +1582,7 @@ function saveFicha(e) {
     }));
 
     const charData = {
+        foto: document.getElementById('fc-foto-data')?.value || '',
         nome: document.getElementById('fc-nome').value,
         codinome: document.getElementById('fc-codinome').value,
         idade: document.getElementById('fc-idade').value,
