@@ -668,60 +668,60 @@ const attributesLevelsData = {
         title: '💪 FORÇA — Interpretação de Níveis',
         icon: 'hand-metal',
         levels: [
-            { level: 'NV. I', name: 'Humano Comum', desc: 'A força corresponde à de uma pessoa saudável sem treinamento específico. É suficiente para levantar, empurrar, carregar e golpear dentro dos limites naturais do corpo humano, dependendo mais da técnica do que da potência bruta.' },
-            { level: 'NV. II', name: 'Condicionado', desc: 'O personagem demonstra preparo físico acima da média. Seus golpes possuem maior impacto, consegue mover cargas mais pesadas e realizar esforços intensos por mais tempo sem perder eficiência rapidamente.' },
-            { level: 'NV. III', name: 'Atleta de Elite', desc: 'A força alcança o nível de atletas profissionais de modalidades de potência. Arrombar obstáculos simples, impulsionar o próprio corpo com explosões musculares e causar danos significativos tornam-se feitos consistentes.' },
-            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'O personagem rompe os limites naturais da musculatura humana. É capaz de produzir impactos capazes de deformar estruturas resistentes, mover grandes massas e utilizar a própria força como ferramenta de mobilidade.' },
-            { level: 'NV. V', name: 'Monstruoso', desc: 'A força se torna devastadora. Objetos extremamente pesados podem ser manipulados com relativa facilidade, enquanto golpes passam a representar grande ameaça até mesmo contra materiais de alta resistência.' },
-            { level: 'NV. VI', name: 'Lendário', desc: 'A força alcança um patamar extraordinário. Cada movimento possui potencial para alterar significativamente o ambiente ao redor, permitindo feitos físicos considerados impossíveis para qualquer ser humano comum.' }
+            { level: 'NV. I', name: 'Humano Comum', val: '105 Kg/F', desc: 'A força corresponde à de uma pessoa saudável sem treinamento específico. É suficiente para levantar, empurrar, carregar e golpear dentro dos limites naturais do corpo humano, dependendo mais da técnica do que da potência bruta.' },
+            { level: 'NV. II', name: 'Condicionado', val: '262,5 Kg/F', desc: 'O personagem demonstra preparo físico acima da média. Seus golpes possuem maior impacto, consegue mover cargas mais pesadas e realizar esforços intensos por mais tempo sem perder eficiência rapidamente.' },
+            { level: 'NV. III', name: 'Atleta de Elite', val: '525 Kg/F', desc: 'A força alcança o nível de atletas profissionais de modalidades de potência. Arrombar obstáculos simples, impulsionar o próprio corpo com explosões musculares e causar danos significativos tornam-se feitos consistentes.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', val: '1.050 Kg/F', desc: 'O personagem rompe os limites naturais da musculatura humana. É capaz de produzir impactos capazes de deformar estruturas resistentes, mover grandes massas e utilizar a própria força como ferramenta de mobilidade.' },
+            { level: 'NV. V', name: 'Monstruoso', val: '2.100 Kg/F', desc: 'A força se torna devastadora. Objetos extremamente pesados podem ser manipulados com relativa facilidade, enquanto golpes passam a representar grande ameaça até mesmo contra materiais de alta resistência.' },
+            { level: 'NV. VI', name: 'Lendário', val: '4.200 Kg/F', desc: 'A força alcança um patamar extraordinário. Cada movimento possui potencial para alterar significativamente o ambiente ao redor, permitindo feitos físicos considerados impossíveis para qualquer ser humano comum.' }
         ]
     },
     'resistencia': {
         title: '🛡️ RESISTÊNCIA — Interpretação de Níveis',
         icon: 'shield',
         levels: [
-            { level: 'NV. I', name: 'Humano Comum', desc: 'O corpo suporta atividades rotineiras e pequenos ferimentos. O cansaço surge naturalmente após esforços prolongados e impactos mais fortes podem incapacitar o personagem.' },
-            { level: 'NV. II', name: 'Condicionado', desc: 'A recuperação durante atividades melhora, suportando treinos intensos e impactos moderados com menor perda de desempenho. A fadiga demora mais para aparecer.' },
-            { level: 'NV. III', name: 'Atleta de Elite', desc: 'O organismo apresenta grande eficiência física e mental. O personagem permanece funcional durante confrontos longos e suporta lesões que normalmente afastariam uma pessoa comum.' },
-            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'A resistência supera os limites biológicos naturais. O corpo absorve impactos severos, mantém desempenho elevado sob extrema pressão e continua combatendo mesmo após danos consideráveis.' },
-            { level: 'NV. V', name: 'Monstruoso', desc: 'Poucos ataques conseguem comprometer seu rendimento rapidamente. A exaustão demora muito a surgir e sua tolerância à dor e ao desgaste é excepcional.' },
-            { level: 'NV. VI', name: 'Lendário', desc: 'O personagem torna-se uma verdadeira fortaleza. Enfrenta longos períodos de combate, suporta danos extremos e mantém sua capacidade de lutar mesmo sob condições que derrotariam praticamente qualquer outro indivíduo.' }
+            { level: 'NV. I', name: 'Humano Comum', val: '100 Kg', desc: 'O corpo suporta atividades rotineiras e pequenos ferimentos. O cansaço surge naturalmente após esforços prolongados e impactos mais fortes podem incapacitar o personagem.' },
+            { level: 'NV. II', name: 'Condicionado', val: '250 Kg', desc: 'A recuperação durante atividades melhora, suportando treinos intensos e impactos moderados com menor perda de desempenho. A fadiga demora mais para aparecer.' },
+            { level: 'NV. III', name: 'Atleta de Elite', val: '500 Kg', desc: 'O organismo apresenta grande eficiência física e mental. O personagem permanece funcional durante confrontos longos e suporta lesões que normalmente afastariam uma pessoa comum.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', val: '1.000 Kg', desc: 'A resistência supera os limites biológicos naturais. O corpo absorve impactos severos, mantém desempenho elevado sob extrema pressão e continua combatendo mesmo após danos consideráveis.' },
+            { level: 'NV. V', name: 'Monstruoso', val: '2.000 Kg', desc: 'Poucos ataques conseguem comprometer seu rendimento rapidamente. A exaustão demora muito a surgir e sua tolerância à dor e ao desgaste é excepcional.' },
+            { level: 'NV. VI', name: 'Lendário', val: '4.000 Kg', desc: 'O personagem torna-se uma verdadeira fortaleza. Enfrenta longos períodos de combate, suporta danos extremos e mantém sua capacidade de lutar mesmo sob condições que derrotariam praticamente qualquer outro indivíduo.' }
         ]
     },
     'velocidade': {
         title: '⚡ VELOCIDADE — Interpretação de Níveis',
         icon: 'zap',
         levels: [
-            { level: 'NV. I', name: 'Humano Comum', desc: 'Capaz de correr dentro dos padrões naturais de uma pessoa saudável, alcançando boa aceleração apenas em curtas distâncias.' },
-            { level: 'NV. II', name: 'Condicionado', desc: 'A aceleração e a velocidade máxima superam a média humana. O personagem percorre distâncias rapidamente e responde melhor durante perseguições ou fugas.' },
-            { level: 'NV. III', name: 'Atleta de Elite', desc: 'Seu deslocamento rivaliza com os melhores velocistas do mundo. Arrancadas explosivas e manutenção da velocidade tornam-se grandes vantagens em combate e exploração.' },
-            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'A velocidade ultrapassa qualquer capacidade humana conhecida. Grandes distâncias podem ser percorridas em poucos instantes e acompanhar seus movimentos torna-se difícil.' },
-            { level: 'NV. V', name: 'Monstruoso', desc: 'O deslocamento é extremamente veloz. O personagem cruza campos de batalha rapidamente, reduz drasticamente o tempo de reação dos adversários e domina confrontos através da mobilidade.' },
-            { level: 'NV. VI', name: 'Lendário', desc: 'A velocidade aproxima-se do extraordinário. Seus deslocamentos acontecem em frações de segundo, tornando extremamente difícil prever ou interceptar seus movimentos.' }
+            { level: 'NV. I', name: 'Humano Comum', val: '25 km/h', desc: 'Capaz de correr dentro dos padrões naturais de uma pessoa saudável, alcançando boa aceleração apenas em curtas distâncias.' },
+            { level: 'NV. II', name: 'Condicionado', val: '40 km/h', desc: 'A aceleração e a velocidade máxima superam a média humana. O personagem percorre distâncias rapidamente e responde melhor durante perseguições ou fugas.' },
+            { level: 'NV. III', name: 'Atleta de Elite', val: '60 km/h', desc: 'Seu deslocamento rivaliza com os melhores velocistas do mundo. Arrancadas explosivas e manutenção da velocidade tornam-se grandes vantagens em combate e exploração.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', val: '100 km/h', desc: 'A velocidade ultrapassa qualquer capacidade humana conhecida. Grandes distâncias podem ser percorridas em poucos instantes e acompanhar seus movimentos torna-se difícil.' },
+            { level: 'NV. V', name: 'Monstruoso', val: '180 km/h', desc: 'O deslocamento é extremamente veloz. O personagem cruza campos de batalha rapidamente, reduz drasticamente o tempo de reação dos adversários e domina confrontos através da mobilidade.' },
+            { level: 'NV. VI', name: 'Lendário', val: '320 km/h', desc: 'A velocidade aproxima-se do extraordinário. Seus deslocamentos acontecem em frações de segundo, tornando extremamente difícil prever ou interceptar seus movimentos.' }
         ]
     },
     'agilidade': {
         title: '💨 AGILIDADE — Interpretação de Níveis',
         icon: 'wind',
         levels: [
-            { level: 'NV. I', name: 'Humano Comum', desc: 'Coordenação motora comum. Consegue esquivar, saltar e reagir dentro das limitações naturais de uma pessoa saudável.' },
-            { level: 'NV. II', name: 'Condicionado', desc: 'Movimentos mais precisos e rápidos. O personagem troca de direção com facilidade, melhora seus reflexos e executa gestos técnicos com maior eficiência.' },
-            { level: 'NV. III', name: 'Atleta de Elite', desc: 'A coordenação alcança nível profissional. Esquivas, acrobacias, mudanças bruscas de trajetória e reações rápidas tornam-se naturais.' },
-            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'Os movimentos passam a desafiar os limites humanos. O personagem reage quase instantaneamente, executando manobras extremamente complexas mesmo sob pressão.' },
-            { level: 'NV. V', name: 'Monstruoso', desc: 'A agilidade torna-se um diferencial absoluto. O corpo responde com precisão impressionante, permitindo esquivas sucessivas, equilíbrio excepcional e domínio completo dos próprios movimentos.' },
-            { level: 'NV. VI', name: 'Lendário', desc: 'Cada movimento é executado com perfeição. Reflexos, coordenação e precisão alcançam um nível extraordinário, tornando o personagem extremamente difícil de atingir em combate direto.' }
+            { level: 'NV. I', name: 'Humano Comum', val: '7,29 m/s', desc: 'Coordenação motora comum. Consegue esquivar, saltar e reagir dentro das limitações naturais de uma pessoa saudável.' },
+            { level: 'NV. II', name: 'Condicionado', val: '11,67 m/s', desc: 'Movimentos mais precisos e rápidos. O personagem troca de direção com facilidade, melhora seus reflexos e executa gestos técnicos com maior eficiência.' },
+            { level: 'NV. III', name: 'Atleta de Elite', val: '17,50 m/s', desc: 'A coordenação alcança nível profissional. Esquivas, acrobacias, mudanças bruscas de trajetória e reações rápidas tornam-se naturais.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', val: '29,17 m/s', desc: 'Os movimentos passam a desafiar os limites humanos. O personagem reage quase instantaneamente, executando manobras extremamente complexas mesmo sob pressão.' },
+            { level: 'NV. V', name: 'Monstruoso', val: '52,50 m/s', desc: 'A agilidade torna-se um diferencial absoluto. O corpo responde com precisão impressionante, permitindo esquivas sucessivas, equilíbrio excepcional e domínio completo dos próprios movimentos.' },
+            { level: 'NV. VI', name: 'Lendário', val: '93,33 m/s', desc: 'Cada movimento é executado com perfeição. Reflexos, coordenação e precisão alcançam um nível extraordinário, tornando o personagem extremamente difícil de atingir em combate direto.' }
         ]
     },
     'poder': {
         title: '⭐ PODER / ESPECIALIDADE — Interpretação de Níveis',
         icon: 'star',
         levels: [
-            { level: 'NV. I', name: 'Iniciante', desc: 'O personagem compreende apenas os fundamentos de seu poder ou especialidade. Suas aplicações são simples, exigem concentração e ainda apresentam limitações evidentes.' },
-            { level: 'NV. II', name: 'Aprendiz', desc: 'O domínio evolui para um uso consistente. Novas aplicações tornam-se possíveis e o personagem passa a explorar diferentes formas de utilizar suas capacidades.' },
-            { level: 'NV. III', name: 'Experiente', desc: 'O uso do poder ou especialidade torna-se refinado. Técnicas mais complexas podem ser executadas com segurança, eficiência e maior controle.' },
-            { level: 'NV. IV', name: 'Especialista', desc: 'O personagem domina profundamente sua área. Seu poder ou especialidade apresenta elevada versatilidade, permitindo adaptações rápidas às mais diversas situações.' },
-            { level: 'NV. V', name: 'Mestre', desc: 'A proficiência aproxima-se da excelência absoluta. O personagem explora praticamente todo o potencial conhecido de sua habilidade, combinando técnicas e criando soluções avançadas.' },
-            { level: 'NV. VI', name: 'Grão-Mestre', desc: 'O domínio alcança seu auge. O personagem não apenas utiliza seu poder ou especialidade com perfeição, mas também desenvolve novas aplicações, conceitos e técnicas que representam a evolução máxima de sua própria capacidade.' }
+            { level: 'NV. I', name: 'Iniciante', val: '', desc: 'O personagem compreende apenas os fundamentos de seu poder ou especialidade. Suas aplicações são simples, exigem concentração e ainda apresentam limitações evidentes.' },
+            { level: 'NV. II', name: 'Aprendiz', val: '', desc: 'O domínio evolui para um uso consistente. Novas aplicações tornam-se possíveis e o personagem passa a explorar diferentes formas de utilizar suas capacidades.' },
+            { level: 'NV. III', name: 'Experiente', val: '', desc: 'O uso do poder ou especialidade torna-se refinado. Técnicas mais complexas podem ser executadas com segurança, eficiência e maior controle.' },
+            { level: 'NV. IV', name: 'Especialista', val: '', desc: 'O personagem domina profundamente sua área. Seu poder ou especialidade apresenta elevada versatilidade, permitindo adaptações rápidas às mais diversas situações.' },
+            { level: 'NV. V', name: 'Mestre', val: '', desc: 'A proficiência aproxima-se da excelência absoluta. O personagem explora praticamente todo o potencial conhecido de sua habilidade, combinando técnicas e criando soluções avançadas.' },
+            { level: 'NV. VI', name: 'Grão-Mestre', val: '', desc: 'O domínio alcança seu auge. O personagem não apenas utiliza seu poder ou especialidade com perfeição, mas também desenvolve novas aplicações, conceitos e técnicas que representam a evolução máxima de sua própria capacidade.' }
         ]
     }
 };
@@ -739,7 +739,10 @@ function openAttributeModal(attrKey) {
     body.innerHTML = data.levels.map(lvl => `
         <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 4px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap;">
-                <strong style="color: var(--text-main); font-size: 1.05rem;">${lvl.level} — <span style="color: var(--neon-red);">${lvl.name}</span></strong>
+                <strong style="color: var(--text-main); font-size: 1.05rem;">
+                    ${lvl.level} — <span style="color: var(--neon-red);">${lvl.name}</span>
+                </strong>
+                ${lvl.val ? `<span class="carmine-text" style="font-family: monospace; font-weight: bold; font-size: 1rem; background: rgba(255,0,60,0.1); padding: 2px 8px; border-radius: 3px; border: 1px solid rgba(255,0,60,0.3);">⟨ ⚡ ${lvl.val} ⟩</span>` : ''}
             </div>
             <p style="color: var(--text-muted); font-size: 0.9em; line-height: 1.5; margin: 0;">${lvl.desc}</p>
         </div>
