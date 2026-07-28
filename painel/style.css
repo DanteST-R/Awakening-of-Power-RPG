@@ -269,12 +269,45 @@ body {
     border-left: 3px solid var(--support-crimson);
 }
 
-.nav-btn.active {
-    color: var(--text-main);
-    background-color: rgba(255, 0, 60, 0.1);
-    border-left: 3px solid var(--neon-red);
-    box-shadow: inset 5px 0 10px rgba(255, 0, 60, 0.1);
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+/* Attribute Cards Interativos */
+.attribute-card {
+    margin-bottom: 1.2rem;
+    padding: 1.2rem;
+    background: rgba(139,0,0,0.05);
+    border: 1px solid var(--support-crimson);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.attribute-card:hover {
+    background: rgba(255,0,60,0.08);
+    border-color: var(--neon-red);
+    box-shadow: 0 0 15px rgba(255, 0, 60, 0.2);
+    transform: translateY(-2px);
+}
+
+.attribute-card .view-levels-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--neon-red);
+    border: 1px solid var(--neon-red);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.attribute-card:hover .view-levels-btn {
+    background: var(--neon-red);
+    color: #fff;
+    box-shadow: 0 0 10px var(--neon-red);
 }
 
 /* Area de Conteúdo */

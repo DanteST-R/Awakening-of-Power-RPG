@@ -124,41 +124,71 @@ const pages = {
 
                 <p style="margin-top: 1.5rem; font-size: 0.9em; color: var(--text-muted); border-left: 2px solid var(--text-muted); padding-left: 10px;">— Exp. pode ser obtido por meio de <strong>missões, treinamentos, interações e eventos</strong>, além de formas alternativas que podem surgir com o tempo.</p>
 
-                <h3 class="neon-text" style="margin-top: 2.5rem; margin-bottom: 1.5rem; font-size: 1.3rem;">Os Atributos</h3>
+                <h3 class="neon-text" style="margin-top: 2.5rem; margin-bottom: 0.8rem; font-size: 1.3rem;">Os Atributos</h3>
+                <p style="color: var(--neon-red); font-size: 0.85rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="corner-down-right" style="color: var(--neon-red); width: 16px; height: 16px;"></i> 
+                    <em>Clique em qualquer card de atributo para ver a interpretação de todos os seus Níveis (I ao VI):</em>
+                </p>
                 
-                <div style="margin-bottom: 1.2rem; padding: 1.2rem; background: rgba(139,0,0,0.05); border: 1px solid var(--support-crimson); border-radius: 4px;">
+                <!-- FORÇA -->
+                <div class="attribute-card" onclick="openAttributeModal('forca')">
                     <h4 style="color: var(--text-main); display: flex; align-items: center; gap: 10px;"><i data-lucide="hand-metal" style="color: var(--neon-red);"></i> FORÇA</h4>
                     <p style="margin-top: 0.8rem; color: var(--text-muted);">A força condiz com a capacidade de causar dano a alvos ou de impulsionar algo, agindo da maneira mais natural possível e tendo como objetivo definir se o personagem <em>é capaz ou não</em> de causar dano, afinal, de empurrar algo ou de se projetar para algum lugar apenas por força.<br><br>Medida utilizada: <strong class="carmine-text" style="font-size: 1em;">Kg/F (quilograma força)</strong></p>
+                    <span class="view-levels-btn"><i data-lucide="layers" style="width: 14px; height: 14px;"></i> Ver Interpretação de Níveis</span>
                 </div>
 
-                <div style="margin-bottom: 1.2rem; padding: 1.2rem; background: rgba(139,0,0,0.05); border: 1px solid var(--support-crimson); border-radius: 4px;">
+                <!-- RESISTÊNCIA -->
+                <div class="attribute-card" onclick="openAttributeModal('resistencia')">
                     <h4 style="color: var(--text-main); display: flex; align-items: center; gap: 10px;"><i data-lucide="shield" style="color: var(--neon-red);"></i> RESISTÊNCIA</h4>
                     <p style="margin-top: 0.8rem; color: var(--text-muted);">Capacidade de manter o desempenho em esforços e intensidade equivalentes ao seu nível, resistir e suportar trabalhos repetidos, resistindo ao cansaço físico e/ou mental. Também é utilizada para ditar a capacidade de aguentar danos, principalmente.<br><br>Medida utilizada: <strong class="carmine-text" style="font-size: 1em;">Kg</strong></p>
+                    <span class="view-levels-btn"><i data-lucide="layers" style="width: 14px; height: 14px;"></i> Ver Interpretação de Níveis</span>
                 </div>
 
-                <div style="margin-bottom: 1.2rem; padding: 1.2rem; background: rgba(139,0,0,0.05); border: 1px solid var(--support-crimson); border-radius: 4px;">
+                <!-- VELOCIDADE -->
+                <div class="attribute-card" onclick="openAttributeModal('velocidade')">
                     <h4 style="color: var(--text-main); display: flex; align-items: center; gap: 10px;"><i data-lucide="zap" style="color: var(--neon-red);"></i> VELOCIDADE</h4>
                     <p style="margin-top: 0.8rem; color: var(--text-muted);">Capacidade de atingir alta velocidade em um curto espaço de tempo, partindo da inércia. A velocidade dita o quão longe e em quanto tempo o corpo inteiro do personagem consegue chegar de ponto A à ponto B.<br><br>Medida utilizada: <strong class="carmine-text" style="font-size: 1em;">km/h</strong></p>
+                    <span class="view-levels-btn"><i data-lucide="layers" style="width: 14px; height: 14px;"></i> Ver Interpretação de Níveis</span>
                 </div>
 
-                <div style="margin-bottom: 1.2rem; padding: 1.2rem; background: rgba(139,0,0,0.05); border: 1px solid var(--support-crimson); border-radius: 4px;">
+                <!-- AGILIDADE -->
+                <div class="attribute-card" onclick="openAttributeModal('agilidade')">
                     <h4 style="color: var(--text-main); display: flex; align-items: center; gap: 10px;"><i data-lucide="wind" style="color: var(--neon-red);"></i> AGILIDADE</h4>
                     <p style="margin-top: 0.8rem; color: var(--text-muted);">Rapidez com que um segmento corporal se desloca durante um gesto motor. Isso significa o quão rápido o personagem pode ser para desviar de obstáculos, esquivar, se pôr em prontidão para algo iminente e etc, é sobre os movimentos mais especificados.<br><br>Medida utilizada: <strong class="carmine-text" style="font-size: 1em;">m/s</strong></p>
+                    <span class="view-levels-btn"><i data-lucide="layers" style="width: 14px; height: 14px;"></i> Ver Interpretação de Níveis</span>
                 </div>
 
-                <div style="margin-bottom: 1.2rem; padding: 1.2rem; background: rgba(139,0,0,0.05); border: 1px solid var(--support-crimson); border-radius: 4px;">
+                <!-- PODER / ESPECIALIDADE -->
+                <div class="attribute-card" onclick="openAttributeModal('poder')">
                     <h4 style="color: var(--text-main); display: flex; align-items: center; gap: 10px;"><i data-lucide="star" style="color: var(--neon-red);"></i> PODER / ESPECIALIDADE</h4>
                     <p style="margin-top: 0.8rem; color: var(--text-muted);">Trata-se da proficiência de um personagem quanto ao seu poder / especialidade. Quanto maior o nível do poder / especialidade, mais competente o personagem se torna em ação utilizando tal, até o ponto de masterizar e inovar.</p>
                     <ul style="margin-top: 1rem; padding-left: 20px; color: var(--text-muted);">
                         <li style="margin-bottom: 0.5rem;"><strong>Poderes:</strong> Podem melhorar a cada nível que sobem e ganham novos espaços para <em>habilidades</em>. Elas precisam condizer com o poder base e com o nível atual.</li>
                         <li><strong>Especialidades:</strong> Podem aprender uma <em>maestria</em> nova a cada nível, sempre baseada na sua especialidade.</li>
                     </ul>
+                    <span class="view-levels-btn"><i data-lucide="layers" style="width: 14px; height: 14px;"></i> Ver Interpretação de Níveis</span>
                 </div>
 
                 <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--neon-red); border-left: 4px solid var(--neon-red); border-radius: 4px;">
                     <p style="font-family: monospace; font-size: 0.9em; margin: 0;">
                         <span style="color: var(--text-muted);">PARA RECEBER A LISTA COM AS INTERPRETAÇÕES E VALORES DAS UNIDADES DE MEDIDA DOS ATRIBUTOS USE O COMANDO ABAIXO:</span><br>
                         <strong style="color: var(--text-main); font-size: 1.2em; display: inline-block; margin-top: 5px;">//nivelamento-atributo</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- MODAL DE INTERPRETAÇÃO DE ATRIBUTOS -->
+            <div id="attribute-modal" class="level-modal-overlay" onclick="closeAttributeModal(event)">
+                <div class="level-modal-card" style="max-width: 680px;" onclick="event.stopPropagation()">
+                    <div class="level-modal-header">
+                        <h3 id="attribute-modal-title" style="display: flex; align-items: center; gap: 10px;">FORÇA</h3>
+                        <button class="level-modal-close" onclick="closeAttributeModal()">&times;</button>
+                    </div>
+
+                    <div style="max-height: 440px; overflow-y: auto; padding-right: 8px;" id="attribute-modal-body">
+                    </div>
+                </div>
+            </div>ont-size: 1.2em; display: inline-block; margin-top: 5px;">//nivelamento-atributo</strong>
                     </p>
                 </div>
             </div>
@@ -618,6 +648,100 @@ function openBairroModal(bairroKey) {
 // Fecha modal de Bairros
 function closeBairroModal(event) {
     const modal = document.getElementById('bairro-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Dados das Interpretações de Nível dos Atributos (I ao VI)
+const attributesLevelsData = {
+    'forca': {
+        title: '💪 FORÇA — Interpretação de Níveis',
+        icon: 'hand-metal',
+        levels: [
+            { level: 'NV. I', name: 'Humano Comum', desc: 'A força corresponde à de uma pessoa saudável sem treinamento específico. É suficiente para levantar, empurrar, carregar e golpear dentro dos limites naturais do corpo humano, dependendo mais da técnica do que da potência bruta.' },
+            { level: 'NV. II', name: 'Condicionado', desc: 'O personagem demonstra preparo físico acima da média. Seus golpes possuem maior impacto, consegue mover cargas mais pesadas e realizar esforços intensos por mais tempo sem perder eficiência rapidamente.' },
+            { level: 'NV. III', name: 'Atleta de Elite', desc: 'A força alcança o nível de atletas profissionais de modalidades de potência. Arrombar obstáculos simples, impulsionar o próprio corpo com explosões musculares e causar danos significativos tornam-se feitos consistentes.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'O personagem rompe os limites naturais da musculatura humana. É capaz de produzir impactos capazes de deformar estruturas resistentes, mover grandes massas e utilizar a própria força como ferramenta de mobilidade.' },
+            { level: 'NV. V', name: 'Monstruoso', desc: 'A força se torna devastadora. Objetos extremamente pesados podem ser manipulados com relativa facilidade, enquanto golpes passam a representar grande ameaça até mesmo contra materiais de alta resistência.' },
+            { level: 'NV. VI', name: 'Lendário', desc: 'A força alcança um patamar extraordinário. Cada movimento possui potencial para alterar significativamente o ambiente ao redor, permitindo feitos físicos considerados impossíveis para qualquer ser humano comum.' }
+        ]
+    },
+    'resistencia': {
+        title: '🛡️ RESISTÊNCIA — Interpretação de Níveis',
+        icon: 'shield',
+        levels: [
+            { level: 'NV. I', name: 'Humano Comum', desc: 'O corpo suporta atividades rotineiras e pequenos ferimentos. O cansaço surge naturalmente após esforços prolongados e impactos mais fortes podem incapacitar o personagem.' },
+            { level: 'NV. II', name: 'Condicionado', desc: 'A recuperação durante atividades melhora, suportando treinos intensos e impactos moderados com menor perda de desempenho. A fadiga demora mais para aparecer.' },
+            { level: 'NV. III', name: 'Atleta de Elite', desc: 'O organismo apresenta grande eficiência física e mental. O personagem permanece funcional durante confrontos longos e suporta lesões que normalmente afastariam uma pessoa comum.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'A resistência supera os limites biológicos naturais. O corpo absorve impactos severos, mantém desempenho elevado sob extrema pressão e continua combatendo mesmo após danos consideráveis.' },
+            { level: 'NV. V', name: 'Monstruoso', desc: 'Poucos ataques conseguem comprometer seu rendimento rapidamente. A exaustão demora muito a surgir e sua tolerância à dor e ao desgaste é excepcional.' },
+            { level: 'NV. VI', name: 'Lendário', desc: 'O personagem torna-se uma verdadeira fortaleza. Enfrenta longos períodos de combate, suporta danos extremos e mantém sua capacidade de lutar mesmo sob condições que derrotariam praticamente qualquer outro indivíduo.' }
+        ]
+    },
+    'velocidade': {
+        title: '⚡ VELOCIDADE — Interpretação de Níveis',
+        icon: 'zap',
+        levels: [
+            { level: 'NV. I', name: 'Humano Comum', desc: 'Capaz de correr dentro dos padrões naturais de uma pessoa saudável, alcançando boa aceleração apenas em curtas distâncias.' },
+            { level: 'NV. II', name: 'Condicionado', desc: 'A aceleração e a velocidade máxima superam a média humana. O personagem percorre distâncias rapidamente e responde melhor durante perseguições ou fugas.' },
+            { level: 'NV. III', name: 'Atleta de Elite', desc: 'Seu deslocamento rivaliza com os melhores velocistas do mundo. Arrancadas explosivas e manutenção da velocidade tornam-se grandes vantagens em combate e exploração.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'A velocidade ultrapassa qualquer capacidade humana conhecida. Grandes distâncias podem ser percorridas em poucos instantes e acompanhar seus movimentos torna-se difícil.' },
+            { level: 'NV. V', name: 'Monstruoso', desc: 'O deslocamento é extremamente veloz. O personagem cruza campos de batalha rapidamente, reduz drasticamente o tempo de reação dos adversários e domina confrontos através da mobilidade.' },
+            { level: 'NV. VI', name: 'Lendário', desc: 'A velocidade aproxima-se do extraordinário. Seus deslocamentos acontecem em frações de segundo, tornando extremamente difícil prever ou interceptar seus movimentos.' }
+        ]
+    },
+    'agilidade': {
+        title: '💨 AGILIDADE — Interpretação de Níveis',
+        icon: 'wind',
+        levels: [
+            { level: 'NV. I', name: 'Humano Comum', desc: 'Coordenação motora comum. Consegue esquivar, saltar e reagir dentro das limitações naturais de uma pessoa saudável.' },
+            { level: 'NV. II', name: 'Condicionado', desc: 'Movimentos mais precisos e rápidos. O personagem troca de direção com facilidade, melhora seus reflexos e executa gestos técnicos com maior eficiência.' },
+            { level: 'NV. III', name: 'Atleta de Elite', desc: 'A coordenação alcança nível profissional. Esquivas, acrobacias, mudanças bruscas de trajetória e reações rápidas tornam-se naturais.' },
+            { level: 'NV. IV', name: 'Sobre-Humano', desc: 'Os movimentos passam a desafiar os limites humanos. O personagem reage quase instantaneamente, executando manobras extremamente complexas mesmo sob pressão.' },
+            { level: 'NV. V', name: 'Monstruoso', desc: 'A agilidade torna-se um diferencial absoluto. O corpo responde com precisão impressionante, permitindo esquivas sucessivas, equilíbrio excepcional e domínio completo dos próprios movimentos.' },
+            { level: 'NV. VI', name: 'Lendário', desc: 'Cada movimento é executado com perfeição. Reflexos, coordenação e precisão alcançam um nível extraordinário, tornando o personagem extremamente difícil de atingir em combate direto.' }
+        ]
+    },
+    'poder': {
+        title: '⭐ PODER / ESPECIALIDADE — Interpretação de Níveis',
+        icon: 'star',
+        levels: [
+            { level: 'NV. I', name: 'Iniciante', desc: 'O personagem compreende apenas os fundamentos de seu poder ou especialidade. Suas aplicações são simples, exigem concentração e ainda apresentam limitações evidentes.' },
+            { level: 'NV. II', name: 'Aprendiz', desc: 'O domínio evolui para um uso consistente. Novas aplicações tornam-se possíveis e o personagem passa a explorar diferentes formas de utilizar suas capacidades.' },
+            { level: 'NV. III', name: 'Experiente', desc: 'O uso do poder ou especialidade torna-se refinado. Técnicas mais complexas podem ser executadas com segurança, eficiência e maior controle.' },
+            { level: 'NV. IV', name: 'Especialista', desc: 'O personagem domina profundamente sua área. Seu poder ou especialidade apresenta elevada versatilidade, permitindo adaptações rápidas às mais diversas situações.' },
+            { level: 'NV. V', name: 'Mestre', desc: 'A proficiência aproxima-se da excelência absoluta. O personagem explora praticamente todo o potencial conhecido de sua habilidade, combinando técnicas e criando soluções avançadas.' },
+            { level: 'NV. VI', name: 'Grão-Mestre', desc: 'O domínio alcança seu auge. O personagem não apenas utiliza seu poder ou especialidade com perfeição, mas também desenvolve novas aplicações, conceitos e técnicas que representam a evolução máxima de sua própria capacidade.' }
+        ]
+    }
+};
+
+// Abre modal de interpretação dos Níveis de Atributo
+function openAttributeModal(attrKey) {
+    const modal = document.getElementById('attribute-modal');
+    const data = attributesLevelsData[attrKey];
+
+    if (!modal || !data) return;
+
+    document.getElementById('attribute-modal-title').innerText = data.title;
+    
+    const body = document.getElementById('attribute-modal-body');
+    body.innerHTML = data.levels.map(lvl => `
+        <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap;">
+                <strong style="color: var(--text-main); font-size: 1.05rem;">${lvl.level} — <span style="color: var(--neon-red);">${lvl.name}</span></strong>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9em; line-height: 1.5; margin: 0;">${lvl.desc}</p>
+        </div>
+    `).join('');
+
+    modal.classList.add('active');
+}
+
+// Fecha modal de Atributos
+function closeAttributeModal(event) {
+    const modal = document.getElementById('attribute-modal');
     if (modal) {
         modal.classList.remove('active');
     }
