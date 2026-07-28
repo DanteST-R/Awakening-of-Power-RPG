@@ -62,11 +62,10 @@ const pages = {
                     </ul>
                 </div>
 
-                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--neon-red); border-left: 4px solid var(--neon-red); border-radius: 4px; display: flex; align-items: center; gap: 15px;">
-                    <i data-lucide="terminal" style="color: var(--neon-red); width: 32px; height: 32px;"></i>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--neon-red); border-left: 4px solid var(--neon-red); border-radius: 4px;">
                     <p style="font-family: monospace; font-size: 0.9em; margin: 0;">
                         <span style="color: var(--text-muted);">PARA RECEBER A LISTA COM AS INTERPRETAÇÕES E VALORES DAS UNIDADES DE MEDIDA DOS ATRIBUTOS USE O COMANDO ABAIXO:</span><br>
-                        <strong style="color: var(--text-main); font-size: 1.2em; display: inline-block; margin-top: 5px;">> //nivelamento-atributo</strong>
+                        <strong style="color: var(--text-main); font-size: 1.2em; display: inline-block; margin-top: 5px;">//nivelamento-atributo</strong>
                     </p>
                 </div>
             </div>
