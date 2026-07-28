@@ -5,7 +5,89 @@ lucide.createIcons();
 const pages = {
     mapa: {
         title: "Mapa de Unicity",
-        content: "<img src='assets/AwakeningRPGMap.png' alt='Mapa de Unicity' style='width: 100%; max-width: 600px; border: 2px solid var(--neon-red); border-radius: 8px; margin-bottom: 1rem;'><br>Acesso aos distritos, Indústrias Wintech e Gasai, e as pontes Dawn e Sunset."
+        content: `
+            <p style="color: var(--text-muted); margin-bottom: 1.2rem;">
+                <em>A metrópole de Unicity é dividida entre Alta Unicity (Noroeste e Sudoeste) e Baixa Unicity (Nordeste, Sudeste e Arquipélago). Clique nas áreas coloridas do mapa ou utilize os botões dos bairros abaixo para explorar os pontos de interesse, lore e nível de segurança de cada distrito.</em>
+            </p>
+
+            <div class="map-container-wrapper">
+                <div class="map-image-wrapper">
+                    <img src="assets/AwakeningRPGMap.png" alt="Mapa de Unicity" id="unicity-map-img">
+                    
+                    <svg class="map-svg-overlay" viewBox="0 0 1000 750" preserveAspectRatio="none">
+                        <!-- Delly (Vermelho - Topo Esquerdo) -->
+                        <polygon points="50,40 450,40 450,450 50,450" class="map-region" onclick="openBairroModal('delly')" title="Delly (Distrito do Poder)"></polygon>
+                        
+                        <!-- Amberling (Amarelo - Centro Esquerdo) -->
+                        <polygon points="450,40 600,40 600,450 450,450" class="map-region" onclick="openBairroModal('amberling')" title="Amberling (Centro Intelectual)"></polygon>
+                        
+                        <!-- Sammill (Azul - Baixo Esquerdo) -->
+                        <polygon points="50,450 450,450 450,700 50,700" class="map-region" onclick="openBairroModal('sammill')" title="Sammill (Onde Tradição Encontra Modernidade)"></polygon>
+                        
+                        <!-- Dawn Hill (Verde - Topo Direito) -->
+                        <polygon points="600,40 980,40 980,280 600,280" class="map-region" onclick="openBairroModal('dawn-hill')" title="Dawn Hill (O Bairro Verde)"></polygon>
+                        
+                        <!-- Central Sunset (Laranja - Centro-Baixo Direito) -->
+                        <polygon points="600,280 980,280 980,550 600,550" class="map-region" onclick="openBairroModal('central-sunset')" title="Central Sunset (Coração Pulsante)"></polygon>
+                        
+                        <!-- Vienner (Roxo - Arquipélago Sul Direito) -->
+                        <polygon points="500,550 980,550 980,720 500,720" class="map-region" onclick="openBairroModal('vienner')" title="Vienner (A Cidade Que Nunca Dorme)"></polygon>
+                    </svg>
+                </div>
+            </div>
+
+            <h3 class="neon-text" style="font-size: 1.1rem; margin-top: 1.8rem; margin-bottom: 0.8rem;">EXPLORAR BAIRROS DE UNICITY:</h3>
+            <div class="bairros-buttons-grid">
+                <button class="bairro-btn delly" onclick="openBairroModal('delly')">
+                    <span class="emoji-icon">🟥</span> Delly
+                </button>
+                <button class="bairro-btn amberling" onclick="openBairroModal('amberling')">
+                    <span class="emoji-icon">🟨</span> Amberling
+                </button>
+                <button class="bairro-btn sammill" onclick="openBairroModal('sammill')">
+                    <span class="emoji-icon">🟦</span> Sammill
+                </button>
+                <button class="bairro-btn dawn-hill" onclick="openBairroModal('dawn-hill')">
+                    <span class="emoji-icon">🟩</span> Dawn Hill
+                </button>
+                <button class="bairro-btn central-sunset" onclick="openBairroModal('central-sunset')">
+                    <span class="emoji-icon">🟧</span> Central Sunset
+                </button>
+                <button class="bairro-btn vienner" onclick="openBairroModal('vienner')">
+                    <span class="emoji-icon">🟪</span> Vienner
+                </button>
+            </div>
+
+            <!-- MODAL DETALHADO DO BAIRRO -->
+            <div id="bairro-modal" class="level-modal-overlay" onclick="closeBairroModal(event)">
+                <div class="level-modal-card" style="max-width: 680px;" onclick="event.stopPropagation()">
+                    <div class="level-modal-header">
+                        <h3 id="bairro-modal-title" style="display: flex; align-items: center; gap: 8px;">
+                            <span id="bairro-modal-color">🟥</span> <span id="bairro-modal-name">Delly</span>
+                        </h3>
+                        <button class="level-modal-close" onclick="closeBairroModal()">&times;</button>
+                    </div>
+
+                    <p id="bairro-modal-quote" style="color: var(--neon-red); font-style: italic; margin-bottom: 1rem; font-weight: bold;"></p>
+
+                    <div style="max-height: 400px; overflow-y: auto; padding-right: 8px;">
+                        <div style="background: var(--bg-primary); padding: 1rem; border: 1px solid var(--support-crimson); border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em; line-height: 1.6; color: var(--text-muted);" id="bairro-modal-description">
+                        </div>
+
+                        <div style="background: rgba(255,0,60,0.08); border-left: 3px solid var(--neon-red); padding: 0.8rem 1rem; margin-bottom: 1rem;">
+                            <strong style="color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                                🛡️ Segurança: <span id="bairro-modal-security" style="color: var(--neon-red);"></span>
+                            </strong>
+                            <p id="bairro-modal-security-desc" style="font-size: 0.85em; color: var(--text-muted); margin-top: 0.3rem;"></p>
+                        </div>
+
+                        <h4 style="color: var(--neon-red); font-size: 1rem; margin-bottom: 0.6rem; letter-spacing: 1px;">📍 PONTOS DE INTERESSE:</h4>
+                        <ul id="bairro-modal-points" style="padding-left: 20px; color: var(--text-main); font-size: 0.9em; line-height: 1.8;">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `
     },
     sistema: {
         title: "Sistema e Regras",
@@ -413,6 +495,149 @@ function openLevelModal(levelNum) {
 // Fecha modal
 function closeLevelModal(event) {
     const modal = document.getElementById('level-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Dados detalhados dos Bairros de Unicity (Lore & Pontos de Interesse)
+const bairrosData = {
+    'delly': {
+        color: '🟥',
+        name: 'Delly',
+        quote: '"O distrito do poder / O coração financeiro de Unicity."',
+        region: 'Alta Unicity (Noroeste)',
+        description: 'Delly é o bairro mais antigo e influente de Unicity, sendo considerado o verdadeiro centro financeiro, político e empresarial da cidade. A maioria dos arranha-céus que compõem o horizonte de Unicity está concentrada aqui, formando uma paisagem dominada por vidro, aço e iluminação constante. É onde grandes empresários, políticos, magistrados e investidores vivem ou trabalham.<br><br>A sede mundial da WinTech fica localizada em Delly, ocupando um complexo inteiro de torres, centros de pesquisa pública, museu tecnológico e laboratórios subterrâneos sigilosos.',
+        security: 'Extremamente Alta',
+        securityDesc: 'O patrulhamento é intenso, com vigilância por câmeras em praticamente todas as ruas e resposta imediata das autoridades. Crimes violentos são raríssimos, embora crimes financeiros e conspirações corporativas ocorram nos bastidores.',
+        points: [
+            'Distrito Financeiro Morgan',
+            'Torre WinTech (Sede Mundial)',
+            'Bolsa de Valores de Unicity',
+            'Parlamento Estadual',
+            'Tribunal Superior de Unicity',
+            'Museu da Fundação de Unicity',
+            'Praça dos Fundadores',
+            'Hotel Imperial Aurora',
+            'Hospital Saint Helena'
+        ]
+    },
+    'amberling': {
+        color: '🟨',
+        name: 'Amberling',
+        quote: '"O conhecimento molda o futuro / O centro intelectual da cidade."',
+        region: 'Alta Unicity (Centro-Norte)',
+        description: 'Amberling é o grande centro acadêmico e cultural de Unicity. Planejado para concentrar universidades, centros de pesquisa e instituições de ensino, atraindo estudantes e pesquisadores de diversas partes do mundo. Suas ruas misturam edifícios de arquitetura clássica com laboratórios modernos, bibliotecas monumentais e parques.<br><br>Em uma área mais afastada está o campus do Instituto Éksodos, construído sobre uma extensa propriedade com dormitórios, hospital próprio, arenas de treinamento e segurança avançada.',
+        security: 'Muito Alta',
+        securityDesc: 'A circulação constante de estudantes, pesquisadores e funcionários públicos garante vigilância contínua. Furtos menores ocorrem em áreas comerciais, mas crimes graves são raros.',
+        points: [
+            'Instituto Éksodos (Campus Principal)',
+            'Universidade Estadual de Unicity',
+            'Biblioteca Central',
+            'Jardim Botânico',
+            'Museu de Ciências Naturais',
+            'Centro Cultural Internacional',
+            'Teatro Municipal',
+            'Planetário',
+            'Parque Memorial Heaven\'s Fall'
+        ]
+    },
+    'sammill': {
+        color: '🟦',
+        name: 'Sammill',
+        quote: '"Onde a cidade respira / Tradição encontra modernidade."',
+        region: 'Alta Unicity (Sudoeste)',
+        description: 'Sammill nasceu como um distrito industrial e foi revitalizado para se tornar uma agradável região residencial de classe média. Galpões antigos reformados abrigam cafés, galerias, estúdios e startups. Possui menos arranha-céus e mais casas, edifícios médios, parques e um porto interno.',
+        security: 'Alta',
+        securityDesc: 'Considerado um dos melhores bairros para morar, com baixos índices de criminalidade e boa presença policial. Pequenos grupos criminosos atuam esporadicamente perto das zonas industriais desativadas.',
+        points: [
+            'Parque Sammill',
+            'Estádio Municipal',
+            'Mercado Público',
+             me Porto Antigo',
+            'Aquário de Unicity',
+            'Estação Central do Metrô'
+        ]
+    },
+    'dawn-hill': {
+        color: '🟩',
+        name: 'Dawn Hill',
+        quote: '"A natureza domina a paisagem / O bairro verde."',
+        region: 'Baixa Unicity (Norte)',
+        description: 'Ocupa a porção norte da Baixa Unicity com baixa densidade urbana e foco na preservação ambiental, reservas, colinas e lagos. Abriga condomínios fechados de alto padrão e centros de pesquisa ecológica desenvolvidos após o Heaven\'s Fall.',
+        security: 'Muito Alta',
+        securityDesc: 'Um dos bairros mais tranquilos e seguros de Unicity, com forte vigilância privada e comunitária.',
+        points: [
+            'Parque Nacional Dawn',
+            'Lago Crystal',
+            'Observatório Astronômico',
+            'Usina Solar Municipal',
+            'Centro de Pesquisas Ambientais'
+        ]
+    },
+    'central-sunset': {
+        color: '🟧',
+        name: 'Central Sunset',
+        quote: '"O coração pulsante / O verdadeiro centro de Unicity."',
+        region: 'Baixa Unicity (Centro-Sul)',
+        description: 'Bairro mais movimentado da cidade onde as pontes Dawn Bridge e Sunset Bridge desembocam. Concentra shopping centers, hotéis, cassinos, arena principal e transporte central. É a sede das Indústrias Gasai, que mantém um complexo tecnológico integrado e aberto ao público.',
+        security: 'Moderada',
+        securityDesc: 'Policiamento constante em avenidas principais, porém o enorme fluxo de pessoas facilita pequenos furtos, golpes e atuação discreta do crime organizado.',
+        points: [
+            'Gasai Industries (Complexo Tecnológico)',
+            'Sunset Plaza',
+            'Arena Unicity',
+            'Centro de Convenções',
+            'Cassino Royal Sunset',
+            'Estação Central Ferroviária',
+            'Porto Internacional',
+            'Centro de Compras Skyline'
+        ]
+    },
+    'vienner': {
+        color: '🟪',
+        name: 'Vienner',
+        quote: '"A cidade nunca dorme."',
+        region: 'Baixa Unicity (Arquipélago Sul)',
+        description: 'Formado por ilhas e praias interconectadas por pontes menores. Polo de turismo e vida noturna com clubes, cassinos e marinas. Sob o brilho dos holofotes, abriga leilões ilegais, mercado negro e operações clandestinas ligadas ao crime organizado.',
+        security: 'Baixa a Moderada',
+        securityDesc: 'Patrulhada em áreas turísticas, mas com altos índices de criminalidade nas zonas portuárias e docas, onde vigilantes e meta-humanos entram frequentemente em ação.',
+        points: [
+            'Cassino Vienner',
+            'Marina Internacional',
+            'Porto de Cruzeiros',
+            'Distrito Noturno',
+            'Teatro Oceânico',
+            'Farol de Vienner',
+            'Mercado do Porto',
+            'Ilha Memorial'
+        ]
+    }
+};
+
+// Abre modal com detalhes do Bairro selecionado
+function openBairroModal(bairroKey) {
+    const modal = document.getElementById('bairro-modal');
+    const data = bairrosData[bairroKey];
+
+    if (!modal || !data) return;
+
+    document.getElementById('bairro-modal-color').innerText = data.color;
+    document.getElementById('bairro-modal-name').innerText = data.name + ' — ' + data.region;
+    document.getElementById('bairro-modal-quote').innerText = data.quote;
+    document.getElementById('bairro-modal-description').innerHTML = data.description;
+    document.getElementById('bairro-modal-security').innerText = data.security;
+    document.getElementById('bairro-modal-security-desc').innerText = data.securityDesc;
+
+    const pointsList = document.getElementById('bairro-modal-points');
+    pointsList.innerHTML = data.points.map(pt => `<li>${pt}</li>`).join('');
+
+    modal.classList.add('active');
+}
+
+// Fecha modal de Bairros
+function closeBairroModal(event) {
+    const modal = document.getElementById('bairro-modal');
     if (modal) {
         modal.classList.remove('active');
     }

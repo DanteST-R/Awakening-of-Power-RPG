@@ -84,6 +84,93 @@ body {
     font-size: 0.8em;
 }
 
+/* Regra Padrão do Projeto: Emojis Pretos com Contorno Vermelho Neon */
+.emoji-icon, span[role="img"] {
+    display: inline-block;
+    filter: drop-shadow(1px 0 0 var(--neon-red)) drop-shadow(-1px 0 0 var(--neon-red)) drop-shadow(0 1px 0 var(--neon-red)) drop-shadow(0 -1px 0 var(--neon-red)) brightness(0.2) contrast(2);
+}
+
+/* Mapa Interativo de Unicity */
+.map-container-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.5rem auto;
+    border: 2px solid var(--neon-red);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 0, 60, 0.25);
+    background: #000;
+    overflow: hidden;
+}
+
+.map-image-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.map-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* SVG Overlay de Regiões Clicáveis */
+.map-svg-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 10;
+}
+
+.map-region {
+    cursor: pointer;
+    fill: transparent;
+    transition: all 0.3s ease;
+}
+
+.map-region:hover {
+    fill: rgba(255, 0, 60, 0.25);
+    stroke: var(--neon-red);
+    stroke-width: 3;
+    filter: drop-shadow(0 0 10px var(--neon-red));
+}
+
+/* Botões da Legenda de Bairros */
+.bairros-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+}
+
+.bairro-btn {
+    background: var(--bg-primary);
+    border: 1px solid var(--support-crimson);
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    color: var(--text-main);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+}
+
+.bairro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px currentColor;
+}
+
+.bairro-btn.delly { border-left: 4px solid #ff003c; color: #ff003c; }
+.bairro-btn.amberling { border-left: 4px solid #ffcc00; color: #ffcc00; }
+.bairro-btn.sammill { border-left: 4px solid #00c3ff; color: #00c3ff; }
+.bairro-btn.dawn-hill { border-left: 4px solid #00ff66; color: #00ff66; }
+.bairro-btn.central-sunset { border-left: 4px solid #ff6600; color: #ff6600; }
+.bairro-btn.vienner { border-left: 4px solid #b026ff; color: #b026ff; }
+
 .sidebar-logo {
     max-width: 100%;
     height: auto;
