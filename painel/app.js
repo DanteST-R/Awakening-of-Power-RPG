@@ -206,17 +206,17 @@ const pages = {
                 <!-- COMO OBTER E VALORES -->
                 <h3 class="neon-text" style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.2rem;">[ COMO OBTER E VALORES ]</h3>
                 <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                    <div style="padding: 0.8rem 1.2rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 3px solid var(--neon-red); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                        <span>📜 <strong>MISSÕES AUTO NARRADAS</strong></span>
-                        <span class="carmine-text" style="font-weight: bold; font-family: monospace;">[ 15 à 30 GP ]</span>
+                    <div style="padding: 1rem 1.4rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <span style="font-size: 1rem;">📜 <strong>MISSÕES AUTO NARRADAS</strong></span>
+                        <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.25rem; letter-spacing: 1px;">[ 15 à 30 GP ]</span>
                     </div>
-                    <div style="padding: 0.8rem 1.2rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 3px solid var(--neon-red); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                        <span>🎯 <strong>MISSÕES NARRADAS ( SECUNDÁRIAS )</strong></span>
-                        <span class="carmine-text" style="font-weight: bold; font-family: monospace;">[ 40 à 80 GP ]</span>
+                    <div style="padding: 1rem 1.4rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <span style="font-size: 1rem;">🎯 <strong>MISSÕES NARRADAS ( SECUNDÁRIAS )</strong></span>
+                        <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.25rem; letter-spacing: 1px;">[ 40 à 80 GP ]</span>
                     </div>
-                    <div style="padding: 0.8rem 1.2rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 3px solid var(--neon-red); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-                        <span>🔥 <strong>MISSÕES DE EVENTO ( PRINCIPAIS )</strong></span>
-                        <span class="carmine-text" style="font-weight: bold; font-family: monospace;">[ 90 – 200 GP ]</span>
+                    <div style="padding: 1rem 1.4rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <span style="font-size: 1rem;">🔥 <strong>MISSÕES DE EVENTO ( PRINCIPAIS )</strong></span>
+                        <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.25rem; letter-spacing: 1px;">[ 90 – 200 GP ]</span>
                     </div>
                 </div>
 

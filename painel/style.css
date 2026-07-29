@@ -97,14 +97,33 @@ body {
     font-size: 0.8em;
 }
 
-/* Regra Padrão do Projeto: Emojis Pretos com Contorno Vermelho Neon */
-.emoji-icon, span[role="img"] {
+/* ═══════════════════════════════════════════════════
+   EMOJIS: Padrão Global — Pretos com Contorno Neon
+   ═══════════════════════════════════════════════════ */
+
+/* Qualquer <span class="emoji-icon"> ou <span role="img"> fica preto c/ outline vermelho */
+.emoji-icon,
+span[role="img"],
+.em {
     display: inline-block;
-    filter: drop-shadow(1px 0 0 var(--neon-red)) drop-shadow(-1px 0 0 var(--neon-red)) drop-shadow(0 1px 0 var(--neon-red)) drop-shadow(0 -1px 0 var(--neon-red)) brightness(0) contrast(10);
+    filter:
+        brightness(0) contrast(10)
+        drop-shadow(1.5px 0 0 var(--neon-red))
+        drop-shadow(-1.5px 0 0 var(--neon-red))
+        drop-shadow(0 1.5px 0 var(--neon-red))
+        drop-shadow(0 -1.5px 0 var(--neon-red));
 }
 
-/* Exceção: Emojis dentro do Mapa mantém as cores originais do mapa colorido */
-.map-container-wrapper .emoji-icon, .map-container-wrapper span[role="img"] {
+/* Exceção: Emojis dentro do Mapa mantém cores originais */
+.map-container-wrapper .emoji-icon,
+.map-container-wrapper span[role="img"],
+.map-container-wrapper .em {
+    filter: none !important;
+}
+
+/* Exceção: status badges não aplicam o filtro */
+.status-badge .emoji-icon,
+.status-badge span[role="img"] {
     filter: none !important;
 }
 
@@ -161,8 +180,8 @@ body {
 }
 
 .bairro-btn {
-    background: var(--bg-primary);
-    border: 1px solid var(--support-crimson);
+    background: #000;
+    border: 1px solid var(--neon-red);
     padding: 0.8rem 1rem;
     border-radius: 4px;
     color: var(--text-main);
@@ -175,11 +194,13 @@ body {
     align-items: center;
     gap: 8px;
     text-align: left;
+    box-shadow: inset 0 0 6px rgba(255,0,60,0.05);
 }
 
 .bairro-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 15px currentColor;
+    background: #0d0d0d;
+    box-shadow: 0 0 14px currentColor;
 }
 
 .bairro-btn.delly { border-left: 4px solid #ff003c; color: #ff003c; }
@@ -254,8 +275,9 @@ body {
 }
 
 .nav-btn {
-    background: transparent;
+    background: #000;
     border: none;
+    border-left: 3px solid transparent;
     color: var(--text-muted);
     padding: 1rem 1.5rem;
     text-align: left;
@@ -265,15 +287,39 @@ body {
     align-items: center;
     gap: 1rem;
     transition: all 0.3s ease;
-    border-left: 3px solid transparent;
     font-family: 'Orbitron', sans-serif;
     letter-spacing: 0.5px;
+    width: 100%;
 }
 
 .nav-btn:hover {
     color: var(--text-main);
-    background-color: rgba(139, 0, 0, 0.2); /* Crimson com opacidade */
-    border-left: 3px solid var(--support-crimson);
+    background: #0d0d0d;
+    border-left: 3px solid var(--neon-red);
+    box-shadow: inset 2px 0 10px rgba(255,0,60,0.1);
+}
+
+.nav-btn.active {
+    color: var(--text-main);
+    background: #0d0d0d;
+    border-left: 3px solid var(--neon-red);
+    box-shadow: inset 2px 0 12px rgba(255,0,60,0.15);
+}
+
+/* Padrão Global: Botões pretos com contorno vermelho neon */
+.black-red-btn {
+    background: #000;
+    color: var(--text-main);
+    border: 2px solid var(--neon-red);
+    padding: 0.8rem 1.2rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.black-red-btn:hover {
+    background: #0d0d0d;
+    box-shadow: 0 0 12px var(--neon-red);
 }
 
 /* Attribute Cards Interativos */
@@ -302,6 +348,7 @@ body {
     margin-top: 1rem;
     font-size: 0.8rem;
     color: var(--neon-red);
+    background: #000;
     border: 1px solid var(--neon-red);
     padding: 4px 10px;
     border-radius: 3px;
@@ -312,9 +359,9 @@ body {
 }
 
 .attribute-card:hover .view-levels-btn {
-    background: var(--neon-red);
-    color: #fff;
-    box-shadow: 0 0 10px var(--neon-red);
+    background: #0d0d0d;
+    color: var(--neon-red);
+    box-shadow: 0 0 12px var(--neon-red);
 }
 
 /* Area de Conteúdo */
@@ -342,10 +389,17 @@ body {
 }
 
 .menu-btn, .close-btn {
-    background: transparent;
-    border: none;
+    background: #000;
+    border: 1px solid var(--neon-red);
     color: var(--neon-red);
     cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+.menu-btn:hover, .close-btn:hover {
+    background: #0d0d0d;
+    box-shadow: 0 0 10px var(--neon-red);
 }
 
 /* Pages Styling */
@@ -381,25 +435,30 @@ body {
 
 /* Sub-tabs */
 .sub-tab-btn {
-    background: transparent;
+    background: #000;
     color: var(--text-muted);
-    border: none;
+    border: 1px solid rgba(255,0,60,0.25);
+    border-bottom: 2px solid transparent;
     padding: 0.6rem 1.2rem;
     cursor: pointer;
     font-weight: bold;
     font-family: 'Orbitron', sans-serif;
     transition: all 0.3s ease;
-    border-bottom: 2px solid transparent;
 }
 
 .sub-tab-btn:hover {
     color: var(--text-main);
+    background: #0d0d0d;
+    border-color: var(--neon-red);
 }
 
 .sub-tab-btn.active {
     color: var(--neon-red);
+    background: #0d0d0d;
+    border-color: var(--neon-red);
     border-bottom: 2px solid var(--neon-red);
     text-shadow: 0 0 8px rgba(255, 0, 60, 0.4);
+    box-shadow: 0 0 8px rgba(255,0,60,0.15);
 }
 
 /* Nível Interactive Buttons Grid */
@@ -410,8 +469,8 @@ body {
 }
 
 .level-btn {
-    background: var(--bg-primary);
-    border: 1px solid var(--support-crimson);
+    background: #000;
+    border: 1px solid var(--neon-red);
     border-left: 3px solid var(--neon-red);
     padding: 1.2rem 1rem;
     text-align: center;
@@ -424,8 +483,8 @@ body {
 .level-btn:hover {
     transform: translateY(-3px);
     border-color: var(--neon-red);
-    box-shadow: 0 0 15px rgba(255, 0, 60, 0.3), inset 0 0 10px rgba(255, 0, 60, 0.1);
-    background: rgba(255, 0, 60, 0.05);
+    box-shadow: 0 0 18px rgba(255, 0, 60, 0.4), inset 0 0 12px rgba(255, 0, 60, 0.08);
+    background: #0d0d0d;
 }
 
 .level-btn strong {
@@ -446,6 +505,7 @@ body {
     border-radius: 2px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    background: #000;
 }
 
 /* Modal Popup de Recompensa de Nível */
@@ -493,17 +553,26 @@ body {
 }
 
 .level-modal-close {
-    background: transparent;
-    border: none;
+    background: #000;
+    border: 1px solid var(--neon-red);
     color: var(--neon-red);
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     cursor: pointer;
     line-height: 1;
-    transition: transform 0.2s ease;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .level-modal-close:hover {
-    transform: scale(1.2);
+    background: #0d0d0d;
+    box-shadow: 0 0 10px var(--neon-red);
+    transform: scale(1.1);
 }
 
 .level-modal-source {
@@ -738,7 +807,7 @@ body {
 .auth-tab {
     flex: 1;
     padding: 0.55rem 0;
-    background: transparent;
+    background: #000;
     border: none;
     border-bottom: 2px solid transparent;
     color: var(--text-muted);
@@ -748,10 +817,15 @@ body {
     cursor: pointer;
     transition: all 0.2s;
 }
-.auth-tab:hover { color: #fff; }
+.auth-tab:hover {
+    color: #fff;
+    background: #0d0d0d;
+}
 .auth-tab.active {
     color: var(--neon-red);
+    background: #0d0d0d;
     border-bottom-color: var(--neon-red);
+    text-shadow: 0 0 6px rgba(255,0,60,0.4);
 }
 
 /* Formulários */
@@ -830,8 +904,8 @@ body {
 .avail-btn {
     flex: 1;
     padding: 0.5rem 0;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,0,60,0.2);
+    background: #000;
+    border: 1px solid var(--neon-red);
     border-radius: 3px;
     color: var(--text-muted);
     font-family: 'Orbitron', monospace;
@@ -841,23 +915,26 @@ body {
     transition: all 0.2s;
 }
 .avail-btn:hover {
+    background: #0d0d0d;
     border-color: var(--neon-red);
     color: #fff;
+    box-shadow: 0 0 8px rgba(255,0,60,0.3);
 }
 .avail-btn.active {
-    background: var(--neon-red);
-    border-color: var(--neon-red);
-    color: #fff;
-    box-shadow: 0 0 10px rgba(255,0,60,0.4);
+    background: #000;
+    border: 2px solid var(--neon-red);
+    color: var(--neon-red);
+    box-shadow: 0 0 12px rgba(255,0,60,0.5);
+    font-weight: bold;
 }
 
-/* Botão principal */
+/* Botão principal — preto com borda vermelha neon */
 .auth-submit-btn {
     padding: 0.75rem;
-    background: var(--neon-red);
-    border: none;
+    background: #000;
+    border: 2px solid var(--neon-red);
     border-radius: 3px;
-    color: #fff;
+    color: var(--neon-red);
     font-family: 'Orbitron', monospace;
     font-size: 0.78rem;
     font-weight: 700;
@@ -865,23 +942,25 @@ body {
     cursor: pointer;
     transition: all 0.3s;
     margin-top: 0.4rem;
-    box-shadow: 0 0 12px rgba(255,0,60,0.3);
+    box-shadow: 0 0 10px rgba(255,0,60,0.2);
 }
 .auth-submit-btn:hover {
-    background: #cc0030;
+    background: #0d0d0d;
     box-shadow: 0 0 22px rgba(255,0,60,0.55);
     transform: translateY(-1px);
+    color: #fff;
 }
+/* Botão Mestre — preto com borda laranja */
 .master-btn {
-    background: transparent;
-    border: 1px solid #ff6b35;
+    background: #000;
+    border: 2px solid #ff6b35;
     color: #ff6b35;
-    box-shadow: 0 0 10px rgba(255,107,53,0.2);
+    box-shadow: 0 0 8px rgba(255,107,53,0.2);
 }
 .master-btn:hover {
-    background: #ff6b35;
-    color: #fff;
-    box-shadow: 0 0 20px rgba(255,107,53,0.45);
+    background: #0d0d0d;
+    color: #ffaa88;
+    box-shadow: 0 0 20px rgba(255,107,53,0.5);
 }
 
 /* Mensagem de erro */
@@ -967,8 +1046,8 @@ body {
 .auth-logout-btn {
     margin-top: 0.6rem;
     padding: 0.4rem 0;
-    background: transparent;
-    border: 1px solid rgba(255,0,60,0.3);
+    background: #000;
+    border: 1px solid var(--neon-red);
     border-radius: 3px;
     color: var(--neon-red);
     font-family: 'Orbitron', monospace;
@@ -978,8 +1057,9 @@ body {
     transition: all 0.2s;
 }
 .auth-logout-btn:hover {
-    background: rgba(255,0,60,0.1);
+    background: #0d0d0d;
     border-color: var(--neon-red);
+    box-shadow: 0 0 10px rgba(255,0,60,0.3);
 }
 
 /* ── Responsivo para mobile ─── */
@@ -1104,8 +1184,8 @@ body {
 
 .perfil-subtab {
     padding: 0.6rem 1.2rem;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--support-crimson);
+    background: #000;
+    border: 1px solid var(--neon-red);
     color: var(--text-muted);
     font-family: 'Orbitron', monospace;
     font-size: 0.78rem;
@@ -1114,11 +1194,19 @@ body {
     transition: all 0.2s;
 }
 
-.perfil-subtab.active, .perfil-subtab:hover {
-    background: var(--neon-red);
-    color: #fff;
+.perfil-subtab:hover {
+    background: #0d0d0d;
+    color: var(--text-main);
     border-color: var(--neon-red);
-    box-shadow: 0 0 10px var(--neon-red);
+    box-shadow: 0 0 10px rgba(255,0,60,0.3);
+}
+
+.perfil-subtab.active {
+    background: #0d0d0d;
+    color: var(--neon-red);
+    border-color: var(--neon-red);
+    border-bottom: 2px solid var(--neon-red);
+    box-shadow: 0 0 14px rgba(255,0,60,0.35);
 }
 
 .char-slots-bar {
@@ -1130,9 +1218,9 @@ body {
 .char-slot-btn {
     flex: 1;
     padding: 0.8rem;
-    background: rgba(10,10,10,0.8);
-    border: 1px solid var(--support-crimson);
-    border-left: 3px solid var(--text-muted);
+    background: #000;
+    border: 1px solid var(--neon-red);
+    border-left: 3px solid rgba(255,0,60,0.4);
     color: var(--text-muted);
     font-family: 'Orbitron', monospace;
     font-size: 0.85rem;
@@ -1142,12 +1230,19 @@ body {
     text-align: left;
 }
 
-.char-slot-btn.active {
-    background: rgba(255,0,60,0.1);
+.char-slot-btn:hover {
+    background: #0d0d0d;
     border-color: var(--neon-red);
     border-left-color: var(--neon-red);
-    color: #fff;
-    box-shadow: 0 0 12px rgba(255,0,60,0.2);
+    color: var(--text-main);
+}
+
+.char-slot-btn.active {
+    background: #0d0d0d;
+    border-color: var(--neon-red);
+    border-left-color: var(--neon-red);
+    color: var(--neon-red);
+    box-shadow: 0 0 14px rgba(255,0,60,0.25);
 }
 
 .ficha-card-scroll {
@@ -1240,19 +1335,33 @@ select option {
 
 .res-btn {
     padding: 0.4rem 0.8rem;
-    background: var(--neon-red);
-    border: none;
-    color: #fff;
+    background: #000;
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
     font-family: 'Orbitron', monospace;
     font-size: 0.7rem;
     font-weight: bold;
     cursor: pointer;
     border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.res-btn:hover {
+    background: #0d0d0d;
+    box-shadow: 0 0 8px rgba(255,0,60,0.4);
+    color: #fff;
 }
 
 .res-btn.remove-btn {
-    background: #440011;
+    background: #000;
     border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    opacity: 0.7;
+}
+
+.res-btn.remove-btn:hover {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(255,0,60,0.5);
 }
 
 .status-badge {
