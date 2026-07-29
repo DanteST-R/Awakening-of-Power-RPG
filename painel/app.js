@@ -1698,7 +1698,7 @@ function renderCharactersSection(container) {
                         <select id="fc-genero" required>
                             <option value="Masculino" ${currentChar.genero === 'Masculino' ? 'selected' : ''}>Masculino</option>
                             <option value="Feminino" ${currentChar.genero === 'Feminino' ? 'selected' : ''}>Feminino</option>
-                            <option value="Hermafrodita" ${currentChar.genero === 'Hermafrodita' ? 'selected' : ''}>Hermafrodita</option>
+                            <option value="Intersex" ${currentChar.genero === 'Intersex' ? 'selected' : ''}>Intersex</option>
                         </select>
                     </div>
                     <div class="ficha-field">

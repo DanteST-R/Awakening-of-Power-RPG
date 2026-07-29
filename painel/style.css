@@ -444,6 +444,8 @@ span[role="img"],
     font-weight: bold;
     font-family: 'Orbitron', sans-serif;
     transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .sub-tab-btn:hover {
@@ -1392,8 +1394,12 @@ select option {
         flex-direction: column;
         text-align: center;
     }
-    .perfil-master-tabs, .char-slots-bar {
-        flex-direction: column;
+    .perfil-master-tabs, .char-slots-bar, .tabs-container {
+        flex-wrap: wrap !important;
+        overflow-x: auto;
+        justify-content: flex-start;
+        max-width: 100%;
+        padding-bottom: 5px;
     }
 }
 
