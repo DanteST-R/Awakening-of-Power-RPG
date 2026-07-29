@@ -530,7 +530,130 @@ const pages = {
     },
     treinamentos: {
         title: "Treinamentos",
-        content: "Log de evolução dos personagens no Instituto Éksodos ou treinamentos independentes."
+        render: () => `
+            <div class="page-container">
+                <h1 class="page-title neon-text">Treinamentos</h1>
+
+                <!-- INTRODUÇÃO / EXPLICAÇÃO PRINCIPAL -->
+                <div style="
+                    background: #000;
+                    border: 2px solid var(--neon-red);
+                    border-radius: 6px;
+                    padding: 1.6rem;
+                    margin-bottom: 2rem;
+                    box-shadow: 0 0 25px rgba(255, 0, 60, 0.15), inset 0 0 30px rgba(0, 0, 0, 0.6);
+                ">
+                    <h3 style="
+                        color: #fff;
+                        font-family: 'Orbitron', sans-serif;
+                        font-size: 1.1rem;
+                        letter-spacing: 2px;
+                        margin-bottom: 0.8rem;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <span style="color: var(--neon-red); font-weight: bold;">[ TREINAMENTO ⟩⟩ ]</span>
+                    </h3>
+                    <p style="
+                        color: var(--text-muted);
+                        line-height: 1.8;
+                        font-size: 0.92rem;
+                        text-align: justify;
+                    ">
+                        O treinamento é uma forma prática e versátil de evolução do personagem, cujo tem o intuito de melhorar e aprimorar suas capacidades, além de expandir seus limites. No Awakening of Power-RPG o treinamento funciona de duas formas, sendo elas o <strong style="color: #fff;">Treinamento Solo</strong>, onde o jogador deve realizar sozinho e o <strong style="color: #fff;">Treinamento Duo+</strong>, que deve ser realizado em dupla ou até quarteto. Em ambos os casos o jogador receberá <strong style="color: var(--neon-red);">Exp.</strong> como recompensa. À seguir as explicações dos dois modos:
+                    </p>
+                </div>
+
+                <!-- BOTÕES DAS SUB-ABAS DE TREINO -->
+                <div class="tabs-container" style="border-bottom: 1px solid var(--support-crimson); margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button id="tab-btn-treino-solo" class="sub-tab-btn active" onclick="switchTreinoTab('solo')">🎯 Treino Solo</button>
+                    <button id="tab-btn-treino-duo" class="sub-tab-btn" onclick="switchTreinoTab('duo')">👥 Treino Duo+</button>
+                </div>
+
+                <!-- SUB-ABA 1: TREINO SOLO -->
+                <div id="subtab-treino-solo" class="content-section" style="line-height: 1.6;">
+                    <div style="background: #000; border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 4px; padding: 1.4rem; margin-bottom: 1.5rem;">
+                        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; font-style: italic; margin-bottom: 1.2rem;">
+                            — Para o treinamento individual, interprete o seu esforço da maneira que achar mais adequado, desde que essa maneira seja condizente com o resultado esperado, isso é, se você deseja receber Exp. para seu atributo de velocidade, você precisa fazer algo relacionado a isso, como uma corrida livre ou na esteira por exemplo. Suas recompensas irão variar de acordo com o número de palavras em sua cena de treinamento, como descrito abaixo:
+                        </p>
+
+                        <!-- METAS DE PALAVRAS E EXP -->
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
+                            <div style="padding: 0.9rem 1.2rem; background: #080808; border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <span style="color: #fff; font-weight: bold; font-family: 'Orbitron', monospace;">📝 150 palavras ⟩⟩</span>
+                                <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.15rem; letter-spacing: 1px;">[ 100 exp. ]</span>
+                            </div>
+                            <div style="padding: 0.9rem 1.2rem; background: #080808; border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <span style="color: #fff; font-weight: bold; font-family: 'Orbitron', monospace;">📝 200 palavras ⟩⟩</span>
+                                <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.15rem; letter-spacing: 1px;">[ 250 exp. ]</span>
+                            </div>
+                            <div style="padding: 0.9rem 1.2rem; background: #080808; border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <span style="color: #fff; font-weight: bold; font-family: 'Orbitron', monospace;">📝 400 palavras ⟩⟩</span>
+                                <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.15rem; letter-spacing: 1px;">[ 500 exp. ]</span>
+                            </div>
+                        </div>
+
+                        <!-- REGRAS E AVISOS SOLO -->
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <div style="padding: 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: var(--neon-red);">[ ❗ ]</strong> Neste modo, você pode treinar e receber exp. por no máximo <strong>2 Atributos diferentes</strong> ou apenas 1 se desejar, mas se optar por receber exp. por 2 atributos, você só poderá enviar 1 treino no dia (exceto duo).
+                            </div>
+                            <div style="padding: 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: var(--neon-red);">[ ❗ ]</strong> O modo Solo pode ser feito até <strong>3× por semana</strong>!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUB-ABA 2: TREINO DUO+ -->
+                <div id="subtab-treino-duo" class="content-section" style="display: none; line-height: 1.6;">
+                    <div style="background: #000; border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 4px; padding: 1.4rem; margin-bottom: 1.5rem;">
+                        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; font-style: italic; margin-bottom: 1.2rem;">
+                            — Como já foi dito, o modo Duo pode conter até mais de dois jogadores durante o treinamento, isso pois a forma a qual ele é avaliado e validado é diferente do modo solo, tendo uma contagem de cenas que deve atingir uma meta pré estabelecida para que seja confirmado o fim do treinamento, e essa meta deve ser alcançada por todos os integrantes do treinamento. O treino em si, pode abrigar muitos métodos de procedimento, indo desde uma corrida competitiva até um combate ou até mesmo uma tutoria! Um outro detalhe importante é quê: Quanto mais pessoas estiverem envolvidas no treinamento, maior a recompensa, sendo o máximo de pessoas <strong>4 integrantes</strong>. Abaixo estão as metas de cenas e suas recompensas:
+                        </p>
+
+                        <!-- METAS DE CENAS E RECOMPENSAS -->
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem;">
+                            <div style="padding: 0.9rem 1.2rem; background: #080808; border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <span style="color: #fff; font-weight: bold; font-family: 'Orbitron', monospace;">🎬 4/4 cenas ⟩⟩</span>
+                                <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.15rem; letter-spacing: 1px;">[ 150 exp. ]</span>
+                            </div>
+                            <div style="padding: 0.9rem 1.2rem; background: #080808; border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <span style="color: #fff; font-weight: bold; font-family: 'Orbitron', monospace;">🎬 6/6 cenas ⟩⟩</span>
+                                <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.15rem; letter-spacing: 1px;">[ 300 exp. ]</span>
+                            </div>
+                            <div style="padding: 0.9rem 1.2rem; background: #080808; border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                <span style="color: #fff; font-weight: bold; font-family: 'Orbitron', monospace;">🎬 8/8 cenas ⟩⟩</span>
+                                <span class="carmine-text" style="font-weight: bold; font-family: monospace; font-size: 1.15rem; letter-spacing: 1px;">[ 600 exp. ]</span>
+                            </div>
+                        </div>
+
+                        <!-- MULTIPLICADOR -->
+                        <div style="padding: 1.2rem; background: rgba(0,0,0,0.8); border: 1px solid var(--neon-red); border-radius: 4px; margin-bottom: 1.5rem;">
+                            <h4 style="color: var(--neon-red); font-family: 'Orbitron', monospace; font-size: 0.95rem; margin-bottom: 0.8rem; letter-spacing: 1px;">
+                                ⚡ MULTIPLICADOR ⟩⟩
+                            </h4>
+                            <div style="display: flex; flex-direction: column; gap: 0.4rem; color: var(--text-main); font-family: monospace; font-size: 0.9rem; padding-left: 0.5rem;">
+                                <span>— 2 Jogadores = <strong>1×</strong></span>
+                                <span>— 3 Jogadores = <strong>1.5×</strong></span>
+                                <span>— 4 Jogadores = <strong>2×</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- REGRAS E AVISOS DUO -->
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <div style="padding: 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: var(--neon-red);">[ ❗ ]</strong> Diferentemente do modo solo, o modo Duo+ só pode ser realizado <strong>1× por semana</strong>! Mas se necessário, você pode fazê-lo para ajudar alguém a receber as recompensas da semana, mesmo que você, se já tiver feito, não vá receber.
+                            </div>
+                            <div style="padding: 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: var(--neon-red);">[ ❗ ]</strong> Neste modo, todos os atributos físicos recebem a mesma quantidade em Exp. e a sua individualidade também receberá!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
     },
     personagens: {
         title: "Personagens e NPCs",
@@ -627,6 +750,29 @@ function switchSubTab(subTabId) {
     } else if (subTabId === 'pontuacoes') {
         pontuacoesSec.style.display = 'block';
         btnPontuacoes.classList.add('active');
+    }
+}
+
+// Alterna sub-abas da tela de Treinamentos (Treino Solo / Treino Duo+)
+function switchTreinoTab(treinoType) {
+    const soloSec = document.getElementById('subtab-treino-solo');
+    const duoSec = document.getElementById('subtab-treino-duo');
+
+    const btnSolo = document.getElementById('tab-btn-treino-solo');
+    const btnDuo = document.getElementById('tab-btn-treino-duo');
+
+    if (!soloSec || !duoSec || !btnSolo || !btnDuo) return;
+
+    if (treinoType === 'solo') {
+        soloSec.style.display = 'block';
+        duoSec.style.display = 'none';
+        btnSolo.classList.add('active');
+        btnDuo.classList.remove('active');
+    } else if (treinoType === 'duo') {
+        soloSec.style.display = 'none';
+        duoSec.style.display = 'block';
+        btnSolo.classList.remove('active');
+        btnDuo.classList.add('active');
     }
 }
 
