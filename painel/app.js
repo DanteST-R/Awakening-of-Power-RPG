@@ -466,40 +466,65 @@ const pages = {
                 </p>
 
                 <!-- ════ PODERES BANIDOS ════ -->
-                <div style="margin-bottom: 2.5rem;">
-                    <h2 class="neon-text" style="font-size: 1.4rem; margin-bottom: 0.4rem;">⛔ PODERES PROIBIDOS</h2>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem; line-height:1.6;">
-                        Os poderes listados abaixo são <strong>absolutamente proibidos</strong> no universo Awakening RPG.
-                        O sistema verifica automaticamente esta lista ao analisar fichas submetidas para aprovação.
-                        Qualquer submissão contendo estes poderes será <span style="color:var(--neon-red);font-weight:bold;">recusada automaticamente</span>.
+                <div style="
+                    margin-bottom: 2.5rem;
+                    background: #000;
+                    border: 2px solid var(--neon-red);
+                    border-radius: 6px;
+                    padding: 1.8rem;
+                    box-shadow: 0 0 30px rgba(255,0,60,0.12), inset 0 0 40px rgba(0,0,0,0.6);
+                ">
+                    <!-- Header -->
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:0.6rem;">
+                        <span style="font-size:1.6rem;">&#x26D4;</span>
+                        <h2 style="
+                            font-family:'Orbitron',sans-serif;
+                            font-size:1.4rem;
+                            font-weight:900;
+                            letter-spacing:3px;
+                            color:#fff;
+                            text-shadow: 0 0 8px var(--neon-red), 0 0 20px var(--neon-red);
+                            text-transform:uppercase;
+                            margin:0;
+                        ">PODERES PROIBIDOS</h2>
+                    </div>
+
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.4rem; line-height:1.7; border-left: 3px solid var(--neon-red); padding-left: 0.8rem;">
+                        Os poderes listados abaixo são <strong style="color:#fff;">absolutamente proibidos</strong> no universo Awakening RPG.
+                        O sistema verifica esta lista <strong style="color:var(--neon-red);">automaticamente e de forma rígida</strong> ao analisar fichas.
+                        Qualquer submissão contendo estes poderes — ou variações que os simulem — será
+                        <span style="color:var(--neon-red);font-weight:bold;">bloqueada imediatamente</span>, sem possibilidade de revisão.
+                        A lista também é cruzada com os <strong style="color:#fff;">níveis de poder</strong>: mesmo poderes não listados podem
+                        ser recusados se o nível do personagem não suportar o impacto descrito.
                     </p>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.8rem;">
-                        ${ BANNED_POWERS.map(power => `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 0.7rem;">
+                        ${ BANNED_POWERS.map((power, i) => `
                             <div style="
                                 display: flex; align-items: flex-start; gap: 10px;
-                                padding: 0.8rem 1rem;
-                                background: #000;
-                                border: 1px solid var(--neon-red);
+                                padding: 0.75rem 1rem;
+                                background: #0a0a0a;
+                                border: 1px solid rgba(255,0,60,0.45);
                                 border-left: 4px solid var(--neon-red);
                                 border-radius: 3px;
+                                transition: all 0.2s;
                             ">
-                                <span style="color: var(--neon-red); font-size: 1rem; flex-shrink:0;">⛔</span>
-                                <span style="color: var(--text-main); font-size: 0.85rem; line-height:1.5;">${power}</span>
+                                <span style="color: var(--neon-red); font-size: 0.75rem; font-family:monospace; font-weight:bold; flex-shrink:0; opacity:0.6; padding-top:2px;">${String(i+1).padStart(2,'0')}</span>
+                                <span style="color: #fff; font-size: 0.85rem; line-height:1.5; font-family:'Orbitron',sans-serif; letter-spacing:0.3px;">${power}</span>
                             </div>
                         `).join('') }
                     </div>
 
-                    <div style="margin-top: 1.2rem; padding: 1rem 1.2rem; background: rgba(255,0,60,0.05); border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
-                        ❗ <em>Esta lista pode ser expandida pela administração a qualquer momento. Poderes similares ou variações que contornem as proibições listadas também serão avaliados e potencialmente recusados. A decisão final é sempre da administração.</em>
+                    <div style="margin-top: 1.4rem; padding: 1rem 1.2rem; background: rgba(255,0,60,0.06); border: 1px solid rgba(255,0,60,0.25); border-radius: 4px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.7;">
+                        &#x2757; <em>Esta lista pode ser expandida pela administração a qualquer momento. Poderes similares, variações ou descrições que contornem as proibições também serão recusados. O sistema cruza a descrição do poder com os níveis de atributo: um poder de impacto extremo descrito por um personagem de nível baixo será automaticamente sinalizado como Overpowered. A decisão final é sempre da administração.</em>
                     </div>
                 </div>
 
                 <!-- ════ REGISTRO DE META-HUMANOS ════ -->
                 <div>
-                    <h2 class="neon-text" style="font-size: 1.4rem; margin-bottom: 1rem;">📋 REGISTRO DE META-HUMANOS</h2>
+                    <h2 class="neon-text" style="font-size: 1.4rem; margin-bottom: 1rem;">&#x1F4CB; REGISTRO DE META-HUMANOS</h2>
                     <div style="padding: 1.5rem; background: #000; border: 1px solid var(--support-crimson); border-radius: 4px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; text-align: center;">
-                        <span style="font-size: 2rem; display: block; margin-bottom: 0.8rem;">🗂️</span>
+                        <span style="font-size: 2rem; display: block; margin-bottom: 0.8rem;">&#x1F5C2;</span>
                         <p>Nenhum registro disponível ainda. Os Mestres podem adicionar Meta-Humanos conhecidos e suas habilidades aqui.</p>
                     </div>
                 </div>
@@ -1794,6 +1819,35 @@ function submitForApproval() {
     const allChars = getCharacters();
     const charData = allChars[session.username]?.[`char${activeCharSlot}`];
     if (!charData || !charData.nome) return alert('Preencha a ficha antes de enviar.');
+
+    // ══ VERIFICAÇÃO AUTOMÁTICA DE PODERES BANIDOS ══
+    const banCheck = checkBannedPowers(charData);
+    if (banCheck.blocked) {
+        showBanBlockModal(banCheck);
+        return; // Bloqueia totalmente o envio
+    }
+
+    // ══ VERIFICAÇÃO DE BALANCEAMENTO POR NÍVEL ══
+    const nivel = parseInt(charData.nivelPoder) || 1;
+    const balanceResult = analyzePowerBalance(
+        charData.nomePoder || '',
+        charData.categoriaPoder || 'Meta-Poder',
+        charData.tipoPoder || 'Emissão',
+        charData.descPoder || '',
+        nivel
+    );
+    if (balanceResult.status === 'overpowered') {
+        const confirmar = confirm(
+            `⚠️ ALERTA DE BALANCEAMENTO\n\n` +
+            `${balanceResult.veredicto}\n\n` +
+            `${balanceResult.analiseDetalhada}\n\n` +
+            `Recarga sugerida: ${balanceResult.cooldownSugerido}\n` +
+            `Custo sugerido: ${balanceResult.custoSugerido}\n\n` +
+            `A ficha será enviada com status "Pendente" mas os Mestres farão nerf antes da aprovação.\n\nDeseja enviar mesmo assim?`
+        );
+        if (!confirmar) return;
+        charData.balanceAlert = balanceResult.veredicto;
+    }
 
     charData.status = 'pendente';
     allChars[session.username][`char${activeCharSlot}`] = charData;
