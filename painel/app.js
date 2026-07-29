@@ -33,6 +33,30 @@ const BANNED_POWERS = [
     "Controle Absoluto de outros personagens"
 ];
 
+// ═══ SISTEMA DE RANQUES — 13 Níveis (Bronze → Diamante) ═══
+const RANK_DATA = [
+    { nivel: 1,  pedra: 'Bronze',    emoji: '🥉', cor: '#cd7f32', pr: 0,      recompensas: ['EXP — 350', '$ — 350', 'Slot de Hab. — +1', 'Traje Classe Simples — +1', 'Cinto de Utilidades — Nível 1'] },
+    { nivel: 2,  pedra: 'Prata',     emoji: '🥈', cor: '#c0c0c0', pr: 2500,   recompensas: ['EXP — 500', '$ — 500', 'GP — 200'] },
+    { nivel: 3,  pedra: 'Ouro',      emoji: '🥇', cor: '#ffd700', pr: 3000,   recompensas: ['EXP — 600', '$ — 600', 'Slot de Hab. — +1'] },
+    { nivel: 4,  pedra: 'Rubi',      emoji: '🔴', cor: '#e0115f', pr: 4500,   recompensas: ['EXP — 650', '$ — 650'] },
+    { nivel: 5,  pedra: 'Safira',    emoji: '💙', cor: '#0f52ba', pr: 5500,   recompensas: ['EXP — 700', '$ — 700'] },
+    { nivel: 6,  pedra: 'Esmeralda', emoji: '💚', cor: '#50c878', pr: 6500,   recompensas: ['EXP — 750', '$ — 750', 'Slot de Hab. — +1'] },
+    { nivel: 7,  pedra: 'Ametista',  emoji: '💜', cor: '#9b59b6', pr: 7500,   recompensas: ['EXP — 900', '$ — 900', 'Traje Classe Avançado — +1', 'Cinto de Utilidades — Nível 2'] },
+    { nivel: 8,  pedra: 'Topázio',   emoji: '💛', cor: '#ffa500', pr: 8500,   recompensas: ['EXP — 1.050', '$ — 1.050', 'Slot de Hab. — +1'] },
+    { nivel: 9,  pedra: 'Opala',     emoji: '🤍', cor: '#a8dadc', pr: 9500,   recompensas: ['EXP — 1.200', '$ — 1.200', 'Travessia — Nível 1', 'GP — 1.200'] },
+    { nivel: 10, pedra: 'Granada',   emoji: '❤️', cor: '#c0392b', pr: 10500,  recompensas: ['EXP — 1.350', '$ — 1.350', 'Slot de Hab. — +1'] },
+    { nivel: 11, pedra: 'Platina',   emoji: '⚗️', cor: '#e5e4e2', pr: 11500,  recompensas: ['EXP — 2.500', '$ — 2.500', 'Travessia — Nível 2'] },
+    { nivel: 12, pedra: 'Pérola',    emoji: '🩶', cor: '#f0ead6', pr: 12500,  recompensas: ['EXP — 3.650', '$ — 3.650', 'Slot de Hab. — +1', 'Traje Classe Super — +1', 'Cinto de Utilidades — Nível 3'] },
+    { nivel: 13, pedra: 'Diamante',  emoji: '💎', cor: '#b9f2ff', pr: 13500,  recompensas: ['EXP — 5.800', '$ — 5.800', 'Travessia — Nível 3', 'GP — 2.400'], ultimo: true }
+];
+
+// Nomes de rank por classe e nível
+function getRankName(nivel, classe) {
+    const r = RANK_DATA.find(x => x.nivel === nivel) || RANK_DATA[0];
+    const prefixo = classe === 'Herói' ? 'Herói' : classe === 'Vilão' ? 'Vilão' : 'Vigilante';
+    return `${prefixo} ${r.pedra} ${r.emoji}`;
+}
+
 // Dados das páginas simulando um roteamento
 const pages = {
     perfil: {
@@ -116,6 +140,7 @@ const pages = {
                 <button id="tab-btn-atributos" class="sub-tab-btn active" onclick="switchSubTab('atributos')">Atributos e Evolução</button>
                 <button id="tab-btn-equipamentos" class="sub-tab-btn" onclick="switchSubTab('equipamentos')">Equipamentos e Trajes</button>
                 <button id="tab-btn-pontuacoes" class="sub-tab-btn" onclick="switchSubTab('pontuacoes')">Pontuações e Recursos</button>
+                <button id="tab-btn-ranking" class="sub-tab-btn" onclick="switchSubTab('ranking')">🎖️ Ranking</button>
             </div>
             
             <!-- SUB-ABA 1: ATRIBUTOS E EVOLUÇÃO -->
@@ -448,6 +473,106 @@ const pages = {
                     </div>
                 </div>
             </div>
+
+            <!-- SUB-ABA 4: RANKING -->
+            <div id="subtab-ranking" class="content-section" style="display: none; line-height: 1.6; text-align: justify;">
+                <!-- INTRODUÇÃO -->
+                <div style="
+                    background: #000;
+                    border: 2px solid var(--neon-red);
+                    border-radius: 6px;
+                    padding: 1.6rem;
+                    margin-bottom: 2rem;
+                    box-shadow: 0 0 28px rgba(255,0,60,0.12), inset 0 0 40px rgba(0,0,0,0.7);
+                ">
+                    <p style="color: var(--text-muted); font-size: 0.93rem; line-height: 1.8; margin-bottom: 1.2rem;">
+                        Feito com o intuito de dar metas e objetivos para os jogadores de uma maneira simples e direta, os ranks de classe são intitulados de forma crescente e suas nomenclaturas dependem da classe escolhida pelo jogador, sendo as classes:
+                        <strong style="color:#fff;">Herói</strong>, <strong style="color:#fff;">Vilão</strong> e <strong style="color:#fff;">Anti-Herói</strong>.
+                    </p>
+                    <div style="border-left: 3px solid var(--neon-red); padding-left: 1rem; margin-bottom: 1rem;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
+                            <strong style="color:#fff;">• Scaling de Rank:</strong><br>
+                            Todas as classes possuem uma evolução equivalente, padronizada por quantidade de <strong style="color: var(--neon-red);">Pontos de Rank (🎖️)</strong>, obtidos para subir o ranking do personagem. Os Pontos de Rank representados por "🎖️" têm a única função de definir o quão distante ou próximo o personagem está de alcançar o próximo rank.
+                        </p>
+                    </div>
+                    <div style="padding: 0.9rem 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; font-size: 0.87rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        <strong style="color: var(--neon-red);">❗</strong> Assim como o Exp., os P.R (🎖️) podem ser acumulados e consequentemente a contagem é continuada da última quantidade existente, tornando mais fácil subir o rank.
+                    </div>
+                    <div style="border-left: 3px solid var(--neon-red); padding-left: 1rem; margin-bottom: 1rem;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
+                            <strong style="color:#fff;">• Rank das Classes e Diferenças:</strong><br>
+                            Todas as classes possuem um número padrão de ranks e cada um possui o mesmo padrão de scaling independentemente da classe (Herói, Vilão ou Anti-Herói), o que torna o scaling justo.
+                        </p>
+                    </div>
+                    <div style="padding: 0.9rem 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; font-size: 0.87rem; color: var(--text-muted);">
+                        <strong style="color:#fff;">• Último Rank:</strong> Ao alcançar o último rank (💎 Diamante), todos os Pontos de Rank que você possuir podem ser transformados em <strong style="color: var(--neon-red);">Dinheiro ($)</strong>, à sua escolha.
+                    </div>
+                </div>
+
+                <!-- GRADE DE RANQUES -->
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${RANK_DATA.map(r => `
+                        <div style="
+                            background: #000;
+                            border: 1px solid ${r.cor}55;
+                            border-left: 5px solid ${r.cor};
+                            border-radius: 5px;
+                            padding: 1.2rem 1.4rem;
+                            box-shadow: 0 0 12px ${r.cor}22;
+                            transition: box-shadow 0.3s;
+                        ">
+                            <!-- Header do rank -->
+                            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 0.8rem;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-size: 1.6rem;">${r.emoji}</span>
+                                    <div>
+                                        <div style="font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.05rem; color: ${r.cor}; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px ${r.cor}88;">
+                                            ${r.pedra}
+                                        </div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">
+                                            Herói ${r.pedra} &nbsp;|&nbsp; Vilão ${r.pedra} &nbsp;|&nbsp; Vigilante ${r.pedra}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="
+                                    background: #0a0a0a;
+                                    border: 1px solid ${r.cor}66;
+                                    border-radius: 4px;
+                                    padding: 0.4rem 0.9rem;
+                                    font-family: monospace;
+                                    font-size: 0.85rem;
+                                    color: ${r.cor};
+                                    white-space: nowrap;
+                                ">
+                                    🎖️ ${r.pr === 0 ? '00 // Rank Inicial' : '00 // ' + r.pr.toLocaleString('pt-BR')}
+                                </div>
+                            </div>
+                            <!-- Recompensas -->
+                            <div>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">— Recompensas —</span>
+                                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                    ${r.recompensas.map(rec => `
+                                        <span style="
+                                            padding: 0.3rem 0.8rem;
+                                            background: ${r.cor}11;
+                                            border: 1px solid ${r.cor}44;
+                                            border-radius: 3px;
+                                            font-size: 0.8rem;
+                                            color: #fff;
+                                            font-family: monospace;
+                                        ">[ ${rec} ]</span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            ${r.ultimo ? `
+                                <div style="margin-top: 1rem; padding: 0.8rem; background: rgba(185,242,255,0.05); border: 1px solid #b9f2ff44; border-radius: 4px; font-size: 0.82rem; color: #b9f2ff; font-style: italic;">
+                                    💎 Rank máximo atingido! Seus P.R. excedentes podem ser convertidos em $ a qualquer momento.
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
         `
     },
     poderes: {
@@ -720,26 +845,30 @@ function navigate(pageId, btnElement) {
     }
 }
 
-// Alterna sub-abas (Atributos e Evolução / Equipamentos e Trajes / Pontuações e Recursos)
+// Alterna sub-abas (Atributos / Equipamentos / Pontuações / Ranking)
 function switchSubTab(subTabId) {
-    const atributosSec = document.getElementById('subtab-atributos');
+    const atributosSec    = document.getElementById('subtab-atributos');
     const equipamentosSec = document.getElementById('subtab-equipamentos');
-    const pontuacoesSec = document.getElementById('subtab-pontuacoes');
-    
-    const btnAtributos = document.getElementById('tab-btn-atributos');
+    const pontuacoesSec   = document.getElementById('subtab-pontuacoes');
+    const rankingSec      = document.getElementById('subtab-ranking');
+
+    const btnAtributos    = document.getElementById('tab-btn-atributos');
     const btnEquipamentos = document.getElementById('tab-btn-equipamentos');
-    const btnPontuacoes = document.getElementById('tab-btn-pontuacoes');
+    const btnPontuacoes   = document.getElementById('tab-btn-pontuacoes');
+    const btnRanking      = document.getElementById('tab-btn-ranking');
 
     if (!atributosSec || !equipamentosSec || !pontuacoesSec) return;
 
     // Reset visibilidade
-    atributosSec.style.display = 'none';
+    atributosSec.style.display    = 'none';
     equipamentosSec.style.display = 'none';
-    pontuacoesSec.style.display = 'none';
+    pontuacoesSec.style.display   = 'none';
+    if (rankingSec) rankingSec.style.display = 'none';
 
     btnAtributos.classList.remove('active');
     btnEquipamentos.classList.remove('active');
     btnPontuacoes.classList.remove('active');
+    if (btnRanking) btnRanking.classList.remove('active');
 
     if (subTabId === 'atributos') {
         atributosSec.style.display = 'block';
@@ -750,6 +879,9 @@ function switchSubTab(subTabId) {
     } else if (subTabId === 'pontuacoes') {
         pontuacoesSec.style.display = 'block';
         btnPontuacoes.classList.add('active');
+    } else if (subTabId === 'ranking' && rankingSec && btnRanking) {
+        rankingSec.style.display = 'block';
+        btnRanking.classList.add('active');
     }
 }
 
@@ -1538,8 +1670,26 @@ function renderCharactersSection(container) {
                     </div>
                     <div class="ficha-field">
                         <label>RANQUE (Baseado na Classe)</label>
-                        <input type="text" id="fc-ranque" value="${currentChar.ranque || 'Iniciante'}" readonly style="background: rgba(255,255,255,0.02);">
+                        <input type="text" id="fc-ranque" value="${currentChar.ranque || getRankName(1, currentChar.classe || 'Herói')}" readonly style="background: rgba(255,255,255,0.02); color: #ffd700; font-family: 'Orbitron', monospace; font-weight: bold;">
                     </div>
+                </div>
+
+                <!-- PONTOS DE RANK -->
+                <div class="ficha-box-highlight" style="margin-top: 0.8rem; border-color: #ffd70044;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                        <label style="color: #ffd700; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 0;">🎖️ PONTOS DE RANK (P.R.)</label>
+                        <div class="resource-control">
+                            <input type="number" id="fc-pr" value="${currentChar.pr || 0}" ${isSupreme() ? '' : 'readonly'} min="0">
+                            ${isSupreme() ? `
+                                <button type="button" class="res-btn" onclick="modResource('fc-pr', 100)">+100</button>
+                                <button type="button" class="res-btn" onclick="modResource('fc-pr', 500)">+500</button>
+                                <button type="button" class="res-btn remove-btn" onclick="modResource('fc-pr', -100)">-100</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">
+                        P.R. acumulados para subir de rank. Consulte a aba <strong>🎖️ Ranking</strong> em Sistema para ver as metas.
+                    </p>
                 </div>
 
                 <!-- EXP E GP -->
@@ -1717,7 +1867,8 @@ function getDefaultCharData() {
         altura: 175,
         peso: 70,
         classe: 'Herói',
-        ranque: 'Iniciante',
+        ranque: getRankName(1, 'Herói'),
+        pr: 0,
         exp: 0,
         gp: 0,
         categoriaPoder: 'Meta-Poder',
@@ -1757,9 +1908,8 @@ function validateWeight(input) {
 function updateRankByClass(classe) {
     const ranqueInput = document.getElementById('fc-ranque');
     if (!ranqueInput) return;
-    if (classe === 'Herói') ranqueInput.value = 'Ranque C (Iniciante)';
-    else if (classe === 'Anti-Herói') ranqueInput.value = 'Vigilante Independente';
-    else if (classe === 'Vilão') ranqueInput.value = 'Ameaça Nível I';
+    // Rank inicial = Bronze (nível 1) com nomenclatura por classe
+    ranqueInput.value = getRankName(1, classe);
 }
 
 function togglePoderTipo(cat) {
@@ -1939,6 +2089,7 @@ function saveFicha(e) {
         ranque: document.getElementById('fc-ranque').value,
         exp: parseInt(document.getElementById('fc-exp').value) || 0,
         gp: parseInt(document.getElementById('fc-gp').value) || 0,
+        pr: parseInt(document.getElementById('fc-pr')?.value) || 0,
         categoriaPoder: document.getElementById('fc-categoria-poder').value,
         nomePoder: document.getElementById('fc-nome-poder').value,
         tipoPoder: document.getElementById('fc-tipo-poder')?.value || 'Emissão',
