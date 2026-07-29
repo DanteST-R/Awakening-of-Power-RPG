@@ -1664,14 +1664,14 @@ function renderCharactersSection(container) {
 
             <form id="ficha-form" onsubmit="saveFicha(event)">
                 <!-- FOTO DO PERSONAGEM COMPRIMIDA -->
-                <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1rem; background: rgba(255,0,60,0.03); border: 1px solid var(--support-crimson); border-radius: 4px;">
-                    <div style="position: relative; width: 80px; height: 80px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; flex-shrink: 0; background: #050505;">
+                <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1.2rem; background: #000; border: 2px solid var(--neon-red); border-left: 5px solid var(--neon-red); border-radius: 6px; box-shadow: 0 0 15px rgba(255,0,60,0.2), inset 0 0 20px rgba(0,0,0,0.8);">
+                    <div style="position: relative; width: 85px; height: 85px; border-radius: 6px; border: 2px solid var(--neon-red); box-shadow: 0 0 10px var(--neon-red); overflow: hidden; flex-shrink: 0; background: #000;">
                         <img id="char-photo-preview" src="${currentChar.foto || 'https://via.placeholder.com/150/111111/FF003C?text=PERSONAGEM'}" alt="Foto do Personagem" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div>
-                        <strong style="color: #fff; font-size: 0.9rem; display: block; margin-bottom: 4px;">FOTO DO PERSONAGEM</strong>
-                        <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 8px;">A imagem será redimensionada e comprimida automaticamente para consumo otimizado de memória.</span>
-                        <label class="res-btn" style="display: inline-block; padding: 5px 12px; cursor: pointer;">
+                        <strong style="color: #fff; font-size: 0.95rem; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; display: block; margin-bottom: 4px; text-shadow: 0 0 6px var(--neon-red);">FOTO DO PERSONAGEM</strong>
+                        <span style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-bottom: 10px;">A imagem será redimensionada e comprimida automaticamente para consumo otimizado de memória.</span>
+                        <label class="res-btn" style="display: inline-block; padding: 6px 14px; cursor: pointer; background: #000; border: 1px solid var(--neon-red); color: #fff; font-weight: bold; border-radius: 4px;">
                             📷 Selecionar Foto
                             <input type="file" accept="image/*" onchange="uploadCharPhoto(event)" style="display:none;">
                         </label>
@@ -1793,9 +1793,7 @@ function renderCharactersSection(container) {
                 <div class="ficha-field" style="margin-top: 0.8rem;">
                     <label>DESCRIÇÃO DO PODER / ESPECIALIDADE</label>
                     <textarea id="fc-desc-poder" rows="3" placeholder="Descreva o funcionamento do seu poder ou especialidade...">${currentChar.descPoder || ''}</textarea>
-                    <button type="button" class="view-levels-btn" onclick="runPowerBalancer()" style="margin-top: 0.5rem; align-self: flex-start;">
-                        ⚡ BALANCEAR PODER / ESPECIALIDADE (IA LOCAL)
-                    </button>
+                    <!-- <button type="button" class="view-levels-btn" onclick="runPowerBalancer()" style="margin-top: 0.5rem; align-self: flex-start;">⚡ BALANCEAR PODER / ESPECIALIDADE (IA LOCAL)</button> -->
                 </div>
 
                 <!-- HABILIDADES / MAESTRIAS -->
@@ -2170,7 +2168,8 @@ function submitForApproval() {
         return; // Bloqueia totalmente o envio
     }
 
-    // ══ VERIFICAÇÃO DE BALANCEAMENTO POR NÍVEL ══
+    // ══ VERIFICAÇÃO DE BALANCEAMENTO POR NÍVEL (DESATIVADA TEMPORARIAMENTE) ══
+    /*
     const nivel = parseInt(charData.nivelPoder) || 1;
     const balanceResult = analyzePowerBalance(
         charData.nomePoder || '',
@@ -2191,6 +2190,7 @@ function submitForApproval() {
         if (!confirmar) return;
         charData.balanceAlert = balanceResult.veredicto;
     }
+    */
 
     charData.status = 'pendente';
     allChars[session.username][`char${activeCharSlot}`] = charData;
