@@ -377,10 +377,7 @@ const pages = {
             <!-- SUB-ABA 3: PONTUAÇÕES E RECURSOS -->
             <div id="subtab-pontuacoes" class="content-section" style="display: none; line-height: 1.6; text-align: justify;">
                 <div style="text-align: center; margin-bottom: 1.8rem;">
-                    <div style="font-size: 1.5rem; color: var(--neon-red); font-family: 'Orbitron', monospace; letter-spacing: 2px;">
-                        　𓐑　 — PONTUAÇÕES E RECURSOS — 　𓐑　
-                    </div>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.6rem; font-style: italic;">
+                    <p style="color: var(--text-muted); font-size: 0.9rem; font-style: italic;">
                         O Awakening of Power-RPG conta com diversos sistemas evolutivos e que funcionam à base de pontuações ou acumulação e gasto de recursos por quantidades e valores. Aqui vai uma lista explicativa de cada tipo de pontuação e recurso existentes no RPG:
                     </p>
                 </div>
