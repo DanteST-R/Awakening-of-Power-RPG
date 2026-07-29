@@ -1,6 +1,38 @@
 // Inicializa os ícones do Lucide
 lucide.createIcons();
 
+// Lista de Poderes Proibidos — consultada na aprovação de fichas
+const BANNED_POWERS = [
+    "Criação e Manipulação de Buracos Negros",
+    "Criação e Manipulação de Doenças",
+    "Onipotência",
+    "Onisciência",
+    "Onipresença",
+    "Omni-poderes",
+    "Manipulação Absoluta da Realidade",
+    "Reescrita da Existência",
+    "Apagamento da Existência",
+    "Aniquilação Total",
+    "Causalidade Absoluta",
+    "Manipulação do Destino",
+    "Controle Absoluto da Morte",
+    "Ressurreição Ilimitada",
+    "Imortalidade Absoluta",
+    "Invulnerabilidade Absoluta",
+    "Poder Ilimitado / Sem Limites",
+    "Cópia Absoluta de Qualquer Poder",
+    "Nulificação Absoluta de Poderes",
+    "Manipulação do Tempo (versão Absoluta)",
+    "Viagem no Tempo sem restrições",
+    "Controle Total da Mente",
+    "Apagamento de Memórias (versão Absoluta)",
+    "Recriação Universal",
+    "Destruição Universal",
+    "Manipulação de Dimensões (versão Absoluta)",
+    "Poderes Divinos / Nivelados a Deuses",
+    "Controle Absoluto de outros personagens"
+];
+
 // Dados das páginas simulando um roteamento
 const pages = {
     perfil: {
@@ -27,22 +59,22 @@ const pages = {
             <h3 class="neon-text" style="font-size: 1.1rem; margin-top: 1.8rem; margin-bottom: 0.8rem;">EXPLORAR BAIRROS DE UNICITY:</h3>
             <div class="bairros-buttons-grid">
                 <button class="bairro-btn delly" onclick="openBairroModal('delly')">
-                    <span class="emoji-icon">🟥</span> Delly
+                    <span style="font-size:1rem;">🟥</span> Delly
                 </button>
                 <button class="bairro-btn amberling" onclick="openBairroModal('amberling')">
-                    <span class="emoji-icon">🟨</span> Amberling
+                    <span style="font-size:1rem;">🟨</span> Amberling
                 </button>
                 <button class="bairro-btn sammill" onclick="openBairroModal('sammill')">
-                    <span class="emoji-icon">🟦</span> Sammill
+                    <span style="font-size:1rem;">🟦</span> Sammill
                 </button>
                 <button class="bairro-btn dawn-hill" onclick="openBairroModal('dawn-hill')">
-                    <span class="emoji-icon">🟩</span> Dawn Hill
+                    <span style="font-size:1rem;">🟩</span> Dawn Hill
                 </button>
                 <button class="bairro-btn central-sunset" onclick="openBairroModal('central-sunset')">
-                    <span class="emoji-icon">🟧</span> Central Sunset
+                    <span style="font-size:1rem;">🟧</span> Central Sunset
                 </button>
                 <button class="bairro-btn vienner" onclick="openBairroModal('vienner')">
-                    <span class="emoji-icon">🟪</span> Vienner
+                    <span style="font-size:1rem;">🟪</span> Vienner
                 </button>
             </div>
 
@@ -423,7 +455,56 @@ const pages = {
     },
     poderes: {
         title: "Poderes Usados",
-        content: "Registro dos Meta-Humanos conhecidos e a descrição técnica de suas habilidades."
+        render: () => `
+            <div class="page-container">
+                <h1 class="page-title neon-text">Poderes Usados</h1>
+
+                <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 2rem;">
+                    Registro dos Meta-Humanos conhecidos e a descrição técnica de suas habilidades.
+                    Esta aba também contém a lista de <strong style="color: var(--neon-red);">Poderes Proibidos</strong>,
+                    consultada automaticamente pelo sistema durante a aprovação de fichas.
+                </p>
+
+                <!-- ════ PODERES BANIDOS ════ -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h2 class="neon-text" style="font-size: 1.4rem; margin-bottom: 0.4rem;">⛔ PODERES PROIBIDOS</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem; line-height:1.6;">
+                        Os poderes listados abaixo são <strong>absolutamente proibidos</strong> no universo Awakening RPG.
+                        O sistema verifica automaticamente esta lista ao analisar fichas submetidas para aprovação.
+                        Qualquer submissão contendo estes poderes será <span style="color:var(--neon-red);font-weight:bold;">recusada automaticamente</span>.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.8rem;">
+                        ${ BANNED_POWERS.map(power => `
+                            <div style="
+                                display: flex; align-items: flex-start; gap: 10px;
+                                padding: 0.8rem 1rem;
+                                background: #000;
+                                border: 1px solid var(--neon-red);
+                                border-left: 4px solid var(--neon-red);
+                                border-radius: 3px;
+                            ">
+                                <span style="color: var(--neon-red); font-size: 1rem; flex-shrink:0;">⛔</span>
+                                <span style="color: var(--text-main); font-size: 0.85rem; line-height:1.5;">${power}</span>
+                            </div>
+                        `).join('') }
+                    </div>
+
+                    <div style="margin-top: 1.2rem; padding: 1rem 1.2rem; background: rgba(255,0,60,0.05); border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                        ❗ <em>Esta lista pode ser expandida pela administração a qualquer momento. Poderes similares ou variações que contornem as proibições listadas também serão avaliados e potencialmente recusados. A decisão final é sempre da administração.</em>
+                    </div>
+                </div>
+
+                <!-- ════ REGISTRO DE META-HUMANOS ════ -->
+                <div>
+                    <h2 class="neon-text" style="font-size: 1.4rem; margin-bottom: 1rem;">📋 REGISTRO DE META-HUMANOS</h2>
+                    <div style="padding: 1.5rem; background: #000; border: 1px solid var(--support-crimson); border-radius: 4px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; text-align: center;">
+                        <span style="font-size: 2rem; display: block; margin-bottom: 0.8rem;">🗂️</span>
+                        <p>Nenhum registro disponível ainda. Os Mestres podem adicionar Meta-Humanos conhecidos e suas habilidades aqui.</p>
+                    </div>
+                </div>
+            </div>
+        `
     },
     treinamentos: {
         title: "Treinamentos",
@@ -454,14 +535,19 @@ function renderPage(pageId) {
     const pageData = pages[pageId];
     if(!pageData) return;
 
-    contentArea.innerHTML = `
-        <div class="page-container">
-            <h1 class="page-title neon-text">${pageData.title}</h1>
-            <div class="placeholder-card">
-                ${pageData.content}
+    // Se a página tem render() próprio, usa ele; senão usa o placeholder padrão
+    if (typeof pageData.render === 'function') {
+        contentArea.innerHTML = pageData.render();
+    } else {
+        contentArea.innerHTML = `
+            <div class="page-container">
+                <h1 class="page-title neon-text">${pageData.title}</h1>
+                <div class="placeholder-card">
+                    ${pageData.content}
+                </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 
     if (pageId === 'perfil') {
         renderPerfil();
