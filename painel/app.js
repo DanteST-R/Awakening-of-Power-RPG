@@ -2302,6 +2302,22 @@ function renderCreateNpcSection(container) {
                     ➕ NOVO NPC
                 </h4>
 
+                <!-- FOTO DO NPC COMPRIMIDA -->
+                <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1rem; background: #000; border: 2px solid var(--neon-red); border-left: 5px solid var(--neon-red); border-radius: 6px;">
+                    <div style="position: relative; width: 75px; height: 75px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; flex-shrink: 0; background: #000;">
+                        <img id="npc-photo-preview" src="https://via.placeholder.com/150/111111/FF003C?text=NPC" alt="Foto do NPC" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div>
+                        <strong style="color: #fff; font-size: 0.9rem; font-family: 'Orbitron', sans-serif; display: block; margin-bottom: 4px;">FOTO DO NPC</strong>
+                        <span style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 8px;">A foto será comprimida e exibida nos registros públicos e secretos.</span>
+                        <label class="res-btn" style="display: inline-block; padding: 5px 12px; cursor: pointer; background: #000; border: 1px solid var(--neon-red); color: #fff;">
+                            📷 Selecionar Foto
+                            <input type="file" accept="image/*" onchange="uploadNpcPhoto(event)" style="display:none;">
+                        </label>
+                        <input type="hidden" id="npc-foto-data" value="">
+                    </div>
+                </div>
+
                 <!-- DADOS BÁSICOS -->
                 <div class="ficha-grid-2">
                     <div class="ficha-field">
@@ -2406,14 +2422,19 @@ function renderCreateNpcSection(container) {
                     ${npcs.map((npc, idx) => `
                         <div style="background: #000; border: 1px solid ${npc.visivel ? 'var(--neon-red)' : '#444'}; border-radius: 6px; padding: 1.2rem; position: relative;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
-                                <div>
-                                    <h4 style="color: #fff; font-size: 1.1rem; margin: 0 0 4px 0; font-family: 'Orbitron', sans-serif;">
-                                        ${npc.nome} 
-                                        <span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 3px; background: ${npc.visivel ? 'rgba(0,255,100,0.1)' : 'rgba(255,0,0,0.1)'}; color: ${npc.visivel ? '#00ff66' : '#ff3333'}; border: 1px solid ${npc.visivel ? '#00ff66' : '#ff3333'};">
-                                            ${npc.visivel ? '👁️ VISÍVEL' : '🙈 OCULTO'}
-                                        </span>
-                                    </h4>
-                                    <span style="color: var(--text-muted); font-size: 0.85rem;">Classe: ${npc.classe} | Ranque: ${npc.ranque}</span>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <div style="width: 60px; height: 60px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; background: #111; flex-shrink: 0;">
+                                        <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover;">
+                                    </div>
+                                    <div>
+                                        <h4 style="color: #fff; font-size: 1.1rem; margin: 0 0 4px 0; font-family: 'Orbitron', sans-serif;">
+                                            ${npc.nome} 
+                                            <span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 3px; background: ${npc.visivel ? 'rgba(0,255,100,0.1)' : 'rgba(255,0,0,0.1)'}; color: ${npc.visivel ? '#00ff66' : '#ff3333'}; border: 1px solid ${npc.visivel ? '#00ff66' : '#ff3333'};">
+                                                ${npc.visivel ? '👁️ VISÍVEL' : '🙈 OCULTO'}
+                                            </span>
+                                        </h4>
+                                        <span style="color: var(--text-muted); font-size: 0.85rem;">Classe: ${npc.classe} | Ranque: ${npc.ranque}</span>
+                                    </div>
                                 </div>
                                 <div style="display: flex; gap: 6px;">
                                     <button type="button" class="res-btn" onclick="toggleNpcVisibility(${idx})" style="padding: 4px 8px;">
@@ -2449,6 +2470,45 @@ function renderCreateNpcSection(container) {
     `;
 }
 
+function uploadNpcPhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 300;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_SIZE) {
+                    height *= MAX_SIZE / width;
+                    width = MAX_SIZE;
+                }
+            } else {
+                if (height > MAX_SIZE) {
+                    width *= MAX_SIZE / height;
+                    height = MAX_SIZE;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            document.getElementById('npc-photo-preview').src = compressedDataUrl;
+            document.getElementById('npc-foto-data').value = compressedDataUrl;
+        };
+        img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 function saveNpcForm(e) {
     e.preventDefault();
     const historia = document.getElementById('npc-historia').value.trim();
@@ -2458,6 +2518,7 @@ function saveNpcForm(e) {
     }
 
     const newNpc = {
+        foto: document.getElementById('npc-foto-data').value || '',
         nome: document.getElementById('npc-nome').value,
         classe: document.getElementById('npc-classe').value,
         ranque: document.getElementById('npc-ranque').value,

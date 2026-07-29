@@ -1288,13 +1288,13 @@ span[role="img"],
     font-weight: bold;
 }
 
-.ficha-field input, .ficha-field select, .ficha-field textarea, select {
-    background: #0d0d0d !important;
-    border: 1px solid rgba(255,0,60,0.4);
-    border-radius: 3px;
+.ficha-field input, .ficha-field select, .ficha-field textarea, select, input[type="text"], input[type="number"] {
+    background: #000000 !important;
+    border: 1px solid var(--neon-red) !important;
+    border-radius: 4px;
     color: var(--neon-red) !important;
     font-family: 'Orbitron', monospace;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     padding: 0.6rem;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -1302,7 +1302,6 @@ span[role="img"],
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23FF003C'><path d='M6 9L1 4h10z'/></svg>") !important;
     background-repeat: no-repeat !important;
     background-position: right 10px center !important;
-    padding-right: 28px !important;
 }
 
 select option {
