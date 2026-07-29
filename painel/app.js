@@ -782,7 +782,53 @@ const pages = {
     },
     personagens: {
         title: "Personagens e NPCs",
-        content: "Fichas completas, alinhamentos, histórico criminal e corporativo."
+        render: () => {
+            const npcs = getNpcs().filter(n => n.visivel);
+            return `
+                <div class="page-container">
+                    <h1 class="page-title neon-text">Personagens e NPCs de Unicity</h1>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6;">
+                        Registros e informações públicas sobre as figuras mais influentes, ameaças conhecidas e NPCs de Unicity.
+                    </p>
+
+                    ${npcs.length === 0 ? `
+                        <div style="padding: 2.5rem; background: #000; border: 1px solid var(--support-crimson); border-radius: 6px; text-align: center; color: var(--text-muted);">
+                            <span style="font-size: 2rem; display: block; margin-bottom: 0.8rem;">🎭</span>
+                            Nenhum NPC público registrado no momento.
+                        </div>
+                    ` : `
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                            ${npcs.map(npc => `
+                                <div style="background: #000; border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 6px; padding: 1.4rem; box-shadow: 0 0 15px rgba(0,0,0,0.6);">
+                                    <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                                        <div style="width: 70px; height: 70px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; background: #111; flex-shrink: 0;">
+                                            <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover;">
+                                        </div>
+                                        <div>
+                                            <h3 style="color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin: 0 0 4px 0;">${npc.nome}</h3>
+                                            <span style="color: var(--neon-red); font-size: 0.8rem; font-weight: bold; font-family: monospace; display: block;">${npc.ranque || 'N/A'} (${npc.classe})</span>
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: rgba(255,255,255,0.02); padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem;">
+                                        <span><strong>Força:</strong> Nv. ${npc.forca || 1}</span>
+                                        <span><strong>Resistência:</strong> Nv. ${npc.resistencia || 1}</span>
+                                        <span><strong>Velocidade:</strong> Nv. ${npc.velocidade || 1}</span>
+                                        <span><strong>Agilidade:</strong> Nv. ${npc.agilidade || 1}</span>
+                                        <span style="grid-column: span 2;"><strong>Poder/Espec:</strong> Nv. ${npc.poderLevel || 1} (${npc.nomePoder || 'N/A'})</span>
+                                    </div>
+                                    ${npc.boatos ? `
+                                        <div style="background: rgba(255,0,60,0.06); border: 1px solid rgba(255,0,60,0.3); border-radius: 4px; padding: 0.8rem 1rem; font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
+                                            <strong style="color: var(--neon-red); display: block; margin-bottom: 4px;">💬 BOATOS & INFORMAÇÕES:</strong>
+                                            <em>"${npc.boatos}"</em>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+            `;
+        }
     },
     historia: {
         title: "História",
@@ -1545,6 +1591,7 @@ function renderPerfil() {
             <div class="perfil-master-tabs" style="margin-top: 1.5rem;">
                 <button class="perfil-subtab ${activePerfilSection === 'fichas' ? 'active' : ''}" onclick="switchPerfilSection('fichas')">👤 MEUS PERSONAGENS</button>
                 <button class="perfil-subtab ${activePerfilSection === 'aprovacoes' ? 'active' : ''}" onclick="switchPerfilSection('aprovacoes')">⚡ CENTRAL DE APROVAÇÃO DOS MESTRES</button>
+                <button class="perfil-subtab ${activePerfilSection === 'npcs' ? 'active' : ''}" onclick="switchPerfilSection('npcs')">🎭 CRIAR NPC</button>
             </div>
         ` : ''}
 
@@ -1583,6 +1630,8 @@ function renderPerfilSection() {
 
     if (activePerfilSection === 'aprovacoes') {
         renderApprovalsSection(container);
+    } else if (activePerfilSection === 'npcs') {
+        renderCreateNpcSection(container);
     } else {
         renderCharactersSection(container);
     }
@@ -2220,6 +2269,235 @@ function runPowerBalancer() {
     const result = analyzePowerBalance(nome, categoria, tipo, descricao, 1);
     showBalancerModal(result);
 }
+
+// ═══════════════════════════════════════════════════════════════
+//          GERENCIAMENTO E CRIAÇÃO DE NPCS (MESTRES)
+// ═══════════════════════════════════════════════════════════════
+
+function getNpcs() {
+    const data = localStorage.getItem('awakening_npcs');
+    return data ? JSON.parse(data) : [];
+}
+
+function saveNpcs(npcs) {
+    localStorage.setItem('awakening_npcs', JSON.stringify(npcs));
+}
+
+function renderCreateNpcSection(container) {
+    const npcs = getNpcs();
+
+    container.innerHTML = `
+        <div class="ficha-card-scroll">
+            <h3 class="neon-text" style="font-size: 1.2rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
+                🎭 GERENCIADOR DE NPCS DA CIDADE (MESTRE SUPREMO)
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.6;">
+                Crie e configure NPCs para o universo de Awakening RPG. 
+                <strong style="color: var(--neon-red);">A Lista de Banimento NÃO se aplica a NPCs</strong>.
+                A história é obrigatória e privada (visível somente para os Mestres). Os jogadores só verão os <strong>Boatos</strong> e os atributos caso o NPC esteja marcado como <strong>Visível</strong>.
+            </p>
+
+            <form id="npc-form" onsubmit="saveNpcForm(event)" style="background: rgba(0,0,0,0.6); padding: 1.5rem; border: 1px solid var(--support-crimson); border-radius: 6px; margin-bottom: 2rem;">
+                <h4 style="color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1rem; margin-bottom: 1.2rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 6px;">
+                    ➕ NOVO NPC
+                </h4>
+
+                <!-- DADOS BÁSICOS -->
+                <div class="ficha-grid-2">
+                    <div class="ficha-field">
+                        <label>NOME DO NPC *</label>
+                        <input type="text" id="npc-nome" required placeholder="Ex: Mestre Kurogane">
+                    </div>
+                    <div class="ficha-field">
+                        <label>CLASSE *</label>
+                        <select id="npc-classe" required>
+                            <option value="Herói">Herói</option>
+                            <option value="Anti-Herói">Anti-Herói</option>
+                            <option value="Vilão">Vilão</option>
+                            <option value="Neutro / Entidade">Neutro / Entidade</option>
+                        </select>
+                    </div>
+                    <div class="ficha-field">
+                        <label>RANQUE DO NPC *</label>
+                        <select id="npc-ranque" required>
+                            ${RANK_DATA.map(r => `<option value="${r.pedra}">${r.emoji} ${r.pedra}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="ficha-field">
+                        <label>VISIBILIDADE PARA PLAYERS *</label>
+                        <select id="npc-visivel" required>
+                            <option value="true">👁️ VISÍVEL (Aparece na aba Personagens/NPCs)</option>
+                            <option value="false">🙈 OCULTO (Visível somente para Mestres)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- NÍVEIS DE ATRIBUTOS CUSTOMIZÁVEIS -->
+                <h5 class="carmine-text" style="margin-top: 1.2rem; font-size: 0.9rem; border-bottom: 1px solid rgba(255,0,60,0.3); padding-bottom: 4px;">
+                    📊 NÍVEIS DOS ATRIBUTOS (SEM LIMITES PARA MESTRE)
+                </h5>
+                <div class="ficha-grid-2" style="margin-top: 0.8rem;">
+                    <div class="ficha-field">
+                        <label>FORÇA (Nível)</label>
+                        <input type="number" id="npc-forca" min="1" max="100" value="1">
+                    </div>
+                    <div class="ficha-field">
+                        <label>RESISTÊNCIA (Nível)</label>
+                        <input type="number" id="npc-resistencia" min="1" max="100" value="1">
+                    </div>
+                    <div class="ficha-field">
+                        <label>VELOCIDADE (Nível)</label>
+                        <input type="number" id="npc-velocidade" min="1" max="100" value="1">
+                    </div>
+                    <div class="ficha-field">
+                        <label>AGILIDADE (Nível)</label>
+                        <input type="number" id="npc-agilidade" min="1" max="100" value="1">
+                    </div>
+                    <div class="ficha-field" style="grid-column: span 2;">
+                        <label>PODER / ESPECIALIDADE (Nível)</label>
+                        <input type="number" id="npc-poder-level" min="1" max="100" value="1">
+                    </div>
+                </div>
+
+                <!-- PODER E HABILIDADES -->
+                <h5 class="carmine-text" style="margin-top: 1.2rem; font-size: 0.9rem; border-bottom: 1px solid rgba(255,0,60,0.3); padding-bottom: 4px;">
+                    ⚡ PODER E HABILIDADES (SEM BANIMENTO)
+                </h5>
+                <div class="ficha-grid-2" style="margin-top: 0.8rem;">
+                    <div class="ficha-field">
+                        <label>NOME DO PODER / HABILIDADE PRINCIPAL</label>
+                        <input type="text" id="npc-nome-poder" placeholder="Ex: Manipulação Dimensional Ilimitada">
+                    </div>
+                    <div class="ficha-field">
+                        <label>DESCRIÇÃO DO PODER</label>
+                        <input type="text" id="npc-desc-poder" placeholder="Sem restrições de banimento para NPCs...">
+                    </div>
+                </div>
+
+                <!-- BOATOS (PÚBLICO) E HISTÓRIA (OBRIGATÓRIO / PRIVADO) -->
+                <h5 class="carmine-text" style="margin-top: 1.2rem; font-size: 0.9rem; border-bottom: 1px solid rgba(255,0,60,0.3); padding-bottom: 4px;">
+                    📜 HISTÓRIA PRIVADA E BOATOS PÚBLICOS
+                </h5>
+                <div class="ficha-field" style="margin-top: 0.8rem;">
+                    <label style="color: var(--neon-red);">HISTÓRIA DO NPC (OBRIGATÓRIA - PRIVADA APENAS PARA MESTRES) *</label>
+                    <textarea id="npc-historia" rows="4" required placeholder="Digite a história secreta do NPC. ESTA SEÇÃO NÃO SERÁ EXIBIDA AOS PLAYERS."></textarea>
+                </div>
+                <div class="ficha-field" style="margin-top: 0.8rem;">
+                    <label>BOATOS E INFORMAÇÕES CONHECIDAS (EXIBIDO AOS PLAYERS)</label>
+                    <textarea id="npc-boatos" rows="2" placeholder="O que os cidadãos e vilões comentam sobre este NPC nas ruas..."></textarea>
+                </div>
+
+                <button type="submit" class="auth-submit-btn master-btn" style="width: 100%; margin-top: 1.2rem;">
+                    💾 SALVAR NPC
+                </button>
+            </form>
+
+            <!-- LISTA DE NPCS CADASTRADOS -->
+            <h4 style="color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin-bottom: 1rem;">
+                📋 NPCS CADASTRADOS (${npcs.length})
+            </h4>
+
+            ${npcs.length === 0 ? `
+                <div style="padding: 1.5rem; text-align: center; border: 1px dashed var(--support-crimson); color: var(--text-muted);">
+                    Nenhum NPC criado até o momento.
+                </div>
+            ` : `
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    ${npcs.map((npc, idx) => `
+                        <div style="background: #000; border: 1px solid ${npc.visivel ? 'var(--neon-red)' : '#444'}; border-radius: 6px; padding: 1.2rem; position: relative;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <h4 style="color: #fff; font-size: 1.1rem; margin: 0 0 4px 0; font-family: 'Orbitron', sans-serif;">
+                                        ${npc.nome} 
+                                        <span style="font-size: 0.75rem; padding: 2px 8px; border-radius: 3px; background: ${npc.visivel ? 'rgba(0,255,100,0.1)' : 'rgba(255,0,0,0.1)'}; color: ${npc.visivel ? '#00ff66' : '#ff3333'}; border: 1px solid ${npc.visivel ? '#00ff66' : '#ff3333'};">
+                                            ${npc.visivel ? '👁️ VISÍVEL' : '🙈 OCULTO'}
+                                        </span>
+                                    </h4>
+                                    <span style="color: var(--text-muted); font-size: 0.85rem;">Classe: ${npc.classe} | Ranque: ${npc.ranque}</span>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <button type="button" class="res-btn" onclick="toggleNpcVisibility(${idx})" style="padding: 4px 8px;">
+                                        ${npc.visivel ? '🙈 Ocultar' : '👁️ Tornar Visível'}
+                                    </button>
+                                    <button type="button" class="res-btn remove-btn" onclick="deleteNpc(${idx})" style="padding: 4px 8px;">
+                                        🗑️ Excluir
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 0.8rem; padding: 0.8rem; background: rgba(255,255,255,0.02); border-radius: 4px; font-size: 0.82rem; color: var(--text-muted);">
+                                <div><strong>Atributos:</strong> Força Nv.${npc.forca || 1} | Resist. Nv.${npc.resistencia || 1} | Veloc. Nv.${npc.velocidade || 1} | Agil. Nv.${npc.agilidade || 1} | Poder Nv.${npc.poderLevel || 1}</div>
+                                <div style="margin-top: 4px;"><strong>Poder:</strong> ${npc.nomePoder || 'N/A'} — <em>${npc.descPoder || 'Sem descrição'}</em></div>
+                            </div>
+
+                            <div style="margin-top: 0.8rem; font-size: 0.83rem; color: var(--text-main); background: rgba(255,0,60,0.05); border-left: 3px solid var(--neon-red); padding: 0.6rem 0.8rem;">
+                                <strong style="color: var(--neon-red); display: block;">🔒 História (Privada):</strong>
+                                ${npc.historia}
+                            </div>
+
+                            ${npc.boatos ? `
+                                <div style="margin-top: 0.5rem; font-size: 0.83rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border-left: 3px solid #ffaa00; padding: 0.6rem 0.8rem;">
+                                    <strong style="color: #ffaa00; display: block;">💬 Boatos (Público):</strong>
+                                    ${npc.boatos}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `}
+        </div>
+    `;
+}
+
+function saveNpcForm(e) {
+    e.preventDefault();
+    const historia = document.getElementById('npc-historia').value.trim();
+    if (!historia) {
+        alert('A história do NPC é obrigatória!');
+        return;
+    }
+
+    const newNpc = {
+        nome: document.getElementById('npc-nome').value,
+        classe: document.getElementById('npc-classe').value,
+        ranque: document.getElementById('npc-ranque').value,
+        visivel: document.getElementById('npc-visivel').value === 'true',
+        forca: parseInt(document.getElementById('npc-forca').value) || 1,
+        resistencia: parseInt(document.getElementById('npc-resistencia').value) || 1,
+        velocidade: parseInt(document.getElementById('npc-velocidade').value) || 1,
+        agilidade: parseInt(document.getElementById('npc-agilidade').value) || 1,
+        poderLevel: parseInt(document.getElementById('npc-poder-level').value) || 1,
+        nomePoder: document.getElementById('npc-nome-poder').value,
+        descPoder: document.getElementById('npc-desc-poder').value,
+        historia: historia,
+        boatos: document.getElementById('npc-boatos').value
+    };
+
+    const npcs = getNpcs();
+    npcs.push(newNpc);
+    saveNpcs(npcs);
+
+    alert('NPC criado com sucesso!');
+    renderPerfilSection();
+}
+
+function toggleNpcVisibility(idx) {
+    const npcs = getNpcs();
+    if (npcs[idx]) {
+        npcs[idx].visivel = !npcs[idx].visivel;
+        saveNpcs(npcs);
+        renderPerfilSection();
+    }
+}
+
+function deleteNpc(idx) {
+    if (!confirm('Deseja realmente excluir este NPC?')) return;
+    const npcs = getNpcs();
+    npcs.splice(idx, 1);
+    saveNpcs(npcs);
+    renderPerfilSection();
+}
+
 
 
 
