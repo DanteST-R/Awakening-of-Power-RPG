@@ -510,7 +510,7 @@ const pages = {
                         </p>
                     </div>
                     <div style="padding: 0.9rem 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; font-size: 0.87rem; color: var(--text-muted);">
-                        <strong style="color:#fff;">• Último Rank:</strong> Ao alcançar o último rank (💎 Diamante), todos os Pontos de Rank que você possuir podem ser transformados em <strong style="color: var(--neon-red);">Dinheiro ($)</strong>, à sua escolha.
+                        <strong style="color:#fff;">• Último Rank:</strong> Ao alcançar o último rank (❖ Diamante), todos os Pontos de Rank que você possuir podem ser transformados em <strong style="color: var(--neon-red);">Pontos Gear (GP)</strong>, à sua escolha.
                     </div>
                 </div>
 
@@ -575,7 +575,7 @@ const pages = {
                             </div>
                             ${r.ultimo ? `
                                 <div style="margin-top: 1rem; padding: 0.8rem; background: rgba(185,242,255,0.05); border: 1px solid #b9f2ff44; border-radius: 4px; font-size: 0.82rem; color: #b9f2ff; font-style: italic;">
-                                    💎 Rank máximo atingido! Seus P.R. excedentes podem ser convertidos em $ a qualquer momento.
+                                    ❖ Rank máximo atingido! Seus P.R. excedentes podem ser convertidos em GP a qualquer momento.
                                 </div>
                             ` : ''}
                         </div>
