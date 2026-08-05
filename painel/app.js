@@ -45,11 +45,10 @@ const RANK_DATA = [
     { nivel: 8, pedra: 'Diamante',  emoji: '❖', cor: '#b9f2ff', pr: 3600,   recompensas: ['Acesso à missões Rank Diamante', '+650 Exp.', '+650 Pontos Gear'], narrativa: 'O personagem alcançou o mais alto grau de reconhecimento existente. Seu nome tornou-se parte da história e sua influência transcende organizações, países e gerações, sendo lembrado como uma verdadeira lenda.', ultimo: true }
 ];
 
-// Nomes de rank por classe e nível
-function getRankName(nivel, classe) {
+// Nomes de rank unificados
+function getRankName(nivel) {
     const r = RANK_DATA.find(x => x.nivel === nivel) || RANK_DATA[0];
-    const prefixo = classe === 'Herói' ? 'Herói' : classe === 'Vilão' ? 'Vilão' : 'Vigilante';
-    return `${prefixo} ${r.pedra} ${r.emoji}`;
+    return `${r.emoji} ${r.pedra}`;
 }
 
 // Dados das páginas simulando um roteamento
@@ -528,9 +527,6 @@ const pages = {
                                     <div>
                                         <div style="font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.05rem; color: ${r.cor}; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px ${r.cor}88;">
                                             ${r.pedra}
-                                        </div>
-                                        <div style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">
-                                            Herói ${r.pedra} &nbsp;|&nbsp; Vilão ${r.pedra} &nbsp;|&nbsp; Vigilante ${r.pedra}
                                         </div>
                                     </div>
                                 </div>
