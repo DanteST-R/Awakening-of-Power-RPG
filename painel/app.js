@@ -1748,6 +1748,16 @@ async function handleMasterLogin(e) {
         return showAuthError(errorId, 'Credenciais incorretas ou acesso não autorizado.');
     }
 
+    // Se o nome está na lista de Supremos e o Firebase autenticou, entra direto.
+    const isSup = SUPREME_MASTERS.some(m => m.toLowerCase() === username.toLowerCase());
+    if (isSup) {
+        // Garante que o documento existe no Firestore com role correto
+        const supUser = { username, role: 'supreme', uid: result.uid };
+        syncToFirebase("users", "dict", { [result.uid]: supUser });
+        return enterApp({ username, role: 'supreme', uid: result.uid });
+    }
+
+    // Para outros mestres, verifica o registro no banco de dados
     const users = getUsers();
     const user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
