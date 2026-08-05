@@ -2649,7 +2649,8 @@ function renderCreateNpcSection(container) {
                                         <span style="color: var(--text-muted); font-size: 0.85rem;">Classe: ${npc.classe} | Ranque: ${npc.ranque}</span>
                                     </div>
                                 </div>
-                                <div style="display: flex; gap: 6px;">
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <button type="button" class="lore-ctrl-btn" onclick="openEditNpcModal(${idx})" style="font-size:0.8rem;">✎ Editar</button>
                                     <button type="button" class="res-btn" onclick="toggleNpcVisibility(${idx})" style="padding: 4px 8px;">
                                         ${npc.visivel ? '🙈 Ocultar' : '👁️ Tornar Visível'}
                                     </button>
@@ -2752,6 +2753,10 @@ function saveNpcForm(e) {
     saveNpcs(npcs);
 
     alert('NPC criado com sucesso!');
+    // Limpa o formulário
+    e.target.reset();
+    document.getElementById('npc-foto-data').value = '';
+    document.getElementById('npc-photo-preview').src = 'https://via.placeholder.com/150/111111/FF003C?text=NPC';
     renderPerfilSection();
 }
 
@@ -2769,6 +2774,148 @@ function deleteNpc(idx) {
     const npcs = getNpcs();
     npcs.splice(idx, 1);
     saveNpcs(npcs);
+    renderPerfilSection();
+}
+
+// ═══ EDITAR NPC ═══
+function openEditNpcModal(idx) {
+    const npcs = getNpcs();
+    const npc = npcs[idx];
+    if (!npc) return;
+
+    let overlay = document.getElementById('global-lore-modal');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'global-lore-modal';
+        document.body.appendChild(overlay);
+    }
+
+    overlay.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;padding:1rem;';
+    overlay.innerHTML = `
+        <div style="background:#0a0a0a;border:1px solid var(--neon-red);border-radius:8px;width:100%;max-width:680px;padding:2rem;max-height:92vh;overflow-y:auto;" onclick="event.stopPropagation()">
+            <h3 style="color:var(--neon-red);font-family:'Orbitron',monospace;font-size:1rem;margin-bottom:1.5rem;letter-spacing:2px;">✎ EDITAR NPC — ${npc.nome.toUpperCase()}</h3>
+
+            <!-- FOTO -->
+            <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;padding:1rem;background:#000;border:2px solid var(--neon-red);border-radius:6px;">
+                <div style="position:relative;width:75px;height:75px;border-radius:6px;border:2px solid var(--neon-red);overflow:hidden;flex-shrink:0;background:#000;">
+                    <img id="edit-npc-photo-preview" src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%;height:100%;object-fit:cover;">
+                </div>
+                <div>
+                    <strong style="color:#fff;font-size:0.9rem;font-family:'Orbitron',sans-serif;display:block;margin-bottom:4px;">FOTO DO NPC</strong>
+                    <label style="display:inline-block;padding:5px 12px;cursor:pointer;background:#000;border:1px solid var(--neon-red);color:#fff;border-radius:3px;font-size:0.82rem;">
+                        📷 Alterar Foto
+                        <input type="file" accept="image/*" onchange="uploadEditNpcPhoto(event)" style="display:none;">
+                    </label>
+                    <input type="hidden" id="edit-npc-foto-data" value="${npc.foto || ''}">
+                </div>
+            </div>
+
+            <!-- DADOS BÁSICOS -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+                <div><label style="color:#aaa;font-size:0.78rem;display:block;margin-bottom:4px;">NOME *</label>
+                    <input id="edit-npc-nome" type="text" value="${npc.nome}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.78rem;display:block;margin-bottom:4px;">CLASSE</label>
+                    <select id="edit-npc-classe" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem 0.8rem;border-radius:3px;box-sizing:border-box;">
+                        <option ${npc.classe==='Herói'?'selected':''}>Herói</option>
+                        <option ${npc.classe==='Anti-Herói'?'selected':''}>Anti-Herói</option>
+                        <option ${npc.classe==='Vilão'?'selected':''}>Vilão</option>
+                        <option ${npc.classe==='Neutro / Entidade'?'selected':''}>Neutro / Entidade</option>
+                    </select></div>
+                <div><label style="color:#aaa;font-size:0.78rem;display:block;margin-bottom:4px;">RANQUE</label>
+                    <select id="edit-npc-ranque" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem 0.8rem;border-radius:3px;box-sizing:border-box;">
+                        ${RANK_DATA.map(r => `<option value="${r.pedra}" ${npc.ranque===r.pedra?'selected':''}>${r.emoji} ${r.pedra}</option>`).join('')}
+                    </select></div>
+                <div><label style="color:#aaa;font-size:0.78rem;display:block;margin-bottom:4px;">VISIBILIDADE</label>
+                    <select id="edit-npc-visivel" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem 0.8rem;border-radius:3px;box-sizing:border-box;">
+                        <option value="true" ${npc.visivel?'selected':''}>Visível para players</option>
+                        <option value="false" ${!npc.visivel?'selected':''}>Oculto (só mestres)</option>
+                    </select></div>
+            </div>
+
+            <!-- ATRIBUTOS -->
+            <p style="color:var(--neon-red);font-size:0.78rem;font-weight:bold;margin-bottom:0.5rem;letter-spacing:1px;">NÍVEIS DOS ATRIBUTOS</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem;">
+                <div><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">FORÇA</label>
+                    <input id="edit-npc-forca" type="number" min="1" max="100" value="${npc.forca||1}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">RESISTÊNCIA</label>
+                    <input id="edit-npc-resistencia" type="number" min="1" max="100" value="${npc.resistencia||1}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">VELOCIDADE</label>
+                    <input id="edit-npc-velocidade" type="number" min="1" max="100" value="${npc.velocidade||1}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">AGILIDADE</label>
+                    <input id="edit-npc-agilidade" type="number" min="1" max="100" value="${npc.agilidade||1}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div style="grid-column:span 2;"><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">PODER / ESPECIALIDADE</label>
+                    <input id="edit-npc-poder-level" type="number" min="1" max="100" value="${npc.poderLevel||1}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+            </div>
+
+            <!-- PODER E HISTÓRIA -->
+            <p style="color:var(--neon-red);font-size:0.78rem;font-weight:bold;margin-bottom:0.5rem;letter-spacing:1px;">PODER E HISTÓRIA</p>
+            <div style="display:flex;flex-direction:column;gap:0.8rem;">
+                <div><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">NOME DO PODER</label>
+                    <input id="edit-npc-nome-poder" type="text" value="${npc.nomePoder||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">DESCRIÇÃO DO PODER</label>
+                    <input id="edit-npc-desc-poder" type="text" value="${npc.descPoder||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:var(--neon-red);font-size:0.75rem;display:block;margin-bottom:3px;">HISTÓRIA PRIVADA (só mestres) *</label>
+                    <textarea id="edit-npc-historia" rows="4" style="width:100%;background:#000;border:1px solid var(--neon-red);color:#fff;padding:0.45rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;">${npc.historia||''}</textarea></div>
+                <div><label style="color:#aaa;font-size:0.75rem;display:block;margin-bottom:3px;">BOATOS PÚBLICOS</label>
+                    <textarea id="edit-npc-boatos" rows="3" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;">${npc.boatos||''}</textarea></div>
+            </div>
+
+            <div style="display:flex;gap:0.8rem;margin-top:1.5rem;justify-content:flex-end;">
+                <button onclick="fecharModalLore()" style="background:none;border:1px solid #333;color:#aaa;padding:0.5rem 1.2rem;border-radius:3px;cursor:pointer;">Cancelar</button>
+                <button onclick="saveEditNpcForm(${idx})" style="background:var(--neon-red);border:none;color:#fff;padding:0.5rem 1.4rem;border-radius:3px;cursor:pointer;font-weight:bold;">Salvar Alterações</button>
+            </div>
+        </div>`;
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) fecharModalLore(); });
+}
+
+function uploadEditNpcPhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 300;
+            let w = img.width, h = img.height;
+            if (w > h) { if (w > MAX_SIZE) { h *= MAX_SIZE/w; w = MAX_SIZE; } }
+            else       { if (h > MAX_SIZE) { w *= MAX_SIZE/h; h = MAX_SIZE; } }
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            const data = canvas.toDataURL('image/jpeg', 0.75);
+            document.getElementById('edit-npc-photo-preview').src = data;
+            document.getElementById('edit-npc-foto-data').value = data;
+        };
+        img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function saveEditNpcForm(idx) {
+    const historia = document.getElementById('edit-npc-historia').value.trim();
+    if (!historia) { alert('A história do NPC é obrigatória!'); return; }
+    const npcs = getNpcs();
+    if (!npcs[idx]) return;
+    const fotoData = document.getElementById('edit-npc-foto-data').value;
+    npcs[idx] = {
+        ...npcs[idx],
+        foto:       fotoData || npcs[idx].foto,
+        nome:       document.getElementById('edit-npc-nome').value.trim(),
+        classe:     document.getElementById('edit-npc-classe').value,
+        ranque:     document.getElementById('edit-npc-ranque').value,
+        visivel:    document.getElementById('edit-npc-visivel').value === 'true',
+        forca:      parseInt(document.getElementById('edit-npc-forca').value) || 1,
+        resistencia:parseInt(document.getElementById('edit-npc-resistencia').value) || 1,
+        velocidade: parseInt(document.getElementById('edit-npc-velocidade').value) || 1,
+        agilidade:  parseInt(document.getElementById('edit-npc-agilidade').value) || 1,
+        poderLevel: parseInt(document.getElementById('edit-npc-poder-level').value) || 1,
+        nomePoder:  document.getElementById('edit-npc-nome-poder').value.trim(),
+        descPoder:  document.getElementById('edit-npc-desc-poder').value.trim(),
+        historia:   historia,
+        boatos:     document.getElementById('edit-npc-boatos').value.trim()
+    };
+    saveNpcs(npcs);
+    fecharModalLore();
     renderPerfilSection();
 }
 
