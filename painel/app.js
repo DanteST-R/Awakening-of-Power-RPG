@@ -35,19 +35,14 @@ const BANNED_POWERS = [
 
 // ═══ SISTEMA DE RANQUES — 13 Níveis (Bronze → Diamante) ═══
 const RANK_DATA = [
-    { nivel: 1,  pedra: 'Bronze',    emoji: '🥉', cor: '#cd7f32', pr: 0,      recompensas: ['EXP — 350', '$ — 350', 'Slot de Hab. — +1', 'Traje Classe Simples — +1', 'Cinto de Utilidades — Nível 1'] },
-    { nivel: 2,  pedra: 'Prata',     emoji: '🥈', cor: '#c0c0c0', pr: 2500,   recompensas: ['EXP — 500', '$ — 500', 'GP — 200'] },
-    { nivel: 3,  pedra: 'Ouro',      emoji: '🥇', cor: '#ffd700', pr: 3000,   recompensas: ['EXP — 600', '$ — 600', 'Slot de Hab. — +1'] },
-    { nivel: 4,  pedra: 'Rubi',      emoji: '🔴', cor: '#e0115f', pr: 4500,   recompensas: ['EXP — 650', '$ — 650'] },
-    { nivel: 5,  pedra: 'Safira',    emoji: '💙', cor: '#0f52ba', pr: 5500,   recompensas: ['EXP — 700', '$ — 700'] },
-    { nivel: 6,  pedra: 'Esmeralda', emoji: '💚', cor: '#50c878', pr: 6500,   recompensas: ['EXP — 750', '$ — 750', 'Slot de Hab. — +1'] },
-    { nivel: 7,  pedra: 'Ametista',  emoji: '💜', cor: '#9b59b6', pr: 7500,   recompensas: ['EXP — 900', '$ — 900', 'Traje Classe Avançado — +1', 'Cinto de Utilidades — Nível 2'] },
-    { nivel: 8,  pedra: 'Topázio',   emoji: '💛', cor: '#ffa500', pr: 8500,   recompensas: ['EXP — 1.050', '$ — 1.050', 'Slot de Hab. — +1'] },
-    { nivel: 9,  pedra: 'Opala',     emoji: '🤍', cor: '#a8dadc', pr: 9500,   recompensas: ['EXP — 1.200', '$ — 1.200', 'Travessia — Nível 1', 'GP — 1.200'] },
-    { nivel: 10, pedra: 'Granada',   emoji: '❤️', cor: '#c0392b', pr: 10500,  recompensas: ['EXP — 1.350', '$ — 1.350', 'Slot de Hab. — +1'] },
-    { nivel: 11, pedra: 'Platina',   emoji: '⚗️', cor: '#e5e4e2', pr: 11500,  recompensas: ['EXP — 2.500', '$ — 2.500', 'Travessia — Nível 2'] },
-    { nivel: 12, pedra: 'Pérola',    emoji: '🩶', cor: '#f0ead6', pr: 12500,  recompensas: ['EXP — 3.650', '$ — 3.650', 'Slot de Hab. — +1', 'Traje Classe Super — +1', 'Cinto de Utilidades — Nível 3'] },
-    { nivel: 13, pedra: 'Diamante',  emoji: '💎', cor: '#b9f2ff', pr: 13500,  recompensas: ['EXP — 5.800', '$ — 5.800', 'Travessia — Nível 3', 'GP — 2.400'], ultimo: true }
+    { nivel: 1, pedra: 'Bronze',    emoji: '⏣', cor: '#cd7f32', pr: 0,      recompensas: ['Acesso a missões Rank Bronze', '+15 Exp.', '+15 Pontos Gear'], narrativa: 'Seu personagem não possui fama negativa ou positiva, mas sua existência é apenas um boato ocasional comentado entre pequenos grupos.' },
+    { nivel: 2, pedra: 'Ferro',     emoji: '⟠', cor: '#a19d94', pr: 100,    recompensas: ['Acesso a missões Rank Ferro', '+50 Exp.', '+50 Pontos Gear'], narrativa: 'Seu personagem já é conhecido em sua região de atuação. Seu nome começa a circular entre profissionais e pessoas ligadas ao meio, sendo reconhecido por alguns de seus feitos.' },
+    { nivel: 3, pedra: 'Titânio',   emoji: '⟡', cor: '#878681', pr: 250,    recompensas: ['Acesso a missões Rank Titânio', '+150 Exp.', '+150 Pontos Gear'], narrativa: 'Seu personagem conquistou respeito dentro de sua área de atuação. Sua reputação já desperta atenção de organizações, aliados e possíveis adversários.' },
+    { nivel: 4, pedra: 'Ouro',      emoji: '✦', cor: '#ffd700', pr: 500,    recompensas: ['Acesso a missões Rank Ouro', '+250 Exp.', '+250 Pontos Gear'], narrativa: 'O nome do personagem tornou-se amplamente conhecido. Seus feitos já são divulgados entre organizações e frequentemente mencionados em notícias, registros ou relatórios.' },
+    { nivel: 5, pedra: 'Platina',   emoji: '✧', cor: '#e5e4e2', pr: 900,    recompensas: ['Acesso a missões Rank Platina', '+350 Exp.', '+350 Pontos Gear'], narrativa: 'Seu personagem é considerado um dos indivíduos mais competentes de sua geração. Sua presença em uma operação costuma ser suficiente para elevar a confiança dos aliados e preocupar seus inimigos.' },
+    { nivel: 6, pedra: 'Paládio',   emoji: '⍟', cor: '#ced0d4', pr: 1500,   recompensas: ['Acesso a missões Rank Paládio', 'Direito de criar equipamentos (Classe Mítica)', '+450 Exp.', '+450 Pontos Gear'], narrativa: 'Seu personagem é uma figura de reconhecimento nacional. Suas ações influenciam diretamente grandes acontecimentos e seu nome é respeitado em praticamente qualquer organização.' },
+    { nivel: 7, pedra: 'Irídio',    emoji: '❂', cor: '#dbdbd7', pr: 2400,   recompensas: ['Acesso a missões Rank Irídio', '+550 Exp.', '+550 Pontos Gear'], narrativa: 'Pouquíssimos indivíduos alcançam este patamar. O personagem tornou-se uma verdadeira lenda viva, sendo reconhecido mundialmente e considerado uma das maiores autoridades em combate ou atuação.' },
+    { nivel: 8, pedra: 'Diamante',  emoji: '❖', cor: '#b9f2ff', pr: 3600,   recompensas: ['Acesso à missões Rank Diamante', '+650 Exp.', '+650 Pontos Gear'], narrativa: 'O personagem alcançou o mais alto grau de reconhecimento existente. Seu nome tornou-se parte da história e sua influência transcende organizações, países e gerações, sendo lembrado como uma verdadeira lenda.', ultimo: true }
 ];
 
 // Nomes de rank por classe e nível
@@ -140,7 +135,7 @@ const pages = {
                 <button id="tab-btn-atributos" class="sub-tab-btn active" onclick="switchSubTab('atributos')">Atributos e Evolução</button>
                 <button id="tab-btn-equipamentos" class="sub-tab-btn" onclick="switchSubTab('equipamentos')">Equipamentos e Trajes</button>
                 <button id="tab-btn-pontuacoes" class="sub-tab-btn" onclick="switchSubTab('pontuacoes')">Pontuações e Recursos</button>
-                <button id="tab-btn-ranking" class="sub-tab-btn" onclick="switchSubTab('ranking')">🎖️ Ranking</button>
+                <button id="tab-btn-ranking" class="sub-tab-btn" onclick="switchSubTab('ranking')">Ranking</button>
             </div>
             
             <!-- SUB-ABA 1: ATRIBUTOS E EVOLUÇÃO -->
@@ -424,10 +419,10 @@ const pages = {
                     <!-- PONTOS DE RANK -->
                     <div style="padding: 1.5rem; background: var(--bg-primary); border: 1px solid var(--support-crimson); border-left: 4px solid #00ccff; border-radius: 4px; box-shadow: 0 0 15px rgba(0,204,255,0.05);">
                         <h4 style="color: #00ccff; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;">
-                            🎖️ PONTOS DE RANK ( PR // 🎖️ )
+                            PONTOS DE RANK ( PR )
                         </h4>
                         <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7;">
-                            Os <strong>Pontos de Rank</strong> (<em>PR // 🎖️</em>) são a principal forma de subir de rank no RPG. Você pode obtê-los por meio de algumas atividades existentes no RPG, além das missões narradas que são basicamente a melhor maneira de conseguir PR devido à alta quantidade garantida, embora seja variável e dependa do desempenho do jogador de acordo com seus <strong>Atos de Classe</strong>.
+                            Os <strong>Pontos de Rank</strong> (<em>PR</em>) são a principal forma de subir de rank no RPG. Você pode obtê-los por meio de algumas atividades existentes no RPG, além das missões narradas que são basicamente a melhor maneira de conseguir PR devido à alta quantidade garantida, embora seja variável e dependa do desempenho do jogador de acordo com seus <strong>Atos de Classe</strong>.
                         </p>
                         <div style="margin-top: 1rem; padding: 0.8rem 1rem; background: rgba(0,204,255,0.06); border: 1px solid rgba(0,204,255,0.3); border-radius: 3px; font-size: 0.88rem; color: var(--text-main);">
                             🛡️ <strong>Atos de Classe:</strong> É um método de avaliação do qual a administração leva em consideração quando se deve ceder Pontos de Rank, e refere-se à quantidade de ações que são características da respectiva classe do personagem (<em>Herói, Vilão, Anti-Herói</em>).
@@ -492,11 +487,21 @@ const pages = {
                     <div style="border-left: 3px solid var(--neon-red); padding-left: 1rem; margin-bottom: 1rem;">
                         <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
                             <strong style="color:#fff;">• Scaling de Rank:</strong><br>
-                            Todas as classes possuem uma evolução equivalente, padronizada por quantidade de <strong style="color: var(--neon-red);">Pontos de Rank (🎖️)</strong>, obtidos para subir o ranking do personagem. Os Pontos de Rank representados por "🎖️" têm a única função de definir o quão distante ou próximo o personagem está de alcançar o próximo rank.
+                            Todas as classes possuem uma evolução equivalente, padronizada por quantidade de <strong style="color: var(--neon-red);">Pontos de Rank (PR)</strong>, obtidos para subir o ranking do personagem. Os Pontos de Rank representados por "PR" têm a única função de definir o quão distante ou próximo o personagem está de alcançar o próximo rank.
                         </p>
                     </div>
                     <div style="padding: 0.9rem 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; font-size: 0.87rem; color: var(--text-muted); margin-bottom: 1rem;">
-                        <strong style="color: var(--neon-red);">❗</strong> Assim como o Exp., os P.R (🎖️) podem ser acumulados e consequentemente a contagem é continuada da última quantidade existente, tornando mais fácil subir o rank.
+                        <strong style="color: var(--neon-red);">❗</strong> Assim como o Exp., os P.R podem ser acumulados e consequentemente a contagem é continuada da última quantidade existente, tornando mais fácil subir o rank.
+                    </div>
+                    <div style="padding: 1.2rem; background: rgba(10,10,10,0.8); border: 1px solid #444; border-radius: 4px; font-size: 0.9rem; color: var(--text-main); margin-bottom: 1rem;">
+                        <h4 class="neon-text" style="margin-bottom: 0.8rem; font-size: 1rem;">[ Como Obter PR ⟩⟩ ]</h4>
+                        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;">
+                            <li><strong style="color: var(--neon-red);">Missões Auto Narradas:</strong> 10-15 PR</li>
+                            <li><strong style="color: var(--neon-red);">Missões Secundárias (narradas):</strong> 30–60 PR</li>
+                            <li><strong style="color: var(--neon-red);">Missões Principais (narradas):</strong> 70–120 PR</li>
+                            <li><strong style="color: var(--neon-red);">Eventos:</strong> 50–200 PR</li>
+                            <li><strong style="color: var(--neon-red);">Feitos Narrativos:</strong> À critério da avaliação da administração, baseando-se na interpretação e aprofundamento do personagem.</li>
+                        </ul>
                     </div>
                     <div style="border-left: 3px solid var(--neon-red); padding-left: 1rem; margin-bottom: 1rem;">
                         <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
@@ -544,7 +549,7 @@ const pages = {
                                     color: ${r.cor};
                                     white-space: nowrap;
                                 ">
-                                    🎖️ ${r.pr === 0 ? '00 // Rank Inicial' : '00 // ' + r.pr.toLocaleString('pt-BR')}
+                                    ${r.pr === 0 ? '00 // Rank Inicial' : '00 // ' + r.pr.toLocaleString('pt-BR')} PR
                                 </div>
                             </div>
                             <!-- Recompensas -->
@@ -563,6 +568,10 @@ const pages = {
                                         ">[ ${rec} ]</span>
                                     `).join('')}
                                 </div>
+                            </div>
+                            <!-- Narrativa -->
+                            <div style="margin-top: 1.2rem; padding: 1rem; background: rgba(0,0,0,0.4); border-left: 3px solid ${r.cor}; border-radius: 4px; font-size: 0.85rem; color: #ccc; font-style: italic; line-height: 1.6;">
+                                "${r.narrativa}"
                             </div>
                             ${r.ultimo ? `
                                 <div style="margin-top: 1rem; padding: 0.8rem; background: rgba(185,242,255,0.05); border: 1px solid #b9f2ff44; border-radius: 4px; font-size: 0.82rem; color: #b9f2ff; font-style: italic;">
@@ -1726,7 +1735,7 @@ function renderCharactersSection(container) {
                 <!-- PONTOS DE RANK -->
                 <div class="ficha-box-highlight" style="margin-top: 0.8rem; border-color: #ffd70044;">
                     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
-                        <label style="color: #ffd700; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 0;">🎖️ PONTOS DE RANK (P.R.)</label>
+                        <label style="color: #ffd700; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 0;">PONTOS DE RANK (P.R.)</label>
                         <div class="resource-control">
                             <input type="number" id="fc-pr" value="${currentChar.pr || 0}" ${isSupreme() ? '' : 'readonly'} min="0">
                             ${isSupreme() ? `
@@ -1737,7 +1746,7 @@ function renderCharactersSection(container) {
                         </div>
                     </div>
                     <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">
-                        P.R. acumulados para subir de rank. Consulte a aba <strong>🎖️ Ranking</strong> em Sistema para ver as metas.
+                        P.R. acumulados para subir de rank. Consulte a aba <strong>Ranking</strong> em Sistema para ver as metas.
                     </p>
                 </div>
 
@@ -1810,6 +1819,28 @@ function renderCharactersSection(container) {
                 <div class="ficha-field">
                     <textarea id="fc-historia" rows="5" placeholder="Conte a trajetória, origem e motivações do seu personagem em Unicity...">${currentChar.historia || ''}</textarea>
                 </div>
+
+                ${currentChar.status === 'aprovado' || isSupreme() ? `
+                <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">INFORMAÇÕES EXTRAS (PÓS-APROVAÇÃO)</h4>
+                <div class="ficha-grid-2">
+                    <div class="ficha-field" style="grid-column: span 2;">
+                        <label>VOZ DO PERSONAGEM (Link / Nome do Dublador)</label>
+                        <input type="text" id="fc-voz" value="${currentChar.voz || ''}" placeholder="Ex: Link do YouTube ou Nome do Ator">
+                    </div>
+                    <div class="ficha-field">
+                        <label>CONEXÕES E LAÇOS</label>
+                        <textarea id="fc-conexoes" rows="3" placeholder="Família, rivais, aliados...">${currentChar.conexoes || ''}</textarea>
+                    </div>
+                    <div class="ficha-field">
+                        <label>INFORMAÇÕES EXTRAS</label>
+                        <textarea id="fc-extras" rows="3" placeholder="Curiosidades, gostos, manias...">${currentChar.extras || ''}</textarea>
+                    </div>
+                    <div class="ficha-field" style="grid-column: span 2;">
+                        <label>TRAUMAS (Apenas Admin pode editar)</label>
+                        <textarea id="fc-traumas" rows="3" placeholder="Traumas adquiridos..." ${isSupreme() ? '' : 'readonly'}>${currentChar.traumas || ''}</textarea>
+                    </div>
+                </div>
+                ` : ''}
 
                 <!-- ATRIBUTOS -->
                 <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">ATRIBUTOS DOS PERSONAGENS</h4>
@@ -1926,6 +1957,10 @@ function getDefaultCharData() {
         trajes: [{}],
         equips: [{}],
         historia: '',
+        voz: '',
+        conexoes: '',
+        extras: '',
+        traumas: '',
         status: 'rascunho'
     };
 }
@@ -2145,6 +2180,10 @@ function saveFicha(e) {
         trajes,
         equips,
         historia: document.getElementById('fc-historia').value,
+        voz: document.getElementById('fc-voz') ? document.getElementById('fc-voz').value : (allChars[session.username][`char${activeCharSlot}`]?.voz || ''),
+        conexoes: document.getElementById('fc-conexoes') ? document.getElementById('fc-conexoes').value : (allChars[session.username][`char${activeCharSlot}`]?.conexoes || ''),
+        extras: document.getElementById('fc-extras') ? document.getElementById('fc-extras').value : (allChars[session.username][`char${activeCharSlot}`]?.extras || ''),
+        traumas: document.getElementById('fc-traumas') ? document.getElementById('fc-traumas').value : (allChars[session.username][`char${activeCharSlot}`]?.traumas || ''),
         status: allChars[session.username][`char${activeCharSlot}`]?.status || 'rascunho'
     };
 
