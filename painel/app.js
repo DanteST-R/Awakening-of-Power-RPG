@@ -790,7 +790,8 @@ const pages = {
     personagens: {
         title: "Personagens e NPCs",
         render: () => {
-            const npcs = getNpcs().filter(n => n.visivel);
+            const isAdm = isSupreme();
+            const npcs = isAdm ? getNpcs() : getNpcs().filter(n => n.visivel);
             return `
                 <div class="page-container">
                     <h1 class="page-title neon-text">Personagens e NPCs de Unicity</h1>
@@ -806,14 +807,17 @@ const pages = {
                     ` : `
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
                             ${npcs.map(npc => `
-                                <div style="background: #000; border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 6px; padding: 1.4rem; box-shadow: 0 0 15px rgba(0,0,0,0.6);">
+                                <div style="background: #000; border: 1px solid ${npc.visivel ? 'var(--support-crimson)' : '#555'}; border-left: 4px solid ${npc.visivel ? 'var(--neon-red)' : '#777'}; border-radius: 6px; padding: 1.4rem; box-shadow: 0 0 15px rgba(0,0,0,0.6); opacity: ${npc.visivel ? '1' : '0.7'};">
                                     <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
-                                        <div style="width: 70px; height: 70px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; background: #111; flex-shrink: 0;">
+                                        <div style="width: 70px; height: 70px; border-radius: 6px; border: 2px solid ${npc.visivel ? 'var(--neon-red)' : '#777'}; overflow: hidden; background: #111; flex-shrink: 0;">
                                         <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                                         </div>
                                         <div>
-                                            <h3 style="color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin: 0 0 4px 0;">${npc.nome}</h3>
-                                            <span style="color: var(--neon-red); font-size: 0.8rem; font-weight: bold; font-family: monospace; display: block;">${npc.ranque || 'N/A'} (${npc.classe})</span>
+                                            <h3 style="color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin: 0 0 4px 0;">
+                                                ${npc.nome} 
+                                                ${!npc.visivel ? '<span style="font-size:0.7rem; padding:2px 6px; background:rgba(255,255,255,0.1); border:1px solid #777; border-radius:3px; color:#aaa; margin-left:6px; vertical-align:middle;">🙈 OCULTO</span>' : ''}
+                                            </h3>
+                                            <span style="color: ${npc.visivel ? 'var(--neon-red)' : '#777'}; font-size: 0.8rem; font-weight: bold; font-family: monospace; display: block;">${npc.ranque || 'N/A'} (${npc.classe})</span>
                                         </div>
                                     </div>
                                     <div style="font-size: 0.85rem; color: var(--text-muted); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: rgba(255,255,255,0.02); padding: 0.8rem; border-radius: 4px; margin-bottom: 1rem;">
