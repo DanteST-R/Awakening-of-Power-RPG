@@ -491,7 +491,7 @@ const pages = {
                         </p>
                     </div>
                     <div style="padding: 0.9rem 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; font-size: 0.87rem; color: var(--text-muted); margin-bottom: 1rem;">
-                        <strong style="color: var(--neon-red);">❗</strong> Assim como o Exp., os P.R podem ser acumulados e consequentemente a contagem é continuada da última quantidade existente, tornando mais fácil subir o rank.
+                        <strong style="color: var(--neon-red);">❗</strong> Diferente do Exp. (que zera a cada nível do atributo), os P.R podem ser acumulados e consequentemente a contagem é continuada da última quantidade existente, tornando mais fácil subir o rank.
                     </div>
                     <div style="padding: 1.2rem; background: rgba(10,10,10,0.8); border: 1px solid #444; border-radius: 4px; font-size: 0.9rem; color: var(--text-main); margin-bottom: 1rem;">
                         <h4 class="neon-text" style="margin-bottom: 0.8rem; font-size: 1rem;">[ Como Obter PR ⟩⟩ ]</h4>
@@ -503,12 +503,7 @@ const pages = {
                             <li><strong style="color: var(--neon-red);">Feitos Narrativos:</strong> À critério da avaliação da administração, baseando-se na interpretação e aprofundamento do personagem.</li>
                         </ul>
                     </div>
-                    <div style="border-left: 3px solid var(--neon-red); padding-left: 1rem; margin-bottom: 1rem;">
-                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
-                            <strong style="color:#fff;">• Rank das Classes e Diferenças:</strong><br>
-                            Todas as classes possuem um número padrão de ranks e cada um possui o mesmo padrão de scaling independentemente da classe (Herói, Vilão ou Anti-Herói), o que torna o scaling justo.
-                        </p>
-                    </div>
+
                     <div style="padding: 0.9rem 1rem; background: rgba(255,0,60,0.06); border: 1px solid var(--neon-red); border-radius: 4px; font-size: 0.87rem; color: var(--text-muted);">
                         <strong style="color:#fff;">• Último Rank:</strong> Ao alcançar o último rank (❖ Diamante), todos os Pontos de Rank que você possuir podem ser transformados em <strong style="color: var(--neon-red);">Pontos Gear (GP)</strong>, à sua escolha.
                     </div>
