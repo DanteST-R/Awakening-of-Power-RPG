@@ -1490,27 +1490,9 @@ function toggleMenu() {
 //          SISTEMA DE AUTENTICAÇÃO — AWAKENING RPG
 // ══════════════════════════════════════════════════════
 
-// Configuração oficial do Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "awakening-rpg.firebaseapp.com",
-  projectId: "awakening-rpg",
-  storageBucket: "awakening-rpg.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef..."
-};
-
-// Inicialização segura do Firebase
-let db = null;
-try {
-    if (typeof firebase !== 'undefined') {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-        console.log("🔥 Firebase inicializado com sucesso!");
-    }
-} catch (e) {
-    console.warn("⚠️ Firebase rodando em modo offline / fallback local:", e);
-}
+// A inicialização do Firebase foi movida para 'js/firebase-service.js'.
+// O serviço já cuida de criar a conexão, o objeto Firestore está disponível como 'db' lá.
+// Não precisamos declarar ou inicializar firebaseConfig aqui novamente.
 
 // Administradores Gerais (acesso automático como Admin Principal ao se registrar)
 const SUPREME_MASTERS = ['DanteSTR', 'ghusAWK'];
