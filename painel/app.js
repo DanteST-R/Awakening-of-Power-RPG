@@ -1,6 +1,75 @@
 // Inicializa os ícones do Lucide
 lucide.createIcons();
 
+// ══════════════════════════════════════════════════════
+//   FIREBASE SETUP & SYNC CACHE (Movidos para js/firebase-service.js)
+// ══════════════════════════════════════════════════════
+// O arquivo firebase-service.js inicializa o Firebase, cria o window.dbCache
+// e contém a função initFirebaseListeners() refatorada para as coleções reais.
+
+// Quando o Firebase recebe dados novos, atualizamos a tela se estivermos nela
+function triggerUIRefresh() {
+    if (!isDbLoaded) return;
+    const authScreen = document.getElementById('auth-screen');
+    if (authScreen && authScreen.style.display === 'none') {
+        const activeItem = document.querySelector('.sidebar-menu li.active');
+        if (activeItem) {
+            const pageIdMatch = activeItem.getAttribute('onclick').match(/'([^']+)'/);
+            if (pageIdMatch) {
+                if (['personagens', 'historia', 'mapa', 'perfil'].includes(pageIdMatch[1])) {
+                    // renderPage(pageIdMatch[1]);
+                }
+            }
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//   WRAPPER DE COMPATIBILIDADE PARA O BANCO DE DADOS
+// ══════════════════════════════════════════════════════
+// Esta função mantém o resto do sistema funcionando sem precisar reescrever
+// todas as chamadas de salvamento imediatamente. Ela envia os dicionários
+// e listas para a nova estrutura de coleções no firebase-service.js.
+async function syncToFirebase(docName, fieldName, data) {
+    if (fieldName === 'list') {
+        await dbSaveList(docName, data);
+    } else {
+        await dbSaveDict(docName, data);
+    }
+}
+
+// ══════════════════════════════════════════════════════
+//   MIGRAÇÃO DE DADOS (LOCALSTORAGE -> FIREBASE)
+// ══════════════════════════════════════════════════════
+async function migrateDataToFirebase() {
+    if (localStorage.getItem('migrated_to_firebase')) return;
+    
+    console.log("Iniciando migração de dados do localStorage para o Firebase...");
+    try {
+        const localNpcs = JSON.parse(localStorage.getItem('awakening_npcs') || '[]');
+        const localLores = JSON.parse(localStorage.getItem('awrpg_lores_historia') || '[]');
+        const localMapa = JSON.parse(localStorage.getItem('awrpg_lores_mapa') || '{}');
+        const localBairros = JSON.parse(localStorage.getItem('awrpg_bairros') || 'null');
+        const localUsers = JSON.parse(localStorage.getItem('awrpg_users') || '[]');
+        const localChars = JSON.parse(localStorage.getItem('awrpg_characters') || '{}');
+        const localApps = JSON.parse(localStorage.getItem('awrpg_approvals') || '[]');
+
+        if (localNpcs.length > 0) await syncToFirebase("npcs", "list", localNpcs);
+        if (localLores.length > 0) await syncToFirebase("loresHistoria", "list", localLores);
+        if (Object.keys(localMapa).length > 0) await syncToFirebase("loresMapa", "dict", localMapa);
+        if (localBairros) await syncToFirebase("bairros", "dict", localBairros);
+        if (localUsers.length > 0) await syncToFirebase("users", "list", localUsers);
+        if (Object.keys(localChars).length > 0) await syncToFirebase("characters", "dict", localChars);
+        if (localApps.length > 0) await syncToFirebase("approvals", "list", localApps);
+
+        localStorage.setItem('migrated_to_firebase', 'true');
+        console.log("Migração concluída com sucesso!");
+        alert("Todos os seus dados antigos foram migrados para o servidor em nuvem com sucesso!");
+    } catch(e) {
+        console.error("Erro na migração: ", e);
+    }
+}
+
 // Lista de Poderes Proibidos — consultada na aprovação de fichas
 const BANNED_POWERS = [
     "Criação e Manipulação de Buracos Negros",
@@ -1448,35 +1517,37 @@ const SUPREME_MASTERS = ['DanteSTR', 'ghusAWK'];
 
 // ═══ HELPERS — LORES DA HISTÓRIA ═══
 function getLoresHistoria() {
-    try { return JSON.parse(localStorage.getItem('awrpg_lores_historia') || '[]'); } catch { return []; }
+    return window.dbCache.loresHistoria || [];
 }
 function saveLoresHistoria(data) {
-    localStorage.setItem('awrpg_lores_historia', JSON.stringify(data));
+    window.dbCache.loresHistoria = data;
+    syncToFirebase("loresHistoria", "list", data);
 }
 
 // ═══ HELPERS — LORES DO MAPA ═══
 function getLoresMapa() {
-    try { return JSON.parse(localStorage.getItem('awrpg_lores_mapa') || '{}'); } catch { return {}; }
+    return window.dbCache.loresMapa || {};
 }
 function saveLoresMapa(data) {
-    localStorage.setItem('awrpg_lores_mapa', JSON.stringify(data));
+    window.dbCache.loresMapa = data;
+    syncToFirebase("loresMapa", "dict", data);
 }
 
 // ═══ HELPERS — BAIRROS EDITÁVEIS ═══
 function getBairrosEditaveis() {
-    try {
-        const saved = JSON.parse(localStorage.getItem('awrpg_bairros') || 'null');
-        if (saved) return saved;
-    } catch {}
+    if (window.dbCache.bairros) {
+        return window.dbCache.bairros;
+    }
     // Retorna uma cópia dos dados originais se não houver edições salvas
     return JSON.parse(JSON.stringify(bairrosData));
 }
 function saveBairrosEditaveis(data) {
-    localStorage.setItem('awrpg_bairros', JSON.stringify(data));
+    window.dbCache.bairros = data;
+    syncToFirebase("bairros", "dict", data);
 }
 
-// Senha mestre padrão (pode ser alterada)
-const MASTER_DEFAULT_PASSWORD = 'AwakeningMaster2025';
+// Senha mestre padrão (Removida por segurança, configure no Firebase Auth)
+const MASTER_DEFAULT_PASSWORD = '';
 
 // Chaves no localStorage
 const KEY_USERS    = 'awrpg_users';
@@ -1484,20 +1555,13 @@ const KEY_SESSION  = 'awrpg_session';
 
 // Retorna lista de usuários do localStorage (e sincroniza com Firebase se disponível)
 function getUsers() {
-    try { return JSON.parse(localStorage.getItem(KEY_USERS)) || []; }
-    catch { return []; }
+    return window.dbCache.users || [];
 }
 
 // Salva lista de usuários localmente e envia para a nuvem no Firestore
 function saveUsers(users) {
-    localStorage.setItem(KEY_USERS, JSON.stringify(users));
-    if (db) {
-        users.forEach(u => {
-            db.collection('users').doc(u.username.toLowerCase()).set(u, { merge: true }).catch(err => {
-                console.warn("Erro ao sincronizar com Firestore:", err);
-            });
-        });
-    }
+    window.dbCache.users = users;
+    syncToFirebase("users", "list", users);
 }
 
 // Retorna sessão atual
@@ -1587,7 +1651,8 @@ function enterApp(session) {
 }
 
 // ── Logout ─────────────────────────────────────────────
-function handleLogout() {
+async function handleLogout() {
+    await authLogout();
     clearSession();
     document.getElementById('app-root').style.display    = 'none';
     document.getElementById('auth-screen').style.display = 'flex';
@@ -1599,7 +1664,7 @@ function handleLogout() {
 }
 
 // ── LOGIN DE JOGADOR ───────────────────────────────────
-function handlePlayerLogin(e) {
+async function handlePlayerLogin(e) {
     e.preventDefault();
     const username = document.getElementById('login-username').value.trim();
     const password = document.getElementById('login-password').value;
@@ -1609,21 +1674,25 @@ function handlePlayerLogin(e) {
         return showAuthError(errorId, 'Preencha todos os campos.');
     }
 
+    const result = await authLogin(username, password);
+    if (!result.success) {
+        return showAuthError(errorId, 'Credenciais incorretas ou conta inexistente no Firebase.');
+    }
+
     const users = getUsers();
-    const user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+    let user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
     if (!user) {
-        return showAuthError(errorId, 'Jogador não encontrado. Aliste-se primeiro.');
-    }
-    if (user.password !== btoa(password)) {
-        return showAuthError(errorId, 'Senha incorreta.');
+        // Se estiver autenticado no Firebase mas não tiver registro no DB (caso incomum)
+        // podemos deixar logar com perfil zerado ou forçar um registro no DB.
+        user = { username, role: 'player', age: 18, availability: 'manha', uid: result.uid };
     }
 
-    enterApp({ username: user.username, role: user.role, age: user.age, availability: user.availability });
+    enterApp({ username: user.username, role: user.role, age: user.age, availability: user.availability, uid: result.uid });
 }
 
 // ── REGISTRO DE JOGADOR ────────────────────────────────
-function handlePlayerRegister(e) {
+async function handlePlayerRegister(e) {
     e.preventDefault();
     const username     = document.getElementById('reg-username').value.trim();
     const age          = document.getElementById('reg-age').value;
@@ -1653,24 +1722,31 @@ function handlePlayerRegister(e) {
     if (exists) {
         return showAuthError(errorId, 'Esse nome de jogador já está em uso.');
     }
+    
+    // Mostra loading no botão opcionalmente...
+    const result = await authRegister(username, password);
+    if (!result.success) {
+        return showAuthError(errorId, 'Erro no servidor: ' + result.error);
+    }
 
     // Todo novo registro de usuário pelo formulário comum COMEÇA APENAS COMO JOGADOR
     const newUser = {
         username,
         age: parseInt(age),
         availability,
-        password: btoa(password), // armazenamento simples (base64)
+        uid: result.uid,
         role: 'player'
     };
 
-    users.push(newUser);
-    saveUsers(users);
+    // Usando a nova camada de salvamento que redireciona para a coleção "users" 
+    // com o UID como ID do documento
+    syncToFirebase("users", "dict", { [result.uid]: newUser });
 
-    enterApp({ username: newUser.username, role: newUser.role, age: newUser.age, availability: newUser.availability });
+    enterApp({ username: newUser.username, role: newUser.role, age: newUser.age, availability: newUser.availability, uid: newUser.uid });
 }
 
 // ── LOGIN DE MESTRE ────────────────────────────────────
-function handleMasterLogin(e) {
+async function handleMasterLogin(e) {
     e.preventDefault();
     const username = document.getElementById('master-username').value.trim();
     const password = document.getElementById('master-password').value;
@@ -1680,24 +1756,24 @@ function handleMasterLogin(e) {
         return showAuthError(errorId, 'Preencha todos os campos.');
     }
 
-    // Mestres Supremos entram pela lista de usuários registrados
+    // Tenta logar via Firebase
+    const result = await authLogin(username, password);
+    
+    // O fallback via código para criação automática foi removido por segurança.
+    // Agora todos os mestres devem ser criados e gerenciados via Firebase Auth e Painel Firestore.
+
+    if (!result.success) {
+        return showAuthError(errorId, 'Credenciais incorretas ou acesso não autorizado.');
+    }
+
     const users = getUsers();
     const user  = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
     if (user && (user.role === 'supreme' || user.role === 'master')) {
-        if (user.password !== btoa(password)) {
-            return showAuthError(errorId, 'Senha incorreta.');
-        }
-        return enterApp({ username: user.username, role: user.role });
+        return enterApp({ username: user.username, role: user.role, uid: result.uid });
     }
 
-    // Acesso via senha padrão de mestre (para admins não registrados ainda)
-    if (password === MASTER_DEFAULT_PASSWORD) {
-        const isSup = SUPREME_MASTERS.some(m => m.toLowerCase() === username.toLowerCase());
-        return enterApp({ username, role: isSup ? 'supreme' : 'master' });
-    }
-
-    return showAuthError(errorId, 'Credenciais inválidas ou acesso não autorizado.');
+    return showAuthError(errorId, 'Você não tem permissão de Mestre.');
 }
 
 // ── Inicialização — verifica sessão existente ──────────
@@ -1720,26 +1796,26 @@ window.onload = () => {
 const KEY_CHARACTERS = 'awrpg_characters';
 const KEY_APPROVALS  = 'awrpg_approvals';
 
-// Retorna personagens do localStorage
+// Retorna personagens do Firebase
 function getCharacters() {
-    try { return JSON.parse(localStorage.getItem(KEY_CHARACTERS)) || {}; }
-    catch { return {}; }
+    return window.dbCache.characters || {};
 }
 
-// Salva personagens no localStorage
+// Salva personagens no Firebase
 function saveCharacters(chars) {
-    localStorage.setItem(KEY_CHARACTERS, JSON.stringify(chars));
+    window.dbCache.characters = chars;
+    syncToFirebase("characters", "dict", chars);
 }
 
 // Retorna fila de aprovações pendentes
 function getApprovals() {
-    try { return JSON.parse(localStorage.getItem(KEY_APPROVALS)) || []; }
-    catch { return []; }
+    return window.dbCache.approvals || [];
 }
 
 // Salva fila de aprovações
 function saveApprovals(apps) {
-    localStorage.setItem(KEY_APPROVALS, JSON.stringify(apps));
+    window.dbCache.approvals = apps;
+    syncToFirebase("approvals", "list", apps);
 }
 
 // Estado local da aba de perfil
@@ -2492,12 +2568,12 @@ function runPowerBalancer() {
 // ═══════════════════════════════════════════════════════════════
 
 function getNpcs() {
-    const data = localStorage.getItem('awakening_npcs');
-    return data ? JSON.parse(data) : [];
+    return window.dbCache.npcs || [];
 }
 
 function saveNpcs(npcs) {
-    localStorage.setItem('awakening_npcs', JSON.stringify(npcs));
+    window.dbCache.npcs = npcs;
+    syncToFirebase("npcs", "list", npcs);
 }
 
 function renderCreateNpcSection(container) {
