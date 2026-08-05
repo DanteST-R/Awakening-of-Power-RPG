@@ -108,7 +108,7 @@ const pages = {
 
                     <p id="bairro-modal-quote" style="color: var(--neon-red); font-style: italic; margin-bottom: 1rem; font-weight: bold;"></p>
 
-                    <div style="max-height: 400px; overflow-y: auto; padding-right: 8px;">
+                    <div style="max-height: 70vh; overflow-y: auto; padding-right: 8px;">
                         <div style="background: var(--bg-primary); padding: 1rem; border: 1px solid var(--support-crimson); border-radius: 4px; margin-bottom: 1rem; font-size: 0.9em; line-height: 1.6; color: var(--text-muted);" id="bairro-modal-description">
                         </div>
 
@@ -120,11 +120,18 @@ const pages = {
                         </div>
 
                         <h4 style="color: var(--neon-red); font-size: 1rem; margin-bottom: 0.6rem; letter-spacing: 1px;">📍 PONTOS DE INTERESSE:</h4>
-                        <ul id="bairro-modal-points" style="padding-left: 20px; color: var(--text-main); font-size: 0.9em; line-height: 1.8;">
+                        <ul id="bairro-modal-points" style="padding-left: 20px; color: var(--text-main); font-size: 0.9em; line-height: 1.8; list-style:none;">
                         </ul>
+
+                        <!-- Controles de admin do bairro -->
+                        <div id="bairro-modal-adm-controls"></div>
+
+                        <!-- Lores vinculadas ao bairro -->
+                        <div id="bairro-modal-lores"></div>
                     </div>
                 </div>
             </div>
+
         `
     },
     sistema: {
@@ -832,7 +839,92 @@ const pages = {
     },
     historia: {
         title: "História",
-        content: "Registros desde a Fundação e o evento Heaven's Fall."
+        render() {
+            const adm = isSupreme();
+            const lores = getLoresHistoria();
+            const visiveis = lores.filter(l => adm || l.visivel);
+            return `
+                <div class="page-container">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+                        <h1 class="page-title neon-text" style="margin:0;">História</h1>
+                        ${adm ? `<button onclick="openCriarLoreHistoria()" style="background:rgba(255,0,60,0.12);border:1px solid var(--neon-red);color:#fff;padding:0.5rem 1.1rem;border-radius:4px;cursor:pointer;font-size:0.9rem;font-family:'Orbitron',monospace;letter-spacing:1px;">+ Nova Lore</button>` : ''}
+                    </div>
+
+                    ${visiveis.length === 0 ? `
+                        <div class="placeholder-card" style="text-align:center;color:#555;">
+                            <p style="font-size:1.5rem;margin-bottom:0.5rem;">📜</p>
+                            <p>Nenhuma lore publicada ainda. Os Administradores Gerais podem criar novas Lores.</p>
+                        </div>` : ''}
+
+                    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                    ${visiveis.map(lore => `
+                        <div style="background:#000;border:1px solid ${lore.visivel ? 'var(--neon-red)' : '#333'};border-left:4px solid var(--neon-red);border-radius:6px;overflow:hidden;">
+                            <!-- Header da Lore -->
+                            <div style="padding:1.2rem 1.4rem;background:rgba(255,0,60,0.04);border-bottom:1px solid #1a0000;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+                                <div>
+                                    <div style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:2px;">
+                                        ${lore.titulo}
+                                        ${!lore.visivel ? '<span style="font-size:0.65rem;color:#555;margin-left:8px;font-family:monospace;">[OCULTO]</span>' : ''}
+                                    </div>
+                                </div>
+                                ${adm ? `<div style="display:flex;gap:6px;">
+                                    <button onclick="toggleLoreHistoriaVisivel('${lore.id}')" class="lore-ctrl-btn">${lore.visivel ? '🙈 Ocultar' : '👁 Publicar'}</button>
+                                    <button onclick="editLoreHistoria('${lore.id}')" class="lore-ctrl-btn">✎ Editar</button>
+                                    <button onclick="deleteLoreHistoria('${lore.id}')" class="lore-ctrl-btn lore-ctrl-delete">✕ Deletar</button>
+                                </div>` : ''}
+                            </div>
+                            <!-- Corpo da Lore -->
+                            <div style="padding:1.2rem 1.4rem;">
+                                ${lore.descricao ? `<p style="color:var(--text-muted);line-height:1.8;margin-bottom:1rem;">${lore.descricao}</p>` : ''}
+                                ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:5px;margin-bottom:1rem;border:1px solid #1a0000;" onerror="this.style.display='none'">` : ''}
+                                ${lore.audioUrl ? `<audio controls src="${lore.audioUrl}" style="width:100%;margin-bottom:1rem;"></audio>` : ''}
+
+                                <!-- ATOS -->
+                                ${lore.atos && lore.atos.filter(a => adm || a.visivel).length > 0 ? `
+                                    <div style="margin-top:0.8rem;">
+                                        <div style="font-size:0.75rem;color:#555;letter-spacing:2px;text-transform:uppercase;margin-bottom:0.8rem;">— ATOS —</div>
+                                        <div style="display:flex;flex-direction:column;gap:0.8rem;">
+                                        ${lore.atos.filter(a => adm || a.visivel).map(ato => `
+                                            <div style="padding:1rem;background:#080808;border:1px solid ${ato.visivel ? '#2a0a0a' : '#1a1a1a'};border-left:3px solid ${ato.visivel ? 'var(--neon-red)' : '#333'};border-radius:4px;">
+                                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem;flex-wrap:wrap;gap:6px;">
+                                                    <strong style="color:${ato.visivel ? 'var(--neon-red)' : '#444'};font-size:0.9rem;">▸ ${ato.titulo} ${!ato.visivel ? '<span style="font-size:0.65rem;color:#444;">[OCULTO]</span>' : ''}</strong>
+                                                    ${adm ? `<div style="display:flex;gap:5px;">
+                                                        <button onclick="toggleAtoHistoriaVisivel('${lore.id}','${ato.id}')" class="lore-ctrl-btn" style="font-size:0.72rem;padding:0.2rem 0.5rem;">${ato.visivel ? '🙈' : '👁'}</button>
+                                                        <button onclick="editAtoHistoria('${lore.id}','${ato.id}')" class="lore-ctrl-btn" style="font-size:0.72rem;padding:0.2rem 0.5rem;">✎</button>
+                                                        <button onclick="deleteAtoHistoria('${lore.id}','${ato.id}')" class="lore-ctrl-btn lore-ctrl-delete" style="font-size:0.72rem;padding:0.2rem 0.5rem;">✕</button>
+                                                    </div>` : ''}
+                                                </div>
+                                                ${ato.descricao ? `<p style="color:#777;font-size:0.85rem;line-height:1.6;margin-bottom:0.5rem;">${ato.descricao}</p>` : ''}
+                                                ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:4px;margin-bottom:0.5rem;" onerror="this.style.display='none'">` : ''}
+                                                ${ato.audioUrl ? `<audio controls src="${ato.audioUrl}" style="width:100%;"></audio>` : ''}
+                                            </div>`).join('')}
+                                        </div>
+                                    </div>` : ''}
+
+                                ${adm ? `<button onclick="createAtoHistoria('${lore.id}')" style="margin-top:0.8rem;background:none;border:1px dashed #2a0a0a;color:#555;padding:0.4rem 1rem;border-radius:4px;cursor:pointer;font-size:0.8rem;width:100%;">+ Adicionar Ato a esta Lore</button>` : ''}
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+
+                <!-- MODAL UNIVERSAL LORE/ATO -->
+                <div id="lore-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:1rem;" onclick="closeLoreModal(event)">
+                    <div style="background:#0a0a0a;border:1px solid var(--neon-red);border-radius:8px;width:100%;max-width:560px;padding:2rem;" onclick="event.stopPropagation()">
+                        <h3 id="lore-modal-title" style="color:var(--neon-red);font-family:'Orbitron',monospace;font-size:1rem;margin-bottom:1.5rem;letter-spacing:2px;">NOVA LORE</h3>
+                        <div style="display:flex;flex-direction:column;gap:1rem;">
+                            <div><label style="color:#aaa;font-size:0.8rem;">Título *</label><input id="lore-f-titulo" type="text" placeholder="Título da Lore/Ato" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;"></div>
+                            <div><label style="color:#aaa;font-size:0.8rem;">Descrição</label><textarea id="lore-f-descricao" rows="5" placeholder="Texto narrativo..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;"></textarea></div>
+                            <div><label style="color:#aaa;font-size:0.8rem;">URL da Imagem (link externo)</label><input id="lore-f-imagem" type="url" placeholder="https://..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;"></div>
+                            <div><label style="color:#aaa;font-size:0.8rem;">URL do Áudio (link externo)</label><input id="lore-f-audio" type="url" placeholder="https://..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;"></div>
+                        </div>
+                        <div style="display:flex;gap:0.8rem;margin-top:1.5rem;justify-content:flex-end;">
+                            <button onclick="closeLoreModal()" style="background:none;border:1px solid #333;color:#aaa;padding:0.5rem 1.2rem;border-radius:3px;cursor:pointer;">Cancelar</button>
+                            <button id="lore-modal-save-btn" onclick="saveLoreModal()" style="background:var(--neon-red);border:none;color:#fff;padding:0.5rem 1.4rem;border-radius:3px;cursor:pointer;font-weight:bold;">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
     },
     missoes: {
         title: "Missões Disponíveis",
@@ -1128,9 +1220,14 @@ const bairrosData = {
 // Abre modal com detalhes do Bairro selecionado
 function openBairroModal(bairroKey) {
     const modal = document.getElementById('bairro-modal');
-    const data = bairrosData[bairroKey];
+    const bairros = getBairrosEditaveis();
+    const data = bairros[bairroKey];
 
     if (!modal || !data) return;
+
+    const adm = isSupreme();
+    const loresMapa = getLoresMapa();
+    const loresDoBairro = (loresMapa[bairroKey] || []).filter(l => adm || l.visivel);
 
     document.getElementById('bairro-modal-color').innerText = data.color;
     document.getElementById('bairro-modal-name').innerText = data.name + ' — ' + data.region;
@@ -1140,7 +1237,66 @@ function openBairroModal(bairroKey) {
     document.getElementById('bairro-modal-security-desc').innerText = data.securityDesc;
 
     const pointsList = document.getElementById('bairro-modal-points');
-    pointsList.innerHTML = data.points.map(pt => `<li>${pt}</li>`).join('');
+    pointsList.innerHTML = data.points.map((pt, i) => `
+        <li style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+            <span>${pt}</span>
+            ${adm ? `<button onclick="editBairroPoint('${bairroKey}',${i})" style="background:none;border:none;color:var(--neon-red);cursor:pointer;font-size:0.8rem;" title="Editar ponto">✎</button>` : ''}
+        </li>`).join('');
+
+    // Botões de admin no modal do bairro
+    const admBairroControls = document.getElementById('bairro-modal-adm-controls');
+    if (admBairroControls) {
+        admBairroControls.innerHTML = adm ? `
+            <div style="margin-top:1.2rem;padding-top:1rem;border-top:1px solid #333;display:flex;flex-wrap:wrap;gap:8px;">
+                <button onclick="openEditBairroModal('${bairroKey}')" class="lore-adm-btn" style="background:rgba(255,0,60,0.12);border:1px solid var(--neon-red);color:#fff;padding:0.4rem 0.9rem;border-radius:3px;cursor:pointer;font-size:0.82rem;">✎ Editar Bairro</button>
+                <button onclick="addBairroPoint('${bairroKey}')" class="lore-adm-btn" style="background:rgba(0,204,255,0.08);border:1px solid #00ccff55;color:#fff;padding:0.4rem 0.9rem;border-radius:3px;cursor:pointer;font-size:0.82rem;">+ Ponto de Interesse</button>
+            </div>` : '';
+    }
+
+    // Lores do bairro
+    const loreContainer = document.getElementById('bairro-modal-lores');
+    if (loreContainer) {
+        loreContainer.innerHTML = `
+            <div style="margin-top:1.5rem;border-top:1px solid #2a0a0a;padding-top:1rem;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.8rem;">
+                    <h4 style="color:var(--neon-red);font-size:0.95rem;letter-spacing:1px;">— LORES DO BAIRRO —</h4>
+                    ${adm ? `<button onclick="createLoreMapa('${bairroKey}')" style="background:rgba(255,0,60,0.1);border:1px solid var(--neon-red);color:#fff;padding:0.3rem 0.7rem;border-radius:3px;cursor:pointer;font-size:0.8rem;">+ Nova Lore</button>` : ''}
+                </div>
+                ${loresDoBairro.length === 0 ? `<p style="color:#555;font-size:0.85rem;font-style:italic;">Nenhuma lore publicada para este bairro ainda.</p>` : ''}
+                ${loresDoBairro.map(lore => `
+                    <div class="lore-card" style="margin-bottom:0.8rem;padding:1rem;background:#0a0a0a;border:1px solid ${lore.visivel ? 'var(--neon-red)' : '#333'};border-radius:4px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;flex-wrap:wrap;gap:6px;">
+                            <strong style="color:${lore.visivel ? '#fff' : '#666'};">${lore.titulo} ${!lore.visivel ? '<span style="font-size:0.7rem;color:#555;">[OCULTO]</span>' : ''}</strong>
+                            ${adm ? `<div style="display:flex;gap:6px;">
+                                <button onclick="toggleLoreMapaVisivel('${bairroKey}','${lore.id}')" style="background:none;border:1px solid #555;color:#aaa;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">${lore.visivel ? '🙈 Ocultar' : '👁 Publicar'}</button>
+                                <button onclick="editLoreMapa('${bairroKey}','${lore.id}')" style="background:none;border:1px solid #555;color:#aaa;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">✎ Editar</button>
+                                <button onclick="deleteLoreMapa('${bairroKey}','${lore.id}')" style="background:none;border:1px solid #7a0000;color:#c00;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">✕</button>
+                            </div>` : ''}
+                        </div>
+                        ${lore.descricao ? `<p style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin-bottom:0.6rem;">${lore.descricao}</p>` : ''}
+                        ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:4px;margin-bottom:0.6rem;border:1px solid #222;" onerror="this.style.display='none'">` : ''}
+                        ${lore.audioUrl ? `<audio controls src="${lore.audioUrl}" style="width:100%;margin-bottom:0.5rem;"></audio>` : ''}
+                        ${lore.atos && lore.atos.filter(a => adm || a.visivel).length > 0 ? `
+                            <div style="padding-left:0.8rem;border-left:2px solid var(--neon-red);margin-top:0.6rem;">
+                                ${lore.atos.filter(a => adm || a.visivel).map(ato => `
+                                    <div style="margin-bottom:0.5rem;padding:0.6rem;background:#111;border-radius:3px;">
+                                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;">
+                                            <strong style="color:${ato.visivel ? 'var(--neon-red)' : '#555'};font-size:0.85rem;">▸ ${ato.titulo} ${!ato.visivel ? '<span style="font-size:0.7rem;">[OCULTO]</span>' : ''}</strong>
+                                            ${adm ? `<div style="display:flex;gap:4px;">
+                                                <button onclick="toggleAtoMapaVisivel('${bairroKey}','${lore.id}','${ato.id}')" style="background:none;border:none;color:#555;cursor:pointer;font-size:0.7rem;">${ato.visivel ? '🙈' : '👁'}</button>
+                                                <button onclick="editAtoMapa('${bairroKey}','${lore.id}','${ato.id}')" style="background:none;border:none;color:#555;cursor:pointer;font-size:0.7rem;">✎</button>
+                                                <button onclick="deleteAtoMapa('${bairroKey}','${lore.id}','${ato.id}')" style="background:none;border:none;color:#7a0000;cursor:pointer;font-size:0.7rem;">✕</button>
+                                            </div>` : ''}
+                                        </div>
+                                        ${ato.descricao ? `<p style="color:#777;font-size:0.8rem;margin:0;">${ato.descricao}</p>` : ''}
+                                        ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:3px;margin-top:4px;" onerror="this.style.display='none'">` : ''}
+                                        ${ato.audioUrl ? `<audio controls src="${ato.audioUrl}" style="width:100%;margin-top:4px;"></audio>` : ''}
+                                    </div>`).join('')}
+                                ${adm ? `<button onclick="createAtoMapa('${bairroKey}','${lore.id}')" style="background:none;border:1px dashed #333;color:#555;padding:0.3rem 0.7rem;border-radius:3px;cursor:pointer;font-size:0.75rem;width:100%;margin-top:4px;">+ Adicionar Ato</button>` : ''}
+                            </div>` : (adm ? `<button onclick="createAtoMapa('${bairroKey}','${lore.id}')" style="background:none;border:1px dashed #333;color:#555;padding:0.3rem 0.7rem;border-radius:3px;cursor:pointer;font-size:0.75rem;margin-top:4px;">+ Adicionar Ato</button>` : '')}
+                    </div>`).join('')}
+            </div>`;
+    }
 
     modal.classList.add('active');
 }
@@ -1148,9 +1304,7 @@ function openBairroModal(bairroKey) {
 // Fecha modal de Bairros
 function closeBairroModal(event) {
     const modal = document.getElementById('bairro-modal');
-    if (modal) {
-        modal.classList.remove('active');
-    }
+    if (modal) modal.classList.remove('active');
 }
 
 // Dados das Interpretações de Nível dos Atributos (I ao VI)
@@ -1285,8 +1439,37 @@ try {
     console.warn("⚠️ Firebase rodando em modo offline / fallback local:", e);
 }
 
-// Mestres Supremos (acesso automático como Admin Principal ao se registrar)
+// Administradores Gerais (acesso automático como Admin Principal ao se registrar)
 const SUPREME_MASTERS = ['DanteSTR', 'ghusAWK'];
+
+// ═══ HELPERS — LORES DA HISTÓRIA ═══
+function getLoresHistoria() {
+    try { return JSON.parse(localStorage.getItem('awrpg_lores_historia') || '[]'); } catch { return []; }
+}
+function saveLoresHistoria(data) {
+    localStorage.setItem('awrpg_lores_historia', JSON.stringify(data));
+}
+
+// ═══ HELPERS — LORES DO MAPA ═══
+function getLoresMapa() {
+    try { return JSON.parse(localStorage.getItem('awrpg_lores_mapa') || '{}'); } catch { return {}; }
+}
+function saveLoresMapa(data) {
+    localStorage.setItem('awrpg_lores_mapa', JSON.stringify(data));
+}
+
+// ═══ HELPERS — BAIRROS EDITÁVEIS ═══
+function getBairrosEditaveis() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('awrpg_bairros') || 'null');
+        if (saved) return saved;
+    } catch {}
+    // Retorna uma cópia dos dados originais se não houver edições salvas
+    return JSON.parse(JSON.stringify(bairrosData));
+}
+function saveBairrosEditaveis(data) {
+    localStorage.setItem('awrpg_bairros', JSON.stringify(data));
+}
 
 // Senha mestre padrão (pode ser alterada)
 const MASTER_DEFAULT_PASSWORD = 'AwakeningMaster2025';
@@ -1390,7 +1573,7 @@ function enterApp(session) {
     const roleEl  = document.getElementById('sidebar-user-role');
     if (labelEl) labelEl.textContent = session.username;
     if (roleEl) {
-        if (session.role === 'supreme') roleEl.textContent = '⚔️ MESTRE SUPREMO';
+        if (session.role === 'supreme') roleEl.textContent = '✦ ADMINISTRADOR GERAL';
         else if (session.role === 'master') roleEl.textContent = '🛡️ MESTRE';
         else roleEl.textContent = '👤 JOGADOR';
     }
@@ -1579,7 +1762,7 @@ function renderPerfil() {
             <div class="perfil-info-wrap">
                 <h2 style="margin: 0; color: #fff; display: flex; align-items: center; gap: 10px;">
                     ${session.username}
-                    ${isSupreme ? '<span class="supreme-badge">⚔️ MESTRE SUPREMO</span>' : '<span class="player-badge">👤 JOGADOR</span>'}
+                    ${isSupreme ? '<span class="supreme-badge">✦ ADMINISTRADOR GERAL</span>' : '<span class="player-badge">👤 JOGADOR</span>'}
                 </h2>
                 <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 5px;">
                     Disponibilidade: <strong>${session.availability ? session.availability.toUpperCase() : 'NÃO INFORMADA'}</strong> | Idade: <strong>${session.age || 'N/A'} anos</strong>
@@ -1887,7 +2070,7 @@ function renderCharactersSection(container) {
     `;
 }
 
-// Renderiza Painel de Aprovações do Mestre Supremo
+// Renderiza Painel de Aprovações do Administrador Geral
 function renderApprovalsSection(container) {
     const approvals = getApprovals();
 
@@ -2319,7 +2502,7 @@ function renderCreateNpcSection(container) {
     container.innerHTML = `
         <div class="ficha-card-scroll">
             <h3 class="neon-text" style="font-size: 1.2rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;">
-                🎭 GERENCIADOR DE NPCS DA CIDADE (MESTRE SUPREMO)
+                🎭 GERENCIADOR DE NPCS DA CIDADE (ADMINISTRADOR GERAL)
             </h3>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.6;">
                 Crie e configure NPCs para o universo de Awakening RPG. 
@@ -2589,6 +2772,326 @@ function deleteNpc(idx) {
     renderPerfilSection();
 }
 
+// ══════════════════════════════════════════════════════
+//   SISTEMA DE LORES E ATOS — HISTÓRIA
+// ══════════════════════════════════════════════════════
 
+function _uuid() {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 
+// Estado do modal de Lore (contexto de edição)
+let _loreCtx = null;
+/* _loreCtx = {
+    tipo: 'lore-historia' | 'ato-historia' | 'lore-mapa' | 'ato-mapa' | 'bairro-edit',
+    bairroKey: string | null,
+    loreId: string | null,
+    atoId: string | null,
+    editando: bool
+} */
 
+function _abrirModalLore(titulo, onSave, dados = {}) {
+    // Cria overlay dinamicamente se não existir
+    let overlay = document.getElementById('global-lore-modal');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'global-lore-modal';
+        overlay.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;padding:1rem;';
+        overlay.innerHTML = `
+            <div style="background:#0a0a0a;border:1px solid var(--neon-red);border-radius:8px;width:100%;max-width:580px;padding:2rem;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">
+                <h3 id="glm-title" style="color:var(--neon-red);font-family:'Orbitron',monospace;font-size:1rem;margin-bottom:1.5rem;letter-spacing:2px;"></h3>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div id="glm-extra-fields"></div>
+                    <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Título *</label><input id="glm-titulo" type="text" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                    <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Descrição</label><textarea id="glm-descricao" rows="6" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea></div>
+                    <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">URL da Imagem</label><input id="glm-imagem" type="url" placeholder="https://..." style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                    <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">URL do Áudio</label><input id="glm-audio" type="url" placeholder="https://..." style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                </div>
+                <div style="display:flex;gap:0.8rem;margin-top:1.5rem;justify-content:flex-end;">
+                    <button onclick="fecharModalLore()" style="background:none;border:1px solid #333;color:#aaa;padding:0.5rem 1.2rem;border-radius:3px;cursor:pointer;">Cancelar</button>
+                    <button id="glm-save-btn" style="background:var(--neon-red);border:none;color:#fff;padding:0.5rem 1.4rem;border-radius:3px;cursor:pointer;font-weight:bold;">Salvar</button>
+                </div>
+            </div>`;
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) fecharModalLore(); });
+    }
+
+    document.getElementById('glm-title').textContent = titulo;
+    document.getElementById('glm-titulo').value = dados.titulo || '';
+    document.getElementById('glm-descricao').value = dados.descricao || '';
+    document.getElementById('glm-imagem').value = dados.imagemUrl || '';
+    document.getElementById('glm-audio').value = dados.audioUrl || '';
+    document.getElementById('glm-extra-fields').innerHTML = '';
+    document.getElementById('glm-save-btn').onclick = onSave;
+    overlay.style.display = 'flex';
+}
+
+function fecharModalLore() {
+    const overlay = document.getElementById('global-lore-modal');
+    if (overlay) overlay.style.display = 'none';
+}
+
+function _getModalDados() {
+    return {
+        titulo: document.getElementById('glm-titulo').value.trim(),
+        descricao: document.getElementById('glm-descricao').value.trim(),
+        imagemUrl: document.getElementById('glm-imagem').value.trim(),
+        audioUrl: document.getElementById('glm-audio').value.trim(),
+    };
+}
+
+// — LORES DA HISTÓRIA —
+
+function openCriarLoreHistoria() {
+    _abrirModalLore('NOVA LORE — HISTÓRIA', () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        const lores = getLoresHistoria();
+        lores.push({ id: _uuid(), titulo: d.titulo, descricao: d.descricao, imagemUrl: d.imagemUrl, audioUrl: d.audioUrl, visivel: false, atos: [] });
+        saveLoresHistoria(lores);
+        fecharModalLore();
+        renderPage('historia');
+    });
+}
+
+function editLoreHistoria(loreId) {
+    const lores = getLoresHistoria();
+    const lore = lores.find(l => l.id === loreId);
+    if (!lore) return;
+    _abrirModalLore('EDITAR LORE', () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        Object.assign(lore, d);
+        saveLoresHistoria(lores);
+        fecharModalLore();
+        renderPage('historia');
+    }, lore);
+}
+
+function deleteLoreHistoria(loreId) {
+    if (!confirm('Deseja realmente deletar esta Lore e todos seus Atos?')) return;
+    const lores = getLoresHistoria().filter(l => l.id !== loreId);
+    saveLoresHistoria(lores);
+    renderPage('historia');
+}
+
+function toggleLoreHistoriaVisivel(loreId) {
+    const lores = getLoresHistoria();
+    const lore = lores.find(l => l.id === loreId);
+    if (lore) { lore.visivel = !lore.visivel; saveLoresHistoria(lores); renderPage('historia'); }
+}
+
+// — ATOS DA HISTÓRIA —
+
+function createAtoHistoria(loreId) {
+    _abrirModalLore('NOVO ATO', () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        const lores = getLoresHistoria();
+        const lore = lores.find(l => l.id === loreId);
+        if (!lore) return;
+        if (!lore.atos) lore.atos = [];
+        lore.atos.push({ id: _uuid(), titulo: d.titulo, descricao: d.descricao, imagemUrl: d.imagemUrl, audioUrl: d.audioUrl, visivel: false });
+        saveLoresHistoria(lores);
+        fecharModalLore();
+        renderPage('historia');
+    });
+}
+
+function editAtoHistoria(loreId, atoId) {
+    const lores = getLoresHistoria();
+    const lore = lores.find(l => l.id === loreId);
+    const ato = lore && lore.atos && lore.atos.find(a => a.id === atoId);
+    if (!ato) return;
+    _abrirModalLore('EDITAR ATO', () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        Object.assign(ato, d);
+        saveLoresHistoria(lores);
+        fecharModalLore();
+        renderPage('historia');
+    }, ato);
+}
+
+function deleteAtoHistoria(loreId, atoId) {
+    if (!confirm('Deseja deletar este Ato?')) return;
+    const lores = getLoresHistoria();
+    const lore = lores.find(l => l.id === loreId);
+    if (lore && lore.atos) { lore.atos = lore.atos.filter(a => a.id !== atoId); saveLoresHistoria(lores); renderPage('historia'); }
+}
+
+function toggleAtoHistoriaVisivel(loreId, atoId) {
+    const lores = getLoresHistoria();
+    const lore = lores.find(l => l.id === loreId);
+    const ato = lore && lore.atos && lore.atos.find(a => a.id === atoId);
+    if (ato) { ato.visivel = !ato.visivel; saveLoresHistoria(lores); renderPage('historia'); }
+}
+
+// ══════════════════════════════════════════════════════
+//   SISTEMA DE LORES E ATOS — MAPA (por bairro)
+// ══════════════════════════════════════════════════════
+
+function _reabrirBairroModal(bairroKey) {
+    // Fecha e reabre para re-renderizar o conteúdo
+    openBairroModal(bairroKey);
+}
+
+function createLoreMapa(bairroKey) {
+    _abrirModalLore('NOVA LORE — ' + bairroKey.toUpperCase(), () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        const all = getLoresMapa();
+        if (!all[bairroKey]) all[bairroKey] = [];
+        all[bairroKey].push({ id: _uuid(), titulo: d.titulo, descricao: d.descricao, imagemUrl: d.imagemUrl, audioUrl: d.audioUrl, visivel: false, atos: [] });
+        saveLoresMapa(all);
+        fecharModalLore();
+        _reabrirBairroModal(bairroKey);
+    });
+}
+
+function editLoreMapa(bairroKey, loreId) {
+    const all = getLoresMapa();
+    const lore = (all[bairroKey] || []).find(l => l.id === loreId);
+    if (!lore) return;
+    _abrirModalLore('EDITAR LORE', () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        Object.assign(lore, d);
+        saveLoresMapa(all);
+        fecharModalLore();
+        _reabrirBairroModal(bairroKey);
+    }, lore);
+}
+
+function deleteLoreMapa(bairroKey, loreId) {
+    if (!confirm('Deseja deletar esta Lore?')) return;
+    const all = getLoresMapa();
+    if (all[bairroKey]) { all[bairroKey] = all[bairroKey].filter(l => l.id !== loreId); saveLoresMapa(all); _reabrirBairroModal(bairroKey); }
+}
+
+function toggleLoreMapaVisivel(bairroKey, loreId) {
+    const all = getLoresMapa();
+    const lore = (all[bairroKey] || []).find(l => l.id === loreId);
+    if (lore) { lore.visivel = !lore.visivel; saveLoresMapa(all); _reabrirBairroModal(bairroKey); }
+}
+
+// — ATOS DO MAPA —
+
+function createAtoMapa(bairroKey, loreId) {
+    _abrirModalLore('NOVO ATO', () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        const all = getLoresMapa();
+        const lore = (all[bairroKey] || []).find(l => l.id === loreId);
+        if (!lore) return;
+        if (!lore.atos) lore.atos = [];
+        lore.atos.push({ id: _uuid(), titulo: d.titulo, descricao: d.descricao, imagemUrl: d.imagemUrl, audioUrl: d.audioUrl, visivel: false });
+        saveLoresMapa(all);
+        fecharModalLore();
+        _reabrirBairroModal(bairroKey);
+    });
+}
+
+function editAtoMapa(bairroKey, loreId, atoId) {
+    const all = getLoresMapa();
+    const lore = (all[bairroKey] || []).find(l => l.id === loreId);
+    const ato = lore && lore.atos && lore.atos.find(a => a.id === atoId);
+    if (!ato) return;
+    _abrirModalLore('EDITAR ATO', () => {
+        const d = _getModalDados();
+        if (!d.titulo) { alert('O título é obrigatório.'); return; }
+        Object.assign(ato, d);
+        saveLoresMapa(all);
+        fecharModalLore();
+        _reabrirBairroModal(bairroKey);
+    }, ato);
+}
+
+function deleteAtoMapa(bairroKey, loreId, atoId) {
+    if (!confirm('Deseja deletar este Ato?')) return;
+    const all = getLoresMapa();
+    const lore = (all[bairroKey] || []).find(l => l.id === loreId);
+    if (lore && lore.atos) { lore.atos = lore.atos.filter(a => a.id !== atoId); saveLoresMapa(all); _reabrirBairroModal(bairroKey); }
+}
+
+function toggleAtoMapaVisivel(bairroKey, loreId, atoId) {
+    const all = getLoresMapa();
+    const lore = (all[bairroKey] || []).find(l => l.id === loreId);
+    const ato = lore && lore.atos && lore.atos.find(a => a.id === atoId);
+    if (ato) { ato.visivel = !ato.visivel; saveLoresMapa(all); _reabrirBairroModal(bairroKey); }
+}
+
+// ══════════════════════════════════════════════════════
+//   EDIÇÃO DE BAIRROS (Admin)
+// ══════════════════════════════════════════════════════
+
+function openEditBairroModal(bairroKey) {
+    const bairros = getBairrosEditaveis();
+    const b = bairros[bairroKey];
+    if (!b) return;
+
+    const overlay = document.getElementById('global-lore-modal') || (() => {
+        const el = document.createElement('div');
+        el.id = 'global-lore-modal';
+        document.body.appendChild(el);
+        return el;
+    })();
+
+    overlay.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;padding:1rem;';
+    overlay.innerHTML = `
+        <div style="background:#0a0a0a;border:1px solid var(--neon-red);border-radius:8px;width:100%;max-width:600px;padding:2rem;max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">
+            <h3 style="color:var(--neon-red);font-family:'Orbitron',monospace;font-size:1rem;margin-bottom:1.5rem;letter-spacing:2px;">✎ EDITAR BAIRRO — ${b.name.toUpperCase()}</h3>
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+                <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Nome do Bairro</label><input id="eb-nome" type="text" value="${b.name}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Região</label><input id="eb-regiao" type="text" value="${b.region}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Citação / Slogan</label><input id="eb-quote" type="text" value="${b.quote.replace(/"/g,'&quot;')}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Descrição (HTML permitido)</label><textarea id="eb-desc" rows="6" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;">${b.description}</textarea></div>
+                <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Nível de Segurança</label><input id="eb-security" type="text" value="${b.security}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.8rem;display:block;margin-bottom:4px;">Descrição da Segurança</label><textarea id="eb-security-desc" rows="3" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;">${b.securityDesc}</textarea></div>
+            </div>
+            <div style="display:flex;gap:0.8rem;margin-top:1.5rem;justify-content:flex-end;">
+                <button onclick="fecharModalLore()" style="background:none;border:1px solid #333;color:#aaa;padding:0.5rem 1.2rem;border-radius:3px;cursor:pointer;">Cancelar</button>
+                <button onclick="salvarEdicaoBairro('${bairroKey}')" style="background:var(--neon-red);border:none;color:#fff;padding:0.5rem 1.4rem;border-radius:3px;cursor:pointer;font-weight:bold;">Salvar Bairro</button>
+            </div>
+        </div>`;
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) fecharModalLore(); });
+}
+
+function salvarEdicaoBairro(bairroKey) {
+    const bairros = getBairrosEditaveis();
+    if (!bairros[bairroKey]) return;
+    bairros[bairroKey].name        = document.getElementById('eb-nome').value.trim();
+    bairros[bairroKey].region      = document.getElementById('eb-regiao').value.trim();
+    bairros[bairroKey].quote       = document.getElementById('eb-quote').value.trim();
+    bairros[bairroKey].description = document.getElementById('eb-desc').value.trim();
+    bairros[bairroKey].security    = document.getElementById('eb-security').value.trim();
+    bairros[bairroKey].securityDesc= document.getElementById('eb-security-desc').value.trim();
+    saveBairrosEditaveis(bairros);
+    fecharModalLore();
+    _reabrirBairroModal(bairroKey);
+}
+
+function addBairroPoint(bairroKey) {
+    const nome = prompt('Nome do novo Ponto de Interesse:');
+    if (!nome || !nome.trim()) return;
+    const bairros = getBairrosEditaveis();
+    if (!bairros[bairroKey]) return;
+    bairros[bairroKey].points.push(nome.trim());
+    saveBairrosEditaveis(bairros);
+    _reabrirBairroModal(bairroKey);
+}
+
+function editBairroPoint(bairroKey, idx) {
+    const bairros = getBairrosEditaveis();
+    const atual = bairros[bairroKey] && bairros[bairroKey].points[idx];
+    if (atual === undefined) return;
+    const novo = prompt('Editar ponto de interesse (deixe vazio para remover):', atual);
+    if (novo === null) return; // cancelou
+    if (novo.trim() === '') {
+        bairros[bairroKey].points.splice(idx, 1);
+    } else {
+        bairros[bairroKey].points[idx] = novo.trim();
+    }
+    saveBairrosEditaveis(bairros);
+    _reabrirBairroModal(bairroKey);
+}

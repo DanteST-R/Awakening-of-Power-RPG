@@ -1402,4 +1402,51 @@ select option {
     }
 }
 
+/* ══════════════════════════════════════
+   SISTEMA DE LORES E ATOS
+══════════════════════════════════════ */
 
+.lore-ctrl-btn {
+    background: rgba(255, 0, 60, 0.08);
+    border: 1px solid rgba(255, 0, 60, 0.3);
+    color: #aaa;
+    padding: 0.25rem 0.65rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.lore-ctrl-btn:hover {
+    background: rgba(255, 0, 60, 0.2);
+    color: #fff;
+    border-color: var(--neon-red);
+}
+.lore-ctrl-btn.lore-ctrl-delete {
+    border-color: #5a0000;
+    color: #c00;
+}
+.lore-ctrl-btn.lore-ctrl-delete:hover {
+    background: rgba(180, 0, 0, 0.2);
+    border-color: #cc0000;
+    color: #ff4444;
+}
+
+.lore-card {
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.lore-card:hover {
+    box-shadow: 0 0 12px rgba(255, 0, 60, 0.1);
+}
+
+/* Badge Administrador Geral */
+.supreme-badge {
+    font-size: 0.65rem;
+    background: rgba(255, 220, 50, 0.12);
+    border: 1px solid #c9a800;
+    color: #e8c200;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: normal;
+    letter-spacing: 1px;
+}
