@@ -809,7 +809,7 @@ const pages = {
                                 <div style="background: #000; border: 1px solid var(--support-crimson); border-left: 4px solid var(--neon-red); border-radius: 6px; padding: 1.4rem; box-shadow: 0 0 15px rgba(0,0,0,0.6);">
                                     <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                                         <div style="width: 70px; height: 70px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; background: #111; flex-shrink: 0;">
-                                            <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover;">
+                                        <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                                         </div>
                                         <div>
                                             <h3 style="color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin: 0 0 4px 0;">${npc.nome}</h3>
@@ -876,7 +876,7 @@ const pages = {
                             <!-- Corpo da Lore -->
                             <div style="padding:1.2rem 1.4rem;">
                                 ${lore.descricao ? `<p style="color:var(--text-muted);line-height:1.8;margin-bottom:1rem;">${lore.descricao}</p>` : ''}
-                                ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:5px;margin-bottom:1rem;border:1px solid #1a0000;" onerror="this.style.display='none'">` : ''}
+                                ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:5px;margin-bottom:1rem;border:1px solid #1a0000; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                                 ${lore.audioUrl ? `<audio controls src="${lore.audioUrl}" style="width:100%;margin-bottom:1rem;"></audio>` : ''}
 
                                 <!-- ATOS -->
@@ -895,7 +895,7 @@ const pages = {
                                                     </div>` : ''}
                                                 </div>
                                                 ${ato.descricao ? `<p style="color:#777;font-size:0.85rem;line-height:1.6;margin-bottom:0.5rem;">${ato.descricao}</p>` : ''}
-                                                ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:4px;margin-bottom:0.5rem;" onerror="this.style.display='none'">` : ''}
+                                                ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:4px;margin-bottom:0.5rem; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                                                 ${ato.audioUrl ? `<audio controls src="${ato.audioUrl}" style="width:100%;"></audio>` : ''}
                                             </div>`).join('')}
                                         </div>
@@ -1274,7 +1274,7 @@ function openBairroModal(bairroKey) {
                             </div>` : ''}
                         </div>
                         ${lore.descricao ? `<p style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin-bottom:0.6rem;">${lore.descricao}</p>` : ''}
-                        ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:4px;margin-bottom:0.6rem;border:1px solid #222;" onerror="this.style.display='none'">` : ''}
+                        ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:4px;margin-bottom:0.6rem;border:1px solid #222; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                         ${lore.audioUrl ? `<audio controls src="${lore.audioUrl}" style="width:100%;margin-bottom:0.5rem;"></audio>` : ''}
                         ${lore.atos && lore.atos.filter(a => adm || a.visivel).length > 0 ? `
                             <div style="padding-left:0.8rem;border-left:2px solid var(--neon-red);margin-top:0.6rem;">
@@ -1289,7 +1289,7 @@ function openBairroModal(bairroKey) {
                                             </div>` : ''}
                                         </div>
                                         ${ato.descricao ? `<p style="color:#777;font-size:0.8rem;margin:0;">${ato.descricao}</p>` : ''}
-                                        ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:3px;margin-top:4px;" onerror="this.style.display='none'">` : ''}
+                                        ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:3px;margin-top:4px; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                                         ${ato.audioUrl ? `<audio controls src="${ato.audioUrl}" style="width:100%;margin-top:4px;"></audio>` : ''}
                                     </div>`).join('')}
                                 ${adm ? `<button onclick="createAtoMapa('${bairroKey}','${lore.id}')" style="background:none;border:1px dashed #333;color:#555;padding:0.3rem 0.7rem;border-radius:3px;cursor:pointer;font-size:0.75rem;width:100%;margin-top:4px;">+ Adicionar Ato</button>` : ''}
@@ -1754,7 +1754,7 @@ function renderPerfil() {
     container.innerHTML = `
         <div class="perfil-header-box">
             <div class="perfil-avatar-wrap">
-                <img id="perfil-avatar-img" src="${userChars.avatar || 'https://via.placeholder.com/150/111111/FF003C?text=PERFIL'}" alt="Avatar">
+                <img id="perfil-avatar-img" src="${userChars.avatar || 'https://via.placeholder.com/150/111111/FF003C?text=PERFIL'}" alt="Avatar" style="cursor: zoom-in;" onclick="openImageViewer(this.src)">
                 <label class="perfil-avatar-upload-btn" title="Alterar Foto de Perfil">
                     📷 <input type="file" accept="image/*" onchange="uploadAvatar(event)" style="display:none;">
                 </label>
@@ -1849,7 +1849,7 @@ function renderCharactersSection(container) {
                 <!-- FOTO DO PERSONAGEM COMPRIMIDA -->
                 <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1.2rem; background: #000; border: 2px solid var(--neon-red); border-left: 5px solid var(--neon-red); border-radius: 6px; box-shadow: 0 0 15px rgba(255,0,60,0.2), inset 0 0 20px rgba(0,0,0,0.8);">
                     <div style="position: relative; width: 85px; height: 85px; border-radius: 6px; border: 2px solid var(--neon-red); box-shadow: 0 0 10px var(--neon-red); overflow: hidden; flex-shrink: 0; background: #000;">
-                        <img id="char-photo-preview" src="${currentChar.foto || 'https://via.placeholder.com/150/111111/FF003C?text=PERSONAGEM'}" alt="Foto do Personagem" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img id="char-photo-preview" src="${currentChar.foto || 'https://via.placeholder.com/150/111111/FF003C?text=PERSONAGEM'}" alt="Foto do Personagem" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                     </div>
                     <div>
                         <strong style="color: #fff; font-size: 0.95rem; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; display: block; margin-bottom: 4px; text-shadow: 0 0 6px var(--neon-red);">FOTO DO PERSONAGEM</strong>
@@ -2518,7 +2518,7 @@ function renderCreateNpcSection(container) {
                 <!-- FOTO DO NPC COMPRIMIDA -->
                 <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1rem; background: #000; border: 2px solid var(--neon-red); border-left: 5px solid var(--neon-red); border-radius: 6px;">
                     <div style="position: relative; width: 75px; height: 75px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; flex-shrink: 0; background: #000;">
-                        <img id="npc-photo-preview" src="https://via.placeholder.com/150/111111/FF003C?text=NPC" alt="Foto do NPC" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img id="npc-photo-preview" src="https://via.placeholder.com/150/111111/FF003C?text=NPC" alt="Foto do NPC" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                     </div>
                     <div>
                         <strong style="color: #fff; font-size: 0.9rem; font-family: 'Orbitron', sans-serif; display: block; margin-bottom: 4px;">FOTO DO NPC</strong>
@@ -2637,7 +2637,7 @@ function renderCreateNpcSection(container) {
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
                                 <div style="display: flex; gap: 12px; align-items: center;">
                                     <div style="width: 60px; height: 60px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; background: #111; flex-shrink: 0;">
-                                        <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover;">
+                                        <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                                     </div>
                                     <div>
                                         <h4 style="color: #fff; font-size: 1.1rem; margin: 0 0 4px 0; font-family: 'Orbitron', sans-serif;">
@@ -2693,7 +2693,7 @@ function uploadNpcPhoto(e) {
         const img = new Image();
         img.onload = function() {
             const canvas = document.createElement('canvas');
-            const MAX_SIZE = 300;
+            const MAX_SIZE = 1200;
             let width = img.width;
             let height = img.height;
 
@@ -2714,7 +2714,7 @@ function uploadNpcPhoto(e) {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
 
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.9);
             document.getElementById('npc-photo-preview').src = compressedDataUrl;
             document.getElementById('npc-foto-data').value = compressedDataUrl;
         };
@@ -2798,7 +2798,7 @@ function openEditNpcModal(idx) {
             <!-- FOTO -->
             <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;padding:1rem;background:#000;border:2px solid var(--neon-red);border-radius:6px;">
                 <div style="position:relative;width:75px;height:75px;border-radius:6px;border:2px solid var(--neon-red);overflow:hidden;flex-shrink:0;background:#000;">
-                    <img id="edit-npc-photo-preview" src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%;height:100%;object-fit:cover;">
+                    <img id="edit-npc-photo-preview" src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%;height:100%;object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                 </div>
                 <div>
                     <strong style="color:#fff;font-size:0.9rem;font-family:'Orbitron',sans-serif;display:block;margin-bottom:4px;">FOTO DO NPC</strong>
@@ -2876,13 +2876,13 @@ function uploadEditNpcPhoto(e) {
         const img = new Image();
         img.onload = function() {
             const canvas = document.createElement('canvas');
-            const MAX_SIZE = 300;
+            const MAX_SIZE = 1200;
             let w = img.width, h = img.height;
             if (w > h) { if (w > MAX_SIZE) { h *= MAX_SIZE/w; w = MAX_SIZE; } }
             else       { if (h > MAX_SIZE) { w *= MAX_SIZE/h; h = MAX_SIZE; } }
             canvas.width = w; canvas.height = h;
             canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-            const data = canvas.toDataURL('image/jpeg', 0.75);
+            const data = canvas.toDataURL('image/jpeg', 0.9);
             document.getElementById('edit-npc-photo-preview').src = data;
             document.getElementById('edit-npc-foto-data').value = data;
         };
@@ -3242,3 +3242,32 @@ function editBairroPoint(bairroKey, idx) {
     saveBairrosEditaveis(bairros);
     _reabrirBairroModal(bairroKey);
 }
+
+// ══════════════════════════════════════════════════════
+//   VISUALIZADOR GLOBAL DE IMAGENS (Lightbox)
+// ══════════════════════════════════════════════════════
+function openImageViewer(src) {
+    if (!src || src.includes('via.placeholder.com')) return;
+    let viewer = document.getElementById('global-image-viewer');
+    if (!viewer) {
+        viewer = document.createElement('div');
+        viewer.id = 'global-image-viewer';
+        viewer.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:10000;align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(5px);';
+        viewer.innerHTML = `
+            <span style="position:absolute;top:20px;right:30px;color:#fff;font-size:40px;cursor:pointer;font-weight:bold;line-height:1;" onclick="closeImageViewer()">&times;</span>
+            <img id="global-image-viewer-img" src="" style="max-width:100%;max-height:100%;object-fit:contain;border:2px solid var(--neon-red);border-radius:8px;box-shadow:0 0 30px rgba(255,0,60,0.4);">
+        `;
+        viewer.addEventListener('click', (e) => {
+            if (e.target === viewer) closeImageViewer();
+        });
+        document.body.appendChild(viewer);
+    }
+    document.getElementById('global-image-viewer-img').src = src;
+    viewer.style.display = 'flex';
+}
+
+function closeImageViewer() {
+    const viewer = document.getElementById('global-image-viewer');
+    if (viewer) viewer.style.display = 'none';
+}
+
