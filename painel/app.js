@@ -481,7 +481,7 @@ const pages = {
                     box-shadow: 0 0 28px rgba(255,0,60,0.12), inset 0 0 40px rgba(0,0,0,0.7);
                 ">
                     <p style="color: var(--text-muted); font-size: 0.93rem; line-height: 1.8; margin-bottom: 1.2rem;">
-                        Feito com o intuito de dar metas e objetivos para os jogadores de uma maneira simples e direta, os ranks de classe são intitulados de forma crescente e suas nomenclaturas dependem da classe escolhida pelo jogador, sendo as classes:
+                        Feito com o intuito de dar metas e objetivos para os jogadores de uma maneira simples e direta, os ranks de classe são intitulados de forma crescente, sendo as classes:
                         <strong style="color:#fff;">Herói</strong>, <strong style="color:#fff;">Vilão</strong> e <strong style="color:#fff;">Anti-Herói</strong>.
                     </p>
                     <div style="border-left: 3px solid var(--neon-red); padding-left: 1rem; margin-bottom: 1rem;">
