@@ -53,17 +53,23 @@ async function dbDeleteItem(collectionName, docId) {
     }
 }
 
-// Para coleções baseadas em Array (que ainda salvam listas, se necessário, ou convertem para docs)
-// Na refatoração completa, o ideal é não usar "salvarListaToda", mas sim salvar item por item.
+// Salva lista inteira mapeando por ID de cada item
 async function dbSaveList(collectionName, list) {
-    // Abordagem temporária para não quebrar a lógica de Arrays do app.js original instantaneamente
-    // O ideal seria o app.js passar a usar dicts ou salvar individualmente.
-    // Vamos mapear os itens do array para documentos se eles tiverem ID.
     for (let i = 0; i < list.length; i++) {
-        let item = list[i];
-        let id = item.id || item.uid || item.username || `item_${i}`;
+        const item = list[i];
+        const id = item.id || item.uid || item.username || `item_${i}`;
         await dbSaveItem(collectionName, id, item);
     }
+}
+
+// Salva UM item individual por ID — ideal para adicionar sem sobrescrever os outros
+async function dbSaveOneItem(collectionName, id, data) {
+    return dbSaveItem(collectionName, id, data);
+}
+
+// Remove UM item do Firestore por ID
+async function dbRemoveItem(collectionName, id) {
+    return dbDeleteItem(collectionName, id);
 }
 
 async function dbSaveDict(collectionName, dict) {
@@ -110,45 +116,63 @@ async function migrateGamedataToCollections() {
 // LISTENERS DE COLEÇÕES REAIS
 // ============================================================================
 function initFirebaseListeners() {
+    // Cancela listeners anteriores para não duplicar
     dbUnsubscribes.forEach(unsub => unsub());
     dbUnsubscribes = [];
+    isDbLoaded = false;
 
-    // Coleções em Array
+    // Coleções que são arrays de documentos
     const arrCollections = ["users", "approvals", "npcs", "loresHistoria"];
     arrCollections.forEach(colName => {
-        dbUnsubscribes.push(db.collection(colName).onSnapshot((snapshot) => {
-            let arr = [];
+        const unsub = db.collection(colName).onSnapshot((snapshot) => {
+            const arr = [];
             snapshot.forEach(doc => {
-                let data = doc.data();
-                data.docId = doc.id; // Guarda o ID do doc real
+                const data = doc.data();
+                // Garante que o id do doc está no objeto (chave para save/delete corretos)
+                if (!data.id) data.id = doc.id;
+                data.docId = doc.id;
                 arr.push(data);
             });
             window.dbCache[colName] = arr;
-            if(typeof triggerUIRefresh === 'function') triggerUIRefresh();
-        }));
+            if (isDbLoaded && typeof triggerUIRefresh === 'function') triggerUIRefresh();
+        }, (err) => console.error(`[DB] Listener error em ${colName}:`, err));
+        dbUnsubscribes.push(unsub);
     });
 
-    // Coleções em Dict
+    // Coleções que são dicionários (chave → objeto)
     const dictCollections = ["characters", "loresMapa", "bairros"];
     dictCollections.forEach(colName => {
-        dbUnsubscribes.push(db.collection(colName).onSnapshot((snapshot) => {
-            let dict = {};
-            snapshot.forEach(doc => dict[doc.id] = doc.data());
+        const unsub = db.collection(colName).onSnapshot((snapshot) => {
+            const dict = {};
+            snapshot.forEach(doc => { dict[doc.id] = doc.data(); });
             window.dbCache[colName] = dict;
-            if(typeof triggerUIRefresh === 'function') triggerUIRefresh();
-        }));
+            if (isDbLoaded && typeof triggerUIRefresh === 'function') triggerUIRefresh();
+        }, (err) => console.error(`[DB] Listener error em ${colName}:`, err));
+        dbUnsubscribes.push(unsub);
     });
 
-    setTimeout(() => { 
-        isDbLoaded = true; 
-        if(typeof triggerUIRefresh === 'function') triggerUIRefresh(); 
-        
-        // Verifica se é administrador (supremo) para rodar a migração
-        if (typeof isSupreme === 'function' && isSupreme()) {
-            migrateGamedataToCollections();
-        }
+    // Marca como carregado após tempo razoável para snapshot inicial
+    setTimeout(() => {
+        isDbLoaded = true;
+        console.log('[DB] Listeners prontos. Cache inicial carregado.');
+        if (typeof triggerUIRefresh === 'function') triggerUIRefresh();
     }, 1500);
 }
+
+// Inicia os listeners automaticamente quando o auth confirma o login
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        console.log('[Auth] Usuário autenticado:', user.uid, '— iniciando listeners do DB.');
+        initFirebaseListeners();
+    } else {
+        console.log('[Auth] Usuário deslogado — cancelando listeners.');
+        dbUnsubscribes.forEach(unsub => unsub());
+        dbUnsubscribes = [];
+        isDbLoaded = false;
+        // Reseta o cache
+        window.dbCache = { users: [], characters: {}, approvals: [], npcs: [], loresHistoria: [], loresMapa: {}, bairros: null };
+    }
+});
 
 // ============================================================================
 // FUNÇÕES DE AUTENTICAÇÃO

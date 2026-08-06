@@ -7,17 +7,18 @@ lucide.createIcons();
 // O arquivo firebase-service.js inicializa o Firebase, cria o window.dbCache
 // e contém a função initFirebaseListeners() refatorada para as coleções reais.
 
-// Quando o Firebase recebe dados novos, atualizamos a tela se estivermos nela
+// Quando o Firebase recebe dados novos, atualizamos a tela
 function triggerUIRefresh() {
     if (!isDbLoaded) return;
     const authScreen = document.getElementById('auth-screen');
     if (authScreen && authScreen.style.display === 'none') {
         const activeItem = document.querySelector('.sidebar-menu li.active');
         if (activeItem) {
-            const pageIdMatch = activeItem.getAttribute('onclick').match(/'([^']+)'/);
-            if (pageIdMatch) {
-                if (['personagens', 'historia', 'mapa', 'perfil'].includes(pageIdMatch[1])) {
-                    // renderPage(pageIdMatch[1]);
+            const onclickAttr = activeItem.getAttribute('onclick');
+            if (onclickAttr) {
+                const pageIdMatch = onclickAttr.match(/'([^']+)'/);
+                if (pageIdMatch && ['personagens', 'historia', 'mapa', 'perfil'].includes(pageIdMatch[1])) {
+                    renderPage(pageIdMatch[1]);
                 }
             }
         }
@@ -1503,7 +1504,8 @@ function getLoresHistoria() {
 }
 function saveLoresHistoria(data) {
     window.dbCache.loresHistoria = data;
-    syncToFirebase("loresHistoria", "list", data);
+    // Salva cada lore individualmente pelo seu ID — evita colisoes e perda de dados
+    data.forEach(lore => dbSaveOneItem('loresHistoria', lore.id, lore));
 }
 
 // ═══ HELPERS — LORES DO MAPA ═══
@@ -1512,7 +1514,8 @@ function getLoresMapa() {
 }
 function saveLoresMapa(data) {
     window.dbCache.loresMapa = data;
-    syncToFirebase("loresMapa", "dict", data);
+    // Para o mapa, salva cada entrada individualmente
+    for (const key in data) dbSaveOneItem('loresMapa', key, data[key]);
 }
 
 // ═══ HELPERS — BAIRROS EDITÁVEIS ═══
@@ -1540,10 +1543,13 @@ function getUsers() {
     return window.dbCache.users || [];
 }
 
-// Salva lista de usuários localmente e envia para a nuvem no Firestore
+// Salva lista de usuarios (cada usuario pelo uid ou username)
 function saveUsers(users) {
     window.dbCache.users = users;
-    syncToFirebase("users", "list", users);
+    users.forEach(u => {
+        const id = u.uid || u.username;
+        if (id) dbSaveOneItem('users', id, u);
+    });
 }
 
 // Retorna sessão atual
@@ -1793,10 +1799,10 @@ function getCharacters() {
     return window.dbCache.characters || {};
 }
 
-// Salva personagens no Firebase
+// Salva personagens no Firebase (cada personagem pelo seu ID)
 function saveCharacters(chars) {
     window.dbCache.characters = chars;
-    syncToFirebase("characters", "dict", chars);
+    for (const key in chars) dbSaveOneItem('characters', key, chars[key]);
 }
 
 // Retorna fila de aprovações pendentes
@@ -1804,10 +1810,13 @@ function getApprovals() {
     return window.dbCache.approvals || [];
 }
 
-// Salva fila de aprovações
+// Salva fila de aprovacoes (cada aprovacao individualmente)
 function saveApprovals(apps) {
     window.dbCache.approvals = apps;
-    syncToFirebase("approvals", "list", apps);
+    apps.forEach((app, i) => {
+        const id = app.id || app.charId || `approval_${i}`;
+        dbSaveOneItem('approvals', id, app);
+    });
 }
 
 // Estado local da aba de perfil
@@ -2565,7 +2574,12 @@ function getNpcs() {
 
 function saveNpcs(npcs) {
     window.dbCache.npcs = npcs;
-    syncToFirebase("npcs", "list", npcs);
+    // Salva cada NPC individualmente pelo seu ID
+    npcs.forEach((npc, i) => {
+        const id = npc.id || `npc_${i}`;
+        if (!npc.id) npc.id = id; // Garante que o NPC tem um id salvo
+        dbSaveOneItem('npcs', id, npc);
+    });
 }
 
 function renderCreateNpcSection(container) {
@@ -2804,6 +2818,7 @@ function saveNpcForm(e) {
     }
 
     const newNpc = {
+        id: _uuid(),  // ID único gerado na criação
         foto: document.getElementById('npc-foto-data').value || '',
         nome: document.getElementById('npc-nome').value,
         classe: document.getElementById('npc-classe').value,
@@ -2844,8 +2859,12 @@ function toggleNpcVisibility(idx) {
 function deleteNpc(idx) {
     if (!confirm('Deseja realmente excluir este NPC?')) return;
     const npcs = getNpcs();
+    const npc = npcs[idx];
+    if (!npc) return;
+    // Remove do Firestore antes de remover da lista local
+    if (npc.id) dbRemoveItem('npcs', npc.id);
     npcs.splice(idx, 1);
-    saveNpcs(npcs);
+    window.dbCache.npcs = npcs; // Atualiza cache sem re-salvar tudo
     renderPerfilSection();
 }
 
@@ -3089,8 +3108,10 @@ function editLoreHistoria(loreId) {
 
 function deleteLoreHistoria(loreId) {
     if (!confirm('Deseja realmente deletar esta Lore e todos seus Atos?')) return;
-    const lores = getLoresHistoria().filter(l => l.id !== loreId);
-    saveLoresHistoria(lores);
+    // Remove o documento do Firestore diretamente pelo ID
+    dbRemoveItem('loresHistoria', loreId);
+    // Atualiza o cache local sem re-salvar as outras lores
+    window.dbCache.loresHistoria = getLoresHistoria().filter(l => l.id !== loreId);
     renderPage('historia');
 }
 
