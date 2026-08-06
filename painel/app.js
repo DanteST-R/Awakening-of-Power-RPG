@@ -39,6 +39,20 @@ async function syncToFirebase(docName, fieldName, data) {
     }
 }
 
+// ──────────────────────────────────────────────────────
+//  HELPER — Texto Inteligente com quebras de linha
+// ──────────────────────────────────────────────────────
+// Converte \n em <br> e sanitiza o texto (evita XSS).
+// Use sempre que exibir texto livre do usuário no innerHTML.
+function nl2br(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>');
+}
+
 // ══════════════════════════════════════════════════════
 //   MIGRAÇÃO DE DADOS (LOCALSTORAGE -> FIREBASE)
 // ══════════════════════════════════════════════════════
@@ -949,7 +963,7 @@ const pages = {
                             </div>
                             <!-- Corpo da Lore -->
                             <div style="padding:1.2rem 1.4rem;">
-                                ${lore.descricao ? `<p style="color:var(--text-muted);line-height:1.8;margin-bottom:1rem;">${lore.descricao}</p>` : ''}
+                                ${lore.descricao ? `<p style="color:var(--text-muted);line-height:1.8;margin-bottom:1rem;">${nl2br(lore.descricao)}</p>` : ''}
                                 ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:5px;margin-bottom:1rem;border:1px solid #1a0000; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                                 ${lore.audioUrl ? `<audio controls src="${lore.audioUrl}" style="width:100%;margin-bottom:1rem;"></audio>` : ''}
 
@@ -968,7 +982,7 @@ const pages = {
                                                         <button onclick="deleteAtoHistoria('${lore.id}','${ato.id}')" class="lore-ctrl-btn lore-ctrl-delete" style="font-size:0.72rem;padding:0.2rem 0.5rem;">✕</button>
                                                     </div>` : ''}
                                                 </div>
-                                                ${ato.descricao ? `<p style="color:#777;font-size:0.85rem;line-height:1.6;margin-bottom:0.5rem;">${ato.descricao}</p>` : ''}
+                                                ${ato.descricao ? `<p style="color:#777;font-size:0.85rem;line-height:1.6;margin-bottom:0.5rem;">${nl2br(ato.descricao)}</p>` : ''}
                                                 ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:4px;margin-bottom:0.5rem; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                                                 ${ato.audioUrl ? `<audio controls src="${ato.audioUrl}" style="width:100%;"></audio>` : ''}
                                             </div>`).join('')}
@@ -1347,7 +1361,7 @@ function openBairroModal(bairroKey) {
                                 <button onclick="deleteLoreMapa('${bairroKey}','${lore.id}')" style="background:none;border:1px solid #7a0000;color:#c00;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">✕</button>
                             </div>` : ''}
                         </div>
-                        ${lore.descricao ? `<p style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin-bottom:0.6rem;">${lore.descricao}</p>` : ''}
+                        ${lore.descricao ? `<p style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin-bottom:0.6rem;">${nl2br(lore.descricao)}</p>` : ''}
                         ${lore.imagemUrl ? `<img src="${lore.imagemUrl}" alt="${lore.titulo}" style="max-width:100%;border-radius:4px;margin-bottom:0.6rem;border:1px solid #222; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                         ${lore.audioUrl ? `<audio controls src="${lore.audioUrl}" style="width:100%;margin-bottom:0.5rem;"></audio>` : ''}
                         ${lore.atos && lore.atos.filter(a => adm || a.visivel).length > 0 ? `
@@ -1362,7 +1376,7 @@ function openBairroModal(bairroKey) {
                                                 <button onclick="deleteAtoMapa('${bairroKey}','${lore.id}','${ato.id}')" style="background:none;border:none;color:#7a0000;cursor:pointer;font-size:0.7rem;">✕</button>
                                             </div>` : ''}
                                         </div>
-                                        ${ato.descricao ? `<p style="color:#777;font-size:0.8rem;margin:0;">${ato.descricao}</p>` : ''}
+                                        ${ato.descricao ? `<p style="color:#777;font-size:0.8rem;margin:0;">${nl2br(ato.descricao)}</p>` : ''}
                                         ${ato.imagemUrl ? `<img src="${ato.imagemUrl}" style="max-width:100%;border-radius:3px;margin-top:4px; cursor: zoom-in;" onclick="openImageViewer(this.src)" onerror="this.style.display='none'">` : ''}
                                         ${ato.audioUrl ? `<audio controls src="${ato.audioUrl}" style="width:100%;margin-top:4px;"></audio>` : ''}
                                     </div>`).join('')}
@@ -2748,18 +2762,18 @@ function renderCreateNpcSection(container) {
 
                             <div style="margin-top: 0.8rem; padding: 0.8rem; background: rgba(255,255,255,0.02); border-radius: 4px; font-size: 0.82rem; color: var(--text-muted);">
                                 <div><strong>Atributos:</strong> Força Nv.${npc.forca || 1} | Resist. Nv.${npc.resistencia || 1} | Veloc. Nv.${npc.velocidade || 1} | Agil. Nv.${npc.agilidade || 1} | Poder Nv.${npc.poderLevel || 1}</div>
-                                <div style="margin-top: 4px;"><strong>Poder:</strong> ${npc.nomePoder || 'N/A'} — <em>${npc.descPoder || 'Sem descrição'}</em></div>
+                                <div style="margin-top: 4px;"><strong>Poder:</strong> ${npc.nomePoder || 'N/A'} — <em>${nl2br(npc.descPoder) || 'Sem descrição'}</em></div>
                             </div>
 
                             <div style="margin-top: 0.8rem; font-size: 0.83rem; color: var(--text-main); background: rgba(255,0,60,0.05); border-left: 3px solid var(--neon-red); padding: 0.6rem 0.8rem;">
                                 <strong style="color: var(--neon-red); display: block;">🔒 História (Privada):</strong>
-                                ${npc.historia}
+                                ${nl2br(npc.historia)}
                             </div>
 
                             ${npc.boatos ? `
                                 <div style="margin-top: 0.5rem; font-size: 0.83rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border-left: 3px solid #ffaa00; padding: 0.6rem 0.8rem;">
                                     <strong style="color: #ffaa00; display: block;">💬 Boatos (Público):</strong>
-                                    ${npc.boatos}
+                                    ${nl2br(npc.boatos)}
                                 </div>
                             ` : ''}
                         </div>
