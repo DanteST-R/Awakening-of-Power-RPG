@@ -159,25 +159,13 @@ function initFirebaseListeners() {
     }, 1500);
 }
 
-// Inicia os listeners automaticamente quando o auth confirma o login
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        console.log('[Auth] Usuário autenticado:', user.uid, '— iniciando listeners do DB.');
-        initFirebaseListeners();
-    } else {
-        console.log('[Auth] Usuário deslogado — cancelando listeners.');
-        dbUnsubscribes.forEach(unsub => unsub());
-        dbUnsubscribes = [];
-        isDbLoaded = false;
-        // Reseta o cache
-        window.dbCache = { users: [], characters: {}, approvals: [], npcs: [], loresHistoria: [], loresMapa: {}, bairros: null };
-    }
-});
-
 // ============================================================================
 // FUNÇÕES DE AUTENTICAÇÃO
 // ============================================================================
 const auth = firebase.auth();
+
+// Firebase Auth persiste a sessão automaticamente (IndexedDB/cookies).
+// O app.js escuta o estado via auth.onAuthStateChanged no window.onload.
 
 // Helpers para e-mail fantasma
 const getGhostEmail = (username) => `${username.trim().toLowerCase()}@awakening.rpg`;

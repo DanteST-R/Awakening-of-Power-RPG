@@ -1550,7 +1550,6 @@ const MASTER_DEFAULT_PASSWORD = '';
 
 // Chaves no localStorage
 const KEY_USERS    = 'awrpg_users';
-const KEY_SESSION  = 'awrpg_session';
 
 // Retorna lista de usuários do localStorage (e sincroniza com Firebase se disponível)
 function getUsers() {
@@ -1566,20 +1565,21 @@ function saveUsers(users) {
     });
 }
 
-// Retorna sessão atual
+// ── Sessão em memória (sem localStorage) ───────────────
+// O Firebase Auth controla a persistência real da sessão.
+// Mantemos apenas um cache em memória para acesso rápido.
+window._currentSession = null;
+
 function getSession() {
-    try { return JSON.parse(localStorage.getItem(KEY_SESSION)); }
-    catch { return null; }
+    return window._currentSession;
 }
 
-// Salva sessão
 function saveSession(data) {
-    localStorage.setItem(KEY_SESSION, JSON.stringify(data));
+    window._currentSession = data;
 }
 
-// Encerra sessão
 function clearSession() {
-    localStorage.removeItem(KEY_SESSION);
+    window._currentSession = null;
 }
 
 // ── Alternar aba Login / Alistar-se ─────────────────────
@@ -1788,17 +1788,63 @@ async function handleMasterLogin(e) {
     return showAuthError(errorId, 'Você não tem permissão de Mestre.');
 }
 
-// ── Inicialização — verifica sessão existente ──────────
+// ── Inicialização — controlada pelo Firebase Auth ──────
+// O Firebase Auth é a ÚNICA fonte da verdade sobre se o usuário está logado.
+// Quando a página carrega, esperamos o Firebase confirmar o estado antes de mostrar qualquer tela.
 window.onload = () => {
-    const session = getSession();
-    if (session && session.username) {
-        enterApp(session);
-    } else {
-        // Garante que a tela de auth está visível
-        document.getElementById('auth-screen').style.display = 'flex';
-        document.getElementById('app-root').style.display    = 'none';
-        lucide.createIcons();
-    }
+    // Mostra loading enquanto o Firebase decide
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app-root').style.display    = 'none';
+
+    auth.onAuthStateChanged(async (firebaseUser) => {
+        if (firebaseUser) {
+            // Inicia listeners do Firestore para o usuário autenticado
+            initFirebaseListeners();
+
+            // Usuário tem sessão ativa no Firebase — busca dados dele no Firestore
+            const existingSession = getSession();
+            if (existingSession && existingSession.uid === firebaseUser.uid) {
+                // Sessão em memória ainda válida — usa ela
+                enterApp(existingSession);
+                return;
+            }
+
+            // Busca dados do usuário no Firestore para montar a sessão
+            try {
+                const docSnap = await db.collection('users').doc(firebaseUser.uid).get();
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    enterApp({ username: data.username, role: data.role, uid: firebaseUser.uid });
+                } else {
+                    // Usuário existe no Auth mas não tem doc no Firestore
+                    // Verifica se é um supremo pela lista
+                    const emailName = firebaseUser.email.split('@')[0];
+                    const isSup = SUPREME_MASTERS.some(m => m.toLowerCase() === emailName.toLowerCase());
+                    const role = isSup ? 'supreme' : 'player';
+                    const username = emailName;
+                    // Cria o documento
+                    await db.collection('users').doc(firebaseUser.uid).set({ username, role, uid: firebaseUser.uid });
+                    enterApp({ username, role, uid: firebaseUser.uid });
+                }
+            } catch (err) {
+                console.error('[Auth] Erro ao buscar sessão do usuário:', err);
+                // Mostra tela de login como fallback seguro
+                document.getElementById('auth-screen').style.display = 'flex';
+                lucide.createIcons();
+            }
+        } else {
+            // Nenhum usuário logado — mostra tela de autenticação e limpa listeners
+            if (typeof dbUnsubscribes !== 'undefined') {
+                dbUnsubscribes.forEach(unsub => unsub());
+                dbUnsubscribes = [];
+            }
+            isDbLoaded = false;
+            clearSession();
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('app-root').style.display    = 'none';
+            lucide.createIcons();
+        }
+    });
 };
 
 // ══════════════════════════════════════════════════════
