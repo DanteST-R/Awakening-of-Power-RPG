@@ -894,7 +894,7 @@ const pages = {
                                 <div style="background: #000; border: 1px solid ${npc.visivel ? 'var(--support-crimson)' : '#555'}; border-left: 4px solid ${npc.visivel ? 'var(--neon-red)' : '#777'}; border-radius: 6px; padding: 1.4rem; box-shadow: 0 0 15px rgba(0,0,0,0.6); opacity: ${npc.visivel ? '1' : '0.7'};">
                                     <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                                         <div style="width: 70px; height: 70px; border-radius: 6px; border: 2px solid ${npc.visivel ? 'var(--neon-red)' : '#777'}; overflow: hidden; background: #111; flex-shrink: 0;">
-                                        <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
+                                        <img src="${npc.foto || DEFAULT_AVATAR}" style="width:100%; height:100%; object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                                         </div>
                                         <div>
                                             <h3 style="color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin: 0 0 4px 0;">
@@ -1532,13 +1532,16 @@ function saveLoresMapa(data) {
     for (const key in data) dbSaveOneItem('loresMapa', key, data[key]);
 }
 
+// ═══ PLACEHOLDER PADRÃO (SVG INLINE - SEM DEPENDÊNCIA EXTERNA) ═══
+const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'><rect width='150' height='150' fill='%23111111' stroke='%23FF003C' stroke-width='2'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23FF003C' font-family='sans-serif' font-size='14'>SEM FOTO</text></svg>";
+
 // ═══ HELPERS — BAIRROS EDITÁVEIS ═══
 function getBairrosEditaveis() {
-    if (window.dbCache.bairros) {
-        return window.dbCache.bairros;
+    const defaultData = JSON.parse(JSON.stringify(bairrosData));
+    if (window.dbCache.bairros && Object.keys(window.dbCache.bairros).length > 0) {
+        return Object.assign(defaultData, window.dbCache.bairros);
     }
-    // Retorna uma cópia dos dados originais se não houver edições salvas
-    return JSON.parse(JSON.stringify(bairrosData));
+    return defaultData;
 }
 function saveBairrosEditaveis(data) {
     window.dbCache.bairros = data;
@@ -1895,7 +1898,7 @@ function renderPerfil() {
     container.innerHTML = `
         <div class="perfil-header-box">
             <div class="perfil-avatar-wrap">
-                <img id="perfil-avatar-img" src="${userChars.avatar || 'https://via.placeholder.com/150/111111/FF003C?text=PERFIL'}" alt="Avatar" style="cursor: zoom-in;" onclick="openImageViewer(this.src)">
+                <img id="perfil-avatar-img" src="${userChars.avatar || DEFAULT_AVATAR}" alt="Avatar" style="cursor: zoom-in;" onclick="openImageViewer(this.src)">
                 <label class="perfil-avatar-upload-btn" title="Alterar Foto de Perfil">
                     📷 <input type="file" accept="image/*" onchange="uploadAvatar(event)" style="display:none;">
                 </label>
@@ -1990,7 +1993,7 @@ function renderCharactersSection(container) {
                 <!-- FOTO DO PERSONAGEM COMPRIMIDA -->
                 <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1.2rem; background: #000; border: 2px solid var(--neon-red); border-left: 5px solid var(--neon-red); border-radius: 6px; box-shadow: 0 0 15px rgba(255,0,60,0.2), inset 0 0 20px rgba(0,0,0,0.8);">
                     <div style="position: relative; width: 85px; height: 85px; border-radius: 6px; border: 2px solid var(--neon-red); box-shadow: 0 0 10px var(--neon-red); overflow: hidden; flex-shrink: 0; background: #000;">
-                        <img id="char-photo-preview" src="${currentChar.foto || 'https://via.placeholder.com/150/111111/FF003C?text=PERSONAGEM'}" alt="Foto do Personagem" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
+                        <img id="char-photo-preview" src="${currentChar.foto || DEFAULT_AVATAR}" alt="Foto do Personagem" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                     </div>
                     <div>
                         <strong style="color: #fff; font-size: 0.95rem; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; display: block; margin-bottom: 4px; text-shadow: 0 0 6px var(--neon-red);">FOTO DO PERSONAGEM</strong>
@@ -2664,7 +2667,7 @@ function renderCreateNpcSection(container) {
                 <!-- FOTO DO NPC COMPRIMIDA -->
                 <div style="display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.2rem; padding: 1rem; background: #000; border: 2px solid var(--neon-red); border-left: 5px solid var(--neon-red); border-radius: 6px;">
                     <div style="position: relative; width: 75px; height: 75px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; flex-shrink: 0; background: #000;">
-                        <img id="npc-photo-preview" src="https://via.placeholder.com/150/111111/FF003C?text=NPC" alt="Foto do NPC" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
+                        <img id="npc-photo-preview" src="${DEFAULT_AVATAR}" alt="Foto do NPC" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                     </div>
                     <div>
                         <strong style="color: #fff; font-size: 0.9rem; font-family: 'Orbitron', sans-serif; display: block; margin-bottom: 4px;">FOTO DO NPC</strong>
@@ -2783,7 +2786,7 @@ function renderCreateNpcSection(container) {
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
                                 <div style="display: flex; gap: 12px; align-items: center;">
                                     <div style="width: 60px; height: 60px; border-radius: 6px; border: 2px solid var(--neon-red); overflow: hidden; background: #111; flex-shrink: 0;">
-                                        <img src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%; height:100%; object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
+                                        <img src="${npc.foto || DEFAULT_AVATAR}" style="width:100%; height:100%; object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                                     </div>
                                     <div>
                                         <h4 style="color: #fff; font-size: 1.1rem; margin: 0 0 4px 0; font-family: 'Orbitron', sans-serif;">
@@ -2903,7 +2906,7 @@ function saveNpcForm(e) {
     // Limpa o formulário
     e.target.reset();
     document.getElementById('npc-foto-data').value = '';
-    document.getElementById('npc-photo-preview').src = 'https://via.placeholder.com/150/111111/FF003C?text=NPC';
+    document.getElementById('npc-photo-preview').src = DEFAULT_AVATAR;
     renderPerfilSection();
 }
 
@@ -2949,7 +2952,7 @@ function openEditNpcModal(idx) {
             <!-- FOTO -->
             <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;padding:1rem;background:#000;border:2px solid var(--neon-red);border-radius:6px;">
                 <div style="position:relative;width:75px;height:75px;border-radius:6px;border:2px solid var(--neon-red);overflow:hidden;flex-shrink:0;background:#000;">
-                    <img id="edit-npc-photo-preview" src="${npc.foto || 'https://via.placeholder.com/150/111111/FF003C?text=NPC'}" style="width:100%;height:100%;object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
+                    <img id="edit-npc-photo-preview" src="${npc.foto || DEFAULT_AVATAR}" style="width:100%;height:100%;object-fit:cover; cursor: zoom-in;" onclick="openImageViewer(this.src)">
                 </div>
                 <div>
                     <strong style="color:#fff;font-size:0.9rem;font-family:'Orbitron',sans-serif;display:block;margin-bottom:4px;">FOTO DO NPC</strong>
@@ -3400,7 +3403,7 @@ function editBairroPoint(bairroKey, idx) {
 //   VISUALIZADOR GLOBAL DE IMAGENS (Lightbox)
 // ══════════════════════════════════════════════════════
 function openImageViewer(src) {
-    if (!src || src.includes('via.placeholder.com')) return;
+    if (!src || src.includes('via.placeholder.com') || src.startsWith('data:image/svg+xml')) return;
     let viewer = document.getElementById('global-image-viewer');
     if (!viewer) {
         viewer = document.createElement('div');
