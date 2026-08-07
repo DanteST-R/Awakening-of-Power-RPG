@@ -2200,36 +2200,36 @@ function renderCharactersSection(container) {
 
                 <!-- ATRIBUTOS -->
                 <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">ATRIBUTOS DOS PERSONAGENS</h4>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Os atributos vão do <strong style="color:#fff;">Nível 00</strong> (ponto de partida) ao <strong style="color:#fff;">Nível 07</strong> (máximo absoluto). Apenas Administradores podem alterar esses valores.</p>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Os atributos vão do <strong style="color:#fff;">Nível 01</strong> (ponto de partida) ao <strong style="color:#fff;">Nível 06</strong> (máximo absoluto). Apenas Administradores podem alterar esses valores.</p>
                 <div class="ficha-grid-2">
                     <div class="ficha-field">
-                        <label>💪 FORÇA (Nv. 00 ao 07)</label>
+                        <label>💪 FORÇA (Nv. 01 ao 06)</label>
                         <select id="fc-forca" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
-                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.forca||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                            ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(currentChar.forca||1)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário'.split(',')[n-1]}</option>`).join('')}
                         </select>
                     </div>
                     <div class="ficha-field">
-                        <label>🛡️ RESISTÊNCIA (Nv. 00 ao 07)</label>
+                        <label>🛡️ RESISTÊNCIA (Nv. 01 ao 06)</label>
                         <select id="fc-resistencia" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
-                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.resistencia||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                            ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(currentChar.resistencia||1)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário'.split(',')[n-1]}</option>`).join('')}
                         </select>
                     </div>
                     <div class="ficha-field">
-                        <label>⚡ VELOCIDADE (Nv. 00 ao 07)</label>
+                        <label>⚡ VELOCIDADE (Nv. 01 ao 06)</label>
                         <select id="fc-velocidade" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
-                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.velocidade||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                            ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(currentChar.velocidade||1)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário'.split(',')[n-1]}</option>`).join('')}
                         </select>
                     </div>
                     <div class="ficha-field">
-                        <label>💨 AGILIDADE (Nv. 00 ao 07)</label>
+                        <label>💨 AGILIDADE (Nv. 01 ao 06)</label>
                         <select id="fc-agilidade" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
-                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.agilidade||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                            ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(currentChar.agilidade||1)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário'.split(',')[n-1]}</option>`).join('')}
                         </select>
                     </div>
                     <div class="ficha-field" style="grid-column: span 2;">
-                        <label>⭐ PODER / ESPECIALIDADE (Nv. 00 ao 07)</label>
+                        <label>⭐ PODER / ESPECIALIDADE (Nv. 01 ao 06)</label>
                         <select id="fc-poderLevel" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
-                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.poderLevel||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Inativo,Iniciante,Aprendiz,Experiente,Especialista,Mestre,Grão-Mestre,Transcendente'.split(',')[n]}</option>`).join('')}
+                            ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(currentChar.poderLevel||1)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Iniciante,Aprendiz,Experiente,Especialista,Mestre,Grão-Mestre'.split(',')[n-1]}</option>`).join('')}
                         </select>
                     </div>
                 </div>
@@ -2272,11 +2272,11 @@ function renderApprovalsSection(container) {
         ? approvals
         : approvals.filter(a => a.username === session.username);
 
-    const attrNames  = ['Atrofiado','Humano Comum','Condicionado','Atleta de Elite','Sobre-Humano','Monstruoso','Lendário','Transcendente'];
-    const poderNames = ['Inativo','Iniciante','Aprendiz','Experiente','Especialista','Mestre','Grão-Mestre','Transcendente'];
+    const attrNames  = ['','Humano Comum','Condicionado','Atleta de Elite','Sobre-Humano','Monstruoso','Lendário'];
+    const poderNames = ['','Iniciante','Aprendiz','Experiente','Especialista','Mestre','Grão-Mestre'];
 
     const renderAttrBadge = (label, val) => {
-        const n = Math.min(7, Math.max(0, parseInt(val) || 0));
+        const n = Math.min(6, Math.max(1, parseInt(val) || 1));
         return `<div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.45rem 0.7rem;">
             <span style="color:#555;font-size:0.7rem;display:block;">${label}</span>
             <span style="color:var(--neon-red);font-weight:bold;font-size:0.85rem;">Nv.${String(n).padStart(2,'0')}</span>
@@ -2349,8 +2349,8 @@ function renderApprovalsSection(container) {
                                         ${renderAttrBadge('💨 AGILIDADE', c.agilidade)}
                                         <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.45rem 0.7rem;grid-column:span 2;">
                                             <span style="color:#555;font-size:0.7rem;display:block;">⭐ PODER / ESPECIALIDADE</span>
-                                            <span style="color:var(--neon-red);font-weight:bold;font-size:0.85rem;">Nv.${String(Math.min(7,parseInt(c.poderLevel)||0)).padStart(2,'0')}</span>
-                                            <span style="color:#777;font-size:0.78rem;"> — ${poderNames[Math.min(7,parseInt(c.poderLevel)||0)]}</span>
+                                            <span style="color:var(--neon-red);font-weight:bold;font-size:0.85rem;">Nv.${String(Math.min(6,Math.max(1,parseInt(c.poderLevel)||1))).padStart(2,'0')}</span>
+                                            <span style="color:#777;font-size:0.78rem;"> — ${poderNames[Math.min(6,Math.max(1,parseInt(c.poderLevel)||1))]}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -2439,12 +2439,12 @@ function getDefaultCharData() {
         extras: '',
         traumas: '',
         status: 'rascunho',
-        // Atributos — Nível 00 ao 07
-        forca: 0,
-        resistencia: 0,
-        velocidade: 0,
-        agilidade: 0,
-        poderLevel: 0
+        // Atributos — Nível 01 ao 06
+        forca: 1,
+        resistencia: 1,
+        velocidade: 1,
+        agilidade: 1,
+        poderLevel: 1
     };
 }
 
@@ -2668,12 +2668,12 @@ function saveFicha(e) {
         extras: document.getElementById('fc-extras') ? document.getElementById('fc-extras').value : (allChars[session.username][`char${activeCharSlot}`]?.extras || ''),
         traumas: document.getElementById('fc-traumas') ? document.getElementById('fc-traumas').value : (allChars[session.username][`char${activeCharSlot}`]?.traumas || ''),
         status: allChars[session.username][`char${activeCharSlot}`]?.status || 'rascunho',
-        // Atributos 00-07 — admin altera, jogador carrega o valor salvo
-        forca:       parseInt(document.getElementById('fc-forca')?.value)       ?? (allChars[session.username][`char${activeCharSlot}`]?.forca       ?? 0),
-        resistencia: parseInt(document.getElementById('fc-resistencia')?.value) ?? (allChars[session.username][`char${activeCharSlot}`]?.resistencia ?? 0),
-        velocidade:  parseInt(document.getElementById('fc-velocidade')?.value)  ?? (allChars[session.username][`char${activeCharSlot}`]?.velocidade  ?? 0),
-        agilidade:   parseInt(document.getElementById('fc-agilidade')?.value)   ?? (allChars[session.username][`char${activeCharSlot}`]?.agilidade   ?? 0),
-        poderLevel:  parseInt(document.getElementById('fc-poderLevel')?.value)  ?? (allChars[session.username][`char${activeCharSlot}`]?.poderLevel  ?? 0)
+        // Atributos 01-06 — admin altera, jogador carrega o valor salvo
+        forca:       parseInt(document.getElementById('fc-forca')?.value)       || (allChars[session.username][`char${activeCharSlot}`]?.forca       || 1),
+        resistencia: parseInt(document.getElementById('fc-resistencia')?.value) || (allChars[session.username][`char${activeCharSlot}`]?.resistencia || 1),
+        velocidade:  parseInt(document.getElementById('fc-velocidade')?.value)  || (allChars[session.username][`char${activeCharSlot}`]?.velocidade  || 1),
+        agilidade:   parseInt(document.getElementById('fc-agilidade')?.value)   || (allChars[session.username][`char${activeCharSlot}`]?.agilidade   || 1),
+        poderLevel:  parseInt(document.getElementById('fc-poderLevel')?.value)  || (allChars[session.username][`char${activeCharSlot}`]?.poderLevel  || 1)
     };
 
     allChars[session.username][`char${activeCharSlot}`] = charData;
@@ -2818,31 +2818,31 @@ function openBalanceModal(index) {
                 </div>
 
                 <div style="background:#050505;border:1px solid #1a0000;border-radius:5px;padding:0.9rem;">
-                    <strong style="color:var(--neon-red);font-size:0.8rem;display:block;margin-bottom:8px;">📊 ATRIBUTOS (Nv. 00 ao 07)</strong>
+                    <strong style="color:var(--neon-red);font-size:0.8rem;display:block;margin-bottom:8px;">📊 ATRIBUTOS (Nv. 01 ao 06)</strong>
                     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
-                        <div><label style="color:#aaa;font-size:0.72rem;">Força (00-07)</label>
+                        <div><label style="color:#aaa;font-size:0.72rem;">Força (01-06)</label>
                             <select id="bal-forca" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
-                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.forca||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                                ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(c.forca||1)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
                             </select>
                         </div>
-                        <div><label style="color:#aaa;font-size:0.72rem;">Resistência (00-07)</label>
+                        <div><label style="color:#aaa;font-size:0.72rem;">Resistência (01-06)</label>
                             <select id="bal-resistencia" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
-                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.resistencia||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                                ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(c.resistencia||1)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
                             </select>
                         </div>
-                        <div><label style="color:#aaa;font-size:0.72rem;">Velocidade (00-07)</label>
+                        <div><label style="color:#aaa;font-size:0.72rem;">Velocidade (01-06)</label>
                             <select id="bal-velocidade" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
-                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.velocidade||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                                ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(c.velocidade||1)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
                             </select>
                         </div>
-                        <div><label style="color:#aaa;font-size:0.72rem;">Agilidade (00-07)</label>
+                        <div><label style="color:#aaa;font-size:0.72rem;">Agilidade (01-06)</label>
                             <select id="bal-agilidade" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
-                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.agilidade||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                                ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(c.agilidade||1)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
                             </select>
                         </div>
-                        <div style="grid-column:span 2;"><label style="color:#aaa;font-size:0.72rem;">Poder/Especialidade (00-07)</label>
+                        <div style="grid-column:span 2;"><label style="color:#aaa;font-size:0.72rem;">Poder/Especialidade (01-06)</label>
                             <select id="bal-poderLevel" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
-                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.poderLevel||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                                ${[1,2,3,4,5,6].map(n => `<option value="${n}" ${(c.poderLevel||1)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
                             </select>
                         </div>
                     </div>
@@ -2887,11 +2887,11 @@ function saveAndApproveBalance() {
     targetChar.nomePoder   = document.getElementById('bal-nomePoder').value.trim();
     targetChar.tipoPoder   = document.getElementById('bal-tipoPoder').value.trim();
     targetChar.descPoder   = document.getElementById('bal-descPoder').value.trim();
-    targetChar.forca       = parseInt(document.getElementById('bal-forca').value) || 0;
-    targetChar.resistencia = parseInt(document.getElementById('bal-resistencia').value) || 0;
-    targetChar.velocidade  = parseInt(document.getElementById('bal-velocidade').value) || 0;
-    targetChar.agilidade   = parseInt(document.getElementById('bal-agilidade').value) || 0;
-    targetChar.poderLevel  = parseInt(document.getElementById('bal-poderLevel').value) || 0;
+    targetChar.forca       = parseInt(document.getElementById('bal-forca').value) || 1;
+    targetChar.resistencia = parseInt(document.getElementById('bal-resistencia').value) || 1;
+    targetChar.velocidade  = parseInt(document.getElementById('bal-velocidade').value) || 1;
+    targetChar.agilidade   = parseInt(document.getElementById('bal-agilidade').value) || 1;
+    targetChar.poderLevel  = parseInt(document.getElementById('bal-poderLevel').value) || 1;
     targetChar.historia    = document.getElementById('bal-historia').value.trim();
     targetChar.status      = 'aprovado';
 
