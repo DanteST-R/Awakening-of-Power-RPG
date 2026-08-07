@@ -25,7 +25,9 @@ window.dbCache = {
     npcs: [],
     loresHistoria: [],
     loresMapa: {},
-    bairros: null
+    bairros: null,
+    organizacoes: [],
+    missoes: []
 };
 
 // Flags de carregamento
@@ -122,7 +124,7 @@ function initFirebaseListeners() {
     isDbLoaded = false;
 
     // Coleções que são arrays de documentos
-    const arrCollections = ["users", "approvals", "npcs", "loresHistoria"];
+    const arrCollections = ["users", "approvals", "npcs", "loresHistoria", "organizacoes", "missoes"];
     arrCollections.forEach(colName => {
         const unsub = db.collection(colName).onSnapshot((snapshot) => {
             const arr = [];

@@ -1016,11 +1016,15 @@ const pages = {
     },
     missoes: {
         title: "Missões Disponíveis",
-        content: "Quadro de missões, recompensas e nível de perigo estabelecido pela cidade."
+        render() {
+            return renderMissoesPage();
+        }
     },
     organizacoes: {
         title: "Organizações",
-        content: "Dados sigilosos sobre o Instituto Éksodos, Wintech, Gasai e o Submundo."
+        render() {
+            return renderOrganizacoesPage();
+        }
     }
 };
 
@@ -2162,26 +2166,37 @@ function renderCharactersSection(container) {
 
                 <!-- ATRIBUTOS -->
                 <h4 class="carmine-text" style="margin-top: 1.5rem; border-bottom: 1px solid var(--support-crimson); padding-bottom: 5px;">ATRIBUTOS DOS PERSONAGENS</h4>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Os atributos vão do <strong style="color:#fff;">Nível 00</strong> (ponto de partida) ao <strong style="color:#fff;">Nível 07</strong> (máximo absoluto). Apenas Administradores podem alterar esses valores.</p>
                 <div class="ficha-grid-2">
                     <div class="ficha-field">
-                        <label>FORÇA (Nv. 1 ao 6)</label>
-                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                        <label>💪 FORÇA (Nv. 00 ao 07)</label>
+                        <select id="fc-forca" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
+                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.forca||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="ficha-field">
-                        <label>RESISTÊNCIA (Nv. 1 ao 6)</label>
-                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                        <label>🛡️ RESISTÊNCIA (Nv. 00 ao 07)</label>
+                        <select id="fc-resistencia" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
+                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.resistencia||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="ficha-field">
-                        <label>VELOCIDADE (Nv. 1 ao 6)</label>
-                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                        <label>⚡ VELOCIDADE (Nv. 00 ao 07)</label>
+                        <select id="fc-velocidade" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
+                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.velocidade||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="ficha-field">
-                        <label>AGILIDADE (Nv. 1 ao 6)</label>
-                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                        <label>💨 AGILIDADE (Nv. 00 ao 07)</label>
+                        <select id="fc-agilidade" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
+                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.agilidade||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Atrofiado,Humano Comum,Condicionado,Atleta de Elite,Sobre-Humano,Monstruoso,Lendário,Transcendente'.split(',')[n]}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="ficha-field" style="grid-column: span 2;">
-                        <label>PODER / ESPECIALIDADE (Nv. 1 ao 6)</label>
-                        <input type="text" value="Nv. 1 [00/100]" readonly style="background: rgba(255,255,255,0.02);">
+                        <label>⭐ PODER / ESPECIALIDADE (Nv. 00 ao 07)</label>
+                        <select id="fc-poderLevel" ${isSupreme() ? '' : 'disabled'} style="background:#0a0a0a;color:#fff;border:1px solid ${isSupreme()?'var(--neon-red)':'#333'};padding:0.5rem;border-radius:4px;opacity:${isSupreme()?'1':'0.6'};">
+                            ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(currentChar.poderLevel||0)==n?'selected':''}>${String(n).padStart(2,'0')} — ${'Inativo,Iniciante,Aprendiz,Experiente,Especialista,Mestre,Grão-Mestre,Transcendente'.split(',')[n]}</option>`).join('')}
+                        </select>
                     </div>
                 </div>
 
@@ -2217,41 +2232,151 @@ function renderCharactersSection(container) {
 // Renderiza Painel de Aprovações do Administrador Geral
 function renderApprovalsSection(container) {
     const approvals = getApprovals();
+    const session = getSession();
+    // Jogadores veem apenas as SUAS fichas pendentes. Admin vê todas.
+    const visible = isSupreme()
+        ? approvals
+        : approvals.filter(a => a.username === session.username);
+
+    const attrNames  = ['Atrofiado','Humano Comum','Condicionado','Atleta de Elite','Sobre-Humano','Monstruoso','Lendário','Transcendente'];
+    const poderNames = ['Inativo','Iniciante','Aprendiz','Experiente','Especialista','Mestre','Grão-Mestre','Transcendente'];
+
+    const renderAttrBadge = (label, val) => {
+        const n = Math.min(7, Math.max(0, parseInt(val) || 0));
+        return `<div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.45rem 0.7rem;">
+            <span style="color:#555;font-size:0.7rem;display:block;">${label}</span>
+            <span style="color:var(--neon-red);font-weight:bold;font-size:0.85rem;">Nv.${String(n).padStart(2,'0')}</span>
+            <span style="color:#777;font-size:0.78rem;"> — ${attrNames[n]}</span>
+        </div>`;
+    };
 
     container.innerHTML = `
         <div class="ficha-card-scroll">
-            <h3 class="neon-text" style="font-size: 1.2rem; margin-bottom: 1rem;">CENTRAL DE APROVAÇÃO DOS MESTRES SUPREMOS</h3>
+            <h3 class="neon-text" style="font-size: 1.2rem; margin-bottom: 0.5rem;">CENTRAL DE APROVAÇÃO DOS MESTRES SUPREMOS</h3>
             <p style="color: var(--text-muted); font-size: 0.85em; margin-bottom: 1.5rem;">
-                Aqui os administradores podem analisar, aprovar, recusar, nerfar ou melhorar fichas, trajes e equipamentos submetidos pelos jogadores de Unicity.
+                ${isSupreme()
+                    ? 'Analise, aprove, recuse ou solicite edição das fichas enviadas pelos jogadores de Unicity.'
+                    : 'Acompanhe o status das suas fichas enviadas para avaliação dos Mestres Supremos.'}
             </p>
 
-            ${approvals.length === 0 ? `
+            ${visible.length === 0 ? `
                 <div style="padding: 2rem; text-align: center; border: 1px dashed var(--support-crimson); color: var(--text-muted);">
-                    Nenhuma solicitação pendente no momento.
+                    ${isSupreme() ? 'Nenhuma solicitação pendente no momento.' : 'Você não possui fichas enviadas para avaliação.'}
                 </div>
             ` : `
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    ${approvals.map((app, index) => `
-                        <div class="approval-card">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <strong style="color: #fff; font-size: 1.1rem;">${app.charData.nome} (${app.charData.codinome || 'Sem codinome'})</strong>
-                                <span class="supreme-tag">Enviado por: ${app.username}</span>
+                <div style="display: flex; flex-direction: column; gap: 1.8rem;">
+                    ${visible.map(app => {
+                        const c = app.charData;
+                        const realIndex = approvals.indexOf(app);
+                        const foto = c.foto && !c.foto.includes('data:image/svg') && !c.foto.includes('placeholder.com')
+                            ? `<img src="${c.foto}" style="width:64px;height:64px;border-radius:6px;object-fit:cover;border:2px solid var(--neon-red);">`
+                            : '';
+                        return `
+                        <div class="approval-card" style="border-left: 4px solid var(--neon-red); padding: 0;">
+
+                            <!-- HEADER -->
+                            <div style="padding: 1rem 1.2rem; background: rgba(255,0,60,0.03); border-bottom: 1px solid #1a0000; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    ${foto}
+                                    <div>
+                                        <strong style="color:#fff; font-size:1.05rem; display:block;">${c.nome || 'Sem Nome'}</strong>
+                                        <span style="color:var(--neon-red); font-size:0.85rem;">${c.codinome || '(sem codinome)'}</span>
+                                    </div>
+                                </div>
+                                <span class="supreme-tag">📤 Enviado por: ${app.username}</span>
                             </div>
-                            <p style="color: var(--text-muted); font-size: 0.85em; margin-top: 6px;">
-                                Classe: <strong>${app.charData.classe}</strong> | Poder: <strong>${app.charData.nomePoder} (${app.charData.tipoPoder || 'Especialidade'})</strong>
-                            </p>
-                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                                <button class="res-btn" style="background: green; color: #fff;" onclick="approveFicha(${index})">✅ APROVAR FICHA</button>
-                                <button class="res-btn" style="background: #ffaa00; color: #000;" onclick="nerfFicha(${index})">⚠️ PEDIR NERF / EDICÃO</button>
-                                <button class="res-btn remove-btn" onclick="rejectFicha(${index})">❌ RECUSAR</button>
+
+                            <!-- CORPO -->
+                            <div style="padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: 0.9rem;">
+
+                                <!-- DADOS BÁSICOS -->
+                                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:7px;">
+                                    <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.4rem 0.7rem;"><span style="color:#555;font-size:0.7rem;display:block;">CLASSE</span><span style="color:#fff;font-size:0.85rem;">${c.classe||'—'}</span></div>
+                                    <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.4rem 0.7rem;"><span style="color:#555;font-size:0.7rem;display:block;">RANQUE</span><span style="color:#ffd700;font-size:0.85rem;">${c.ranque||'—'}</span></div>
+                                    <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.4rem 0.7rem;"><span style="color:#555;font-size:0.7rem;display:block;">IDADE</span><span style="color:#fff;font-size:0.85rem;">${c.idade||'—'}</span></div>
+                                    <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.4rem 0.7rem;"><span style="color:#555;font-size:0.7rem;display:block;">GÊNERO</span><span style="color:#fff;font-size:0.85rem;">${c.genero||'—'}</span></div>
+                                    <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.4rem 0.7rem;"><span style="color:#555;font-size:0.7rem;display:block;">ALTURA / PESO</span><span style="color:#fff;font-size:0.85rem;">${c.altura||'—'}cm / ${c.peso||'—'}kg</span></div>
+                                </div>
+
+                                <!-- PODER -->
+                                <div style="background:#050505;border:1px solid var(--support-crimson);border-radius:5px;padding:0.8rem 1rem;">
+                                    <strong style="color:var(--neon-red);font-size:0.78rem;display:block;margin-bottom:0.4rem;">⭐ META-PODER / ESPECIALIDADE</strong>
+                                    <span style="color:#fff;font-size:0.9rem;">${c.categoriaPoder||'Meta-Poder'}: <strong>${c.nomePoder||'—'}</strong>${c.tipoPoder?' ('+c.tipoPoder+')':''}</span>
+                                    ${c.descPoder ? `<p style="color:var(--text-muted);font-size:0.85rem;margin:0.5rem 0 0;line-height:1.6;">${nl2br(c.descPoder)}</p>` : ''}
+                                </div>
+
+                                <!-- ATRIBUTOS -->
+                                <div>
+                                    <strong style="color:var(--neon-red);font-size:0.78rem;display:block;margin-bottom:6px;">📊 ATRIBUTOS</strong>
+                                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px;">
+                                        ${renderAttrBadge('💪 FORÇA', c.forca)}
+                                        ${renderAttrBadge('🛡️ RESISTÊNCIA', c.resistencia)}
+                                        ${renderAttrBadge('⚡ VELOCIDADE', c.velocidade)}
+                                        ${renderAttrBadge('💨 AGILIDADE', c.agilidade)}
+                                        <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.45rem 0.7rem;grid-column:span 2;">
+                                            <span style="color:#555;font-size:0.7rem;display:block;">⭐ PODER / ESPECIALIDADE</span>
+                                            <span style="color:var(--neon-red);font-weight:bold;font-size:0.85rem;">Nv.${String(Math.min(7,parseInt(c.poderLevel)||0)).padStart(2,'0')}</span>
+                                            <span style="color:#777;font-size:0.78rem;"> — ${poderNames[Math.min(7,parseInt(c.poderLevel)||0)]}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- HABILIDADES -->
+                                ${c.habilidades && c.habilidades.filter(h=>h.nome).length > 0 ? `
+                                <div>
+                                    <strong style="color:var(--neon-red);font-size:0.78rem;display:block;margin-bottom:6px;">📋 HABILIDADES / MAESTRIAS</strong>
+                                    <div style="display:flex;flex-direction:column;gap:5px;">
+                                        ${c.habilidades.filter(h=>h.nome).map(h=>`
+                                        <div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.45rem 0.7rem;">
+                                            <strong style="color:#fff;font-size:0.85rem;">${h.nome}</strong>${h.tipo?` <span style="color:var(--neon-red);font-size:0.75rem;">[${h.tipo}]</span>`:''}
+                                            ${h.descricao?`<p style="color:#777;font-size:0.8rem;margin:2px 0 0;">${h.descricao}</p>`:''}
+                                        </div>`).join('')}
+                                    </div>
+                                </div>` : ''}
+
+                                <!-- HISTÓRIA -->
+                                ${c.historia ? `
+                                <div style="background:#050505;border:1px solid #1a0000;border-radius:4px;padding:0.7rem 1rem;">
+                                    <strong style="color:var(--neon-red);font-size:0.78rem;display:block;margin-bottom:0.4rem;">📖 HISTÓRIA DO PERSONAGEM</strong>
+                                    <p style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin:0;">${nl2br(c.historia)}</p>
+                                </div>` : ''}
+
+                                <!-- TRAJES E EQUIPAMENTOS -->
+                                ${((c.trajes||[]).filter(t=>t.nome).length > 0 || (c.equips||[]).filter(e=>e.nome).length > 0) ? `
+                                <div>
+                                    <strong style="color:var(--neon-red);font-size:0.78rem;display:block;margin-bottom:6px;">🧥 TRAJES E EQUIPAMENTOS</strong>
+                                    <div style="display:flex;flex-direction:column;gap:5px;">
+                                        ${(c.trajes||[]).filter(t=>t.nome).map(t=>`<div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.4rem 0.7rem;"><span style="color:#fff;font-size:0.83rem;">🧥 ${t.nome}</span>${t.descricao?`<p style="color:#777;font-size:0.78rem;margin:2px 0 0;">${t.descricao}</p>`:''}</div>`).join('')}
+                                        ${(c.equips||[]).filter(e=>e.nome).map(e=>`<div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.4rem 0.7rem;"><span style="color:#fff;font-size:0.83rem;">⚙️ ${e.nome}</span>${e.descricao?`<p style="color:#777;font-size:0.78rem;margin:2px 0 0;">${e.descricao}</p>`:''}</div>`).join('')}
+                                    </div>
+                                </div>` : ''}
+
+                                <!-- CONEXÕES E TRAUMAS (admin only) -->
+                                ${isSupreme() && (c.conexoes || c.traumas) ? `
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                                    ${c.conexoes?`<div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.5rem 0.7rem;"><strong style="color:var(--neon-red);font-size:0.73rem;display:block;">🔗 CONEXÕES E LAÇOS</strong><p style="color:#888;font-size:0.8rem;margin:3px 0 0;">${nl2br(c.conexoes)}</p></div>` : ''}
+                                    ${c.traumas?`<div style="background:#0a0a0a;border:1px solid #1a0000;border-radius:4px;padding:0.5rem 0.7rem;"><strong style="color:var(--neon-red);font-size:0.73rem;display:block;">⚡ TRAUMAS</strong><p style="color:#888;font-size:0.8rem;margin:3px 0 0;">${nl2br(c.traumas)}</p></div>` : ''}
+                                </div>` : ''}
+
+                                <!-- BOTÕES DE AÇÃO / STATUS -->
+                                <div style="padding-top: 0.8rem; border-top: 1px solid #1a0000;">
+                                    ${isSupreme() ? `
+                                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                                        <button class="res-btn" style="background:#006600;color:#fff;" onclick="approveFicha(${realIndex})">✅ APROVAR FICHA</button>
+                                        <button class="res-btn" style="background:#aa7700;color:#fff;" onclick="nerfFicha(${realIndex})">⚠️ SOLICITAR EDIÇÃO</button>
+                                        <button class="res-btn remove-btn" onclick="rejectFicha(${realIndex})">❌ RECUSAR</button>
+                                    </div>` : `
+                                    <span style="color:#777;font-size:0.85rem;">⏳ Aguardando avaliação dos Mestres Supremos...</span>`}
+                                </div>
                             </div>
-                        </div>
-                    `).join('')}
+                        </div>`;
+                    }).join('')}
                 </div>
             `}
         </div>
     `;
 }
+
 
 // Funções auxiliares da Ficha
 function getDefaultCharData() {
@@ -2279,7 +2404,13 @@ function getDefaultCharData() {
         conexoes: '',
         extras: '',
         traumas: '',
-        status: 'rascunho'
+        status: 'rascunho',
+        // Atributos — Nível 00 ao 07
+        forca: 0,
+        resistencia: 0,
+        velocidade: 0,
+        agilidade: 0,
+        poderLevel: 0
     };
 }
 
@@ -2502,7 +2633,13 @@ function saveFicha(e) {
         conexoes: document.getElementById('fc-conexoes') ? document.getElementById('fc-conexoes').value : (allChars[session.username][`char${activeCharSlot}`]?.conexoes || ''),
         extras: document.getElementById('fc-extras') ? document.getElementById('fc-extras').value : (allChars[session.username][`char${activeCharSlot}`]?.extras || ''),
         traumas: document.getElementById('fc-traumas') ? document.getElementById('fc-traumas').value : (allChars[session.username][`char${activeCharSlot}`]?.traumas || ''),
-        status: allChars[session.username][`char${activeCharSlot}`]?.status || 'rascunho'
+        status: allChars[session.username][`char${activeCharSlot}`]?.status || 'rascunho',
+        // Atributos 00-07 — admin altera, jogador carrega o valor salvo
+        forca:       parseInt(document.getElementById('fc-forca')?.value)       ?? (allChars[session.username][`char${activeCharSlot}`]?.forca       ?? 0),
+        resistencia: parseInt(document.getElementById('fc-resistencia')?.value) ?? (allChars[session.username][`char${activeCharSlot}`]?.resistencia ?? 0),
+        velocidade:  parseInt(document.getElementById('fc-velocidade')?.value)  ?? (allChars[session.username][`char${activeCharSlot}`]?.velocidade  ?? 0),
+        agilidade:   parseInt(document.getElementById('fc-agilidade')?.value)   ?? (allChars[session.username][`char${activeCharSlot}`]?.agilidade   ?? 0),
+        poderLevel:  parseInt(document.getElementById('fc-poderLevel')?.value)  ?? (allChars[session.username][`char${activeCharSlot}`]?.poderLevel  ?? 0)
     };
 
     allChars[session.username][`char${activeCharSlot}`] = charData;
@@ -3427,3 +3564,424 @@ function closeImageViewer() {
     if (viewer) viewer.style.display = 'none';
 }
 
+// ══════════════════════════════════════════════════════
+//   MÓDULO DE MISSÕES
+// ══════════════════════════════════════════════════════
+
+function getMissoes() { return window.dbCache.missoes || []; }
+
+function saveMissao(missao) {
+    const missoes = getMissoes();
+    if (missao.id) {
+        const idx = missoes.findIndex(m => m.id === missao.id);
+        if (idx >= 0) missoes[idx] = missao; else missoes.push(missao);
+    } else {
+        missao.id = 'missao_' + Date.now();
+        missoes.push(missao);
+    }
+    window.dbCache.missoes = missoes;
+    dbSaveOneItem('missoes', missao.id, missao);
+    renderPage('missoes');
+}
+
+function deleteMissao(id) {
+    if (!confirm('Deseja excluir esta missão?')) return;
+    const missoes = getMissoes().filter(m => m.id !== id);
+    window.dbCache.missoes = missoes;
+    dbRemoveItem('missoes', id);
+    renderPage('missoes');
+}
+
+function renderMissoesPage() {
+    const adm = isSupreme();
+    const todas = getMissoes();
+    const visiveis = adm ? todas : todas.filter(m => m.visivel);
+    const statusBadge = { 'Aberta': '#006600', 'Em Andamento': '#aa7700', 'Finalizada': '#333' };
+    const statusIcon  = { 'Aberta': '🟢', 'Em Andamento': '🟡', 'Finalizada': '🔴' };
+
+    return `
+    <div class="page-container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+            <h1 class="page-title neon-text" style="margin:0;">Missões</h1>
+            ${adm ? `<button onclick="openMissaoModal()" style="background:rgba(255,0,60,0.12);border:1px solid var(--neon-red);color:#fff;padding:0.5rem 1.1rem;border-radius:4px;cursor:pointer;font-family:'Orbitron',monospace;font-size:0.85rem;letter-spacing:1px;">+ Nova Missão</button>` : ''}
+        </div>
+
+        <!-- FILTROS DE STATUS -->
+        <div style="display:flex;gap:8px;margin-bottom:1.5rem;flex-wrap:wrap;">
+            ${['Todas','Aberta','Em Andamento','Finalizada'].map(s => `
+                <button onclick="filterMissoes('${s}')" id="miss-filter-${s.replace(' ','-')}"
+                    style="padding:0.3rem 0.8rem;border-radius:4px;border:1px solid #333;background:#0a0a0a;color:#aaa;cursor:pointer;font-size:0.8rem;">
+                    ${statusIcon[s] || '📋'} ${s}
+                </button>`).join('')}
+        </div>
+
+        <div id="missoes-list" style="display:flex;flex-direction:column;gap:1.2rem;">
+        ${visiveis.length === 0 ? `
+            <div class="placeholder-card" style="text-align:center;color:#555;">
+                <p style="font-size:1.5rem;">🎯</p>
+                <p>${adm ? 'Nenhuma missão criada ainda.' : 'Nenhuma missão disponível no momento.'}</p>
+            </div>` :
+        visiveis.map(m => `
+            <div class="missao-card" id="mcard-${m.id}" style="background:#000;border:1px solid ${m.status==='Aberta'?'#006600':m.status==='Em Andamento'?'#aa7700':'#333'};border-left:4px solid ${m.status==='Aberta'?'#00aa00':m.status==='Em Andamento'?'#ffaa00':'#666'};border-radius:6px;overflow:hidden;">
+                <!-- HEADER -->
+                <div style="padding:1rem 1.2rem;background:rgba(255,255,255,0.02);border-bottom:1px solid #111;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+                    <div>
+                        <div style="font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#fff;letter-spacing:1px;">
+                            ${m.titulo || 'Sem Título'}
+                            ${!m.visivel && adm ? '<span style="font-size:0.65rem;color:#555;margin-left:8px;">[OCULTA]</span>' : ''}
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;align-items:center;">
+                            <span style="padding:2px 10px;border-radius:12px;background:${statusBadge[m.status||'Aberta']};color:#fff;font-size:0.75rem;font-weight:bold;">${statusIcon[m.status||'Aberta']} ${m.status || 'Aberta'}</span>
+                            ${m.ranque ? `<span style="padding:2px 8px;border-radius:3px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#ffd700;font-size:0.75rem;">⚔️ ${m.ranque}</span>` : ''}
+                        </div>
+                    </div>
+                    ${adm ? `<div style="display:flex;gap:6px;">
+                        <button onclick="cycleMissaoStatus('${m.id}')" style="background:none;border:1px solid #555;color:#aaa;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">🔄 Status</button>
+                        <button onclick="toggleMissaoVisivel('${m.id}')" style="background:none;border:1px solid #555;color:#aaa;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">${m.visivel ? '🙈' : '👁'}</button>
+                        <button onclick="openMissaoModal('${m.id}')" style="background:none;border:1px solid #555;color:#aaa;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">✎</button>
+                        <button onclick="deleteMissao('${m.id}')" style="background:none;border:1px solid #7a0000;color:#c00;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.75rem;">✕</button>
+                    </div>` : ''}
+                </div>
+                <!-- CONTEÚDO -->
+                <div style="padding:1rem 1.2rem;">
+                    ${m.imagemUrl ? `<img src="${m.imagemUrl}" style="max-width:100%;border-radius:4px;margin-bottom:0.8rem;border:1px solid #1a1a1a;max-height:200px;object-fit:cover;" onerror="this.style.display='none'">` : ''}
+                    ${m.briefing ? `<p style="color:var(--text-muted);font-size:0.9rem;line-height:1.7;margin-bottom:0.8rem;">${nl2br(m.briefing)}</p>` : ''}
+                    ${m.recompensa ? `<div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.2);border-radius:4px;padding:0.6rem 0.8rem;font-size:0.85rem;">
+                        <strong style="color:#ffd700;">🏆 Recompensa:</strong> <span style="color:#ccc;">${m.recompensa}</span>
+                    </div>` : ''}
+                    ${adm && m.notasAdmin ? `
+                    <div style="margin-top:0.8rem;background:rgba(255,0,60,0.05);border:1px dashed var(--support-crimson);border-radius:4px;padding:0.7rem 0.9rem;">
+                        <strong style="color:var(--neon-red);font-size:0.78rem;display:block;margin-bottom:4px;">🔒 NOTAS PRIVADAS DA ADMINISTRAÇÃO</strong>
+                        <p style="color:#888;font-size:0.82rem;margin:0;line-height:1.6;">${nl2br(m.notasAdmin)}</p>
+                    </div>` : ''}
+                </div>
+            </div>`).join('')}
+        </div>
+    </div>
+
+    <!-- MODAL CRIAR/EDITAR MISSÃO -->
+    <div id="missao-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;padding:1rem;" onclick="closeMissaoModal(event)">
+        <div style="background:#0a0a0a;border:1px solid var(--neon-red);border-radius:8px;width:100%;max-width:600px;padding:2rem;max-height:92vh;overflow-y:auto;" onclick="event.stopPropagation()">
+            <h3 id="missao-modal-title" style="color:var(--neon-red);font-family:'Orbitron',monospace;font-size:1rem;margin-bottom:1.5rem;letter-spacing:2px;">NOVA MISSÃO</h3>
+            <input type="hidden" id="missao-f-id" value="">
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+                <div><label style="color:#aaa;font-size:0.8rem;">Título *</label><input id="missao-f-titulo" type="text" placeholder="Ex: Operação Blackout" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+                    <div><label style="color:#aaa;font-size:0.8rem;">Status</label>
+                        <select id="missao-f-status" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem;border-radius:3px;box-sizing:border-box;">
+                            <option value="Aberta">🟢 Aberta</option>
+                            <option value="Em Andamento">🟡 Em Andamento</option>
+                            <option value="Finalizada">🔴 Finalizada</option>
+                        </select>
+                    </div>
+                    <div><label style="color:#aaa;font-size:0.8rem;">Ranque Exigido</label>
+                        <select id="missao-f-ranque" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem;border-radius:3px;box-sizing:border-box;">
+                            <option value="">Qualquer um</option>
+                            <option value="Bronze">Bronze</option>
+                            <option value="Prata">Prata</option>
+                            <option value="Ouro">Ouro</option>
+                            <option value="Platina">Platina</option>
+                            <option value="Diamante">Diamante</option>
+                        </select>
+                    </div>
+                </div>
+                <div><label style="color:#aaa;font-size:0.8rem;">URL da Imagem / Banner</label><input id="missao-f-imagem" type="url" placeholder="https://..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.8rem;">📖 Briefing / Detalhes Públicos do Plot</label><textarea id="missao-f-briefing" rows="5" placeholder="Informações públicas da missão para os jogadores..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea></div>
+                <div><label style="color:#aaa;font-size:0.8rem;">🏆 Recompensa</label><input id="missao-f-recompensa" type="text" placeholder="Ex: 500 EXP, 200 GP, 50 PR" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div style="background:rgba(255,0,60,0.05);border:1px dashed var(--support-crimson);border-radius:5px;padding:1rem;">
+                    <label style="color:var(--neon-red);font-size:0.8rem;display:block;margin-bottom:4px;">🔒 NOTAS PRIVADAS DA ADMINISTRAÇÃO (Apenas Mestres podem ver)</label>
+                    <textarea id="missao-f-notas" rows="4" placeholder="Segredos do Mestre, reviravoltas, NPCs envolvidos, etc..." style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea>
+                </div>
+                <label style="display:flex;align-items:center;gap:8px;color:#aaa;font-size:0.85rem;cursor:pointer;">
+                    <input type="checkbox" id="missao-f-visivel" checked style="accent-color:var(--neon-red);">
+                    Publicar Missão (visível para todos os jogadores)
+                </label>
+            </div>
+            <div style="display:flex;gap:0.8rem;margin-top:1.5rem;justify-content:flex-end;">
+                <button onclick="closeMissaoModal()" style="background:none;border:1px solid #333;color:#aaa;padding:0.5rem 1.2rem;border-radius:3px;cursor:pointer;">Cancelar</button>
+                <button onclick="saveMissaoFromModal()" style="background:var(--neon-red);border:none;color:#fff;padding:0.5rem 1.4rem;border-radius:3px;cursor:pointer;font-weight:bold;">Salvar Missão</button>
+            </div>
+        </div>
+    </div>`;
+}
+
+function filterMissoes(status) {
+    const cards = document.querySelectorAll('.missao-card');
+    cards.forEach(card => {
+        if (status === 'Todas') { card.style.display = ''; return; }
+        const s = card.querySelector('[id^="mcard-"]') || card;
+        // filter by class or inline check via data attr
+        const cardStatus = card.querySelector('span[style*="border-radius:12px"]')?.textContent?.trim() || '';
+        card.style.display = cardStatus.includes(status) ? '' : 'none';
+    });
+}
+
+function openMissaoModal(id) {
+    if (!isSupreme()) return;
+    const overlay = document.getElementById('missao-modal-overlay');
+    if (!overlay) return;
+    if (id) {
+        const m = getMissoes().find(x => x.id === id);
+        if (!m) return;
+        document.getElementById('missao-modal-title').textContent = '✎ EDITAR MISSÃO';
+        document.getElementById('missao-f-id').value      = m.id;
+        document.getElementById('missao-f-titulo').value  = m.titulo || '';
+        document.getElementById('missao-f-status').value  = m.status || 'Aberta';
+        document.getElementById('missao-f-ranque').value  = m.ranque || '';
+        document.getElementById('missao-f-imagem').value  = m.imagemUrl || '';
+        document.getElementById('missao-f-briefing').value = m.briefing || '';
+        document.getElementById('missao-f-recompensa').value = m.recompensa || '';
+        document.getElementById('missao-f-notas').value   = m.notasAdmin || '';
+        document.getElementById('missao-f-visivel').checked = !!m.visivel;
+    } else {
+        document.getElementById('missao-modal-title').textContent = 'NOVA MISSÃO';
+        document.getElementById('missao-f-id').value      = '';
+        document.getElementById('missao-f-titulo').value  = '';
+        document.getElementById('missao-f-status').value  = 'Aberta';
+        document.getElementById('missao-f-ranque').value  = '';
+        document.getElementById('missao-f-imagem').value  = '';
+        document.getElementById('missao-f-briefing').value = '';
+        document.getElementById('missao-f-recompensa').value = '';
+        document.getElementById('missao-f-notas').value   = '';
+        document.getElementById('missao-f-visivel').checked = true;
+    }
+    overlay.style.display = 'flex';
+}
+
+function closeMissaoModal(e) {
+    const overlay = document.getElementById('missao-modal-overlay');
+    if (!e || e.target === overlay) { if (overlay) overlay.style.display = 'none'; }
+}
+
+function saveMissaoFromModal() {
+    const titulo = document.getElementById('missao-f-titulo').value.trim();
+    if (!titulo) return alert('Preencha o título da missão.');
+    saveMissao({
+        id:         document.getElementById('missao-f-id').value || null,
+        titulo,
+        status:     document.getElementById('missao-f-status').value,
+        ranque:     document.getElementById('missao-f-ranque').value,
+        imagemUrl:  document.getElementById('missao-f-imagem').value,
+        briefing:   document.getElementById('missao-f-briefing').value,
+        recompensa: document.getElementById('missao-f-recompensa').value,
+        notasAdmin: document.getElementById('missao-f-notas').value,
+        visivel:    document.getElementById('missao-f-visivel').checked
+    });
+    const overlay = document.getElementById('missao-modal-overlay');
+    if (overlay) overlay.style.display = 'none';
+}
+
+function cycleMissaoStatus(id) {
+    const missoes = getMissoes();
+    const m = missoes.find(x => x.id === id);
+    if (!m) return;
+    const cycle = ['Aberta', 'Em Andamento', 'Finalizada'];
+    const cur = cycle.indexOf(m.status || 'Aberta');
+    m.status = cycle[(cur + 1) % cycle.length];
+    window.dbCache.missoes = missoes;
+    dbSaveOneItem('missoes', m.id, m);
+    renderPage('missoes');
+}
+
+function toggleMissaoVisivel(id) {
+    const missoes = getMissoes();
+    const m = missoes.find(x => x.id === id);
+    if (!m) return;
+    m.visivel = !m.visivel;
+    window.dbCache.missoes = missoes;
+    dbSaveOneItem('missoes', m.id, m);
+    renderPage('missoes');
+}
+
+// ══════════════════════════════════════════════════════
+//   MÓDULO DE ORGANIZAÇÕES
+// ══════════════════════════════════════════════════════
+
+function getOrganizacoes() { return window.dbCache.organizacoes || []; }
+
+function saveOrganizacao(org) {
+    const orgs = getOrganizacoes();
+    if (org.id) {
+        const idx = orgs.findIndex(o => o.id === org.id);
+        if (idx >= 0) orgs[idx] = org; else orgs.push(org);
+    } else {
+        org.id = 'org_' + Date.now();
+        orgs.push(org);
+    }
+    window.dbCache.organizacoes = orgs;
+    dbSaveOneItem('organizacoes', org.id, org);
+    renderPage('organizacoes');
+}
+
+function deleteOrganizacao(id) {
+    if (!confirm('Deseja excluir esta organização?')) return;
+    const orgs = getOrganizacoes().filter(o => o.id !== id);
+    window.dbCache.organizacoes = orgs;
+    dbRemoveItem('organizacoes', id);
+    renderPage('organizacoes');
+}
+
+function renderOrganizacoesPage() {
+    const adm = isSupreme();
+    const todas = getOrganizacoes();
+    const visiveis = adm ? todas : todas.filter(o => o.visivel);
+
+    return `
+    <div class="page-container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+            <h1 class="page-title neon-text" style="margin:0;">Organizações</h1>
+            ${adm ? `<button onclick="openOrgModal()" style="background:rgba(255,0,60,0.12);border:1px solid var(--neon-red);color:#fff;padding:0.5rem 1.1rem;border-radius:4px;cursor:pointer;font-family:'Orbitron',monospace;font-size:0.85rem;letter-spacing:1px;">+ Nova Organização</button>` : ''}
+        </div>
+
+        ${visiveis.length === 0 ? `
+        <div class="placeholder-card" style="text-align:center;color:#555;">
+            <p style="font-size:1.5rem;">🏛️</p>
+            <p>${adm ? 'Nenhuma organização cadastrada ainda.' : 'Nenhuma organização disponível no momento.'}</p>
+        </div>` : `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;">
+        ${visiveis.map(o => `
+            <div style="background:#000;border:1px solid ${o.visivel?'var(--support-crimson)':'#333'};border-left:4px solid ${o.visivel?'var(--neon-red)':'#555'};border-radius:6px;overflow:hidden;">
+                <!-- HEADER -->
+                <div style="padding:1rem;background:rgba(255,255,255,0.02);border-bottom:1px solid #111;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+                        ${o.imagemUrl ? `<img src="${o.imagemUrl}" style="width:50px;height:50px;border-radius:6px;object-fit:cover;border:2px solid var(--neon-red);" onerror="this.style.display='none'">` : `<div style="width:50px;height:50px;border-radius:6px;background:#111;border:2px solid #333;display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🏛️</div>`}
+                        <div>
+                            <div style="font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:900;color:#fff;">${o.nome || 'Sem Nome'} ${!o.visivel&&adm?'<span style="font-size:0.6rem;color:#555;">[OCULTA]</span>':''}</div>
+                            ${o.tipo ? `<span style="color:var(--neon-red);font-size:0.78rem;">${o.tipo}</span>` : ''}
+                        </div>
+                    </div>
+                    ${adm ? `<div style="display:flex;gap:5px;justify-content:flex-end;">
+                        <button onclick="toggleOrgVisivel('${o.id}')" style="background:none;border:1px solid #555;color:#aaa;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.72rem;">${o.visivel?'🙈':'👁'}</button>
+                        <button onclick="openOrgModal('${o.id}')" style="background:none;border:1px solid #555;color:#aaa;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.72rem;">✎</button>
+                        <button onclick="deleteOrganizacao('${o.id}')" style="background:none;border:1px solid #7a0000;color:#c00;padding:0.2rem 0.5rem;border-radius:3px;cursor:pointer;font-size:0.72rem;">✕</button>
+                    </div>` : ''}
+                </div>
+                <!-- CORPO -->
+                <div style="padding:1rem;">
+                    ${o.lider ? `<div style="font-size:0.82rem;color:#aaa;margin-bottom:6px;"><strong style="color:#fff;">👑 Líder:</strong> ${o.lider}</div>` : ''}
+                    ${o.sede ? `<div style="font-size:0.82rem;color:#aaa;margin-bottom:8px;"><strong style="color:#fff;">📍 Sede:</strong> ${o.sede}</div>` : ''}
+                    ${o.influencia ? `<div style="margin-bottom:8px;"><span style="padding:2px 8px;border-radius:3px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#ffd700;font-size:0.75rem;">📊 ${o.influencia}</span></div>` : ''}
+                    ${o.descricao ? `<p style="color:var(--text-muted);font-size:0.85rem;line-height:1.6;margin-bottom:0.8rem;">${nl2br(o.descricao)}</p>` : ''}
+                    ${adm && o.notasAdmin ? `
+                    <div style="margin-top:0.6rem;background:rgba(255,0,60,0.05);border:1px dashed var(--support-crimson);border-radius:4px;padding:0.6rem 0.8rem;">
+                        <strong style="color:var(--neon-red);font-size:0.75rem;display:block;margin-bottom:3px;">🔒 NOTAS PRIVADAS</strong>
+                        <p style="color:#888;font-size:0.8rem;margin:0;line-height:1.5;">${nl2br(o.notasAdmin)}</p>
+                    </div>` : ''}
+                </div>
+            </div>`).join('')}
+        </div>`}
+    </div>
+
+    <!-- MODAL CRIAR/EDITAR ORGANIZAÇÃO -->
+    <div id="org-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;align-items:center;justify-content:center;padding:1rem;" onclick="closeOrgModal(event)">
+        <div style="background:#0a0a0a;border:1px solid var(--neon-red);border-radius:8px;width:100%;max-width:600px;padding:2rem;max-height:92vh;overflow-y:auto;" onclick="event.stopPropagation()">
+            <h3 id="org-modal-title" style="color:var(--neon-red);font-family:'Orbitron',monospace;font-size:1rem;margin-bottom:1.5rem;letter-spacing:2px;">NOVA ORGANIZAÇÃO</h3>
+            <input type="hidden" id="org-f-id" value="">
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+                <div><label style="color:#aaa;font-size:0.8rem;">Nome da Organização *</label><input id="org-f-nome" type="text" placeholder="Ex: Instituto Éksodos" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+                    <div><label style="color:#aaa;font-size:0.8rem;">Tipo / Categoria</label>
+                        <select id="org-f-tipo" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem;border-radius:3px;box-sizing:border-box;">
+                            <option value="">Selecione...</option>
+                            <option value="Corporação">Corporação</option>
+                            <option value="Agência Governamental">Agência Governamental</option>
+                            <option value="Organização de Heróis">Organização de Heróis</option>
+                            <option value="Facção Criminosa">Facção Criminosa</option>
+                            <option value="Ordem Secreta">Ordem Secreta</option>
+                            <option value="Submundo">Submundo</option>
+                            <option value="Outra">Outra</option>
+                        </select>
+                    </div>
+                    <div><label style="color:#aaa;font-size:0.8rem;">Nível de Influência</label>
+                        <select id="org-f-influencia" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem;border-radius:3px;box-sizing:border-box;">
+                            <option value="">Desconhecido</option>
+                            <option value="Local">Local</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Nacional">Nacional</option>
+                            <option value="Global">Global</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+                    <div><label style="color:#aaa;font-size:0.8rem;">URL do Logo / Imagem</label><input id="org-f-imagem" type="url" placeholder="https://..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                    <div><label style="color:#aaa;font-size:0.8rem;">Líder / Figuras de Destaque</label><input id="org-f-lider" type="text" placeholder="Ex: Dr. Marcus Vane" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                </div>
+                <div><label style="color:#aaa;font-size:0.8rem;">Sede / Base de Operações</label><input id="org-f-sede" type="text" placeholder="Ex: Delly, Torre Central" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div><label style="color:#aaa;font-size:0.8rem;">📖 Descrição Pública</label><textarea id="org-f-descricao" rows="4" placeholder="Informações públicas sobre a organização..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea></div>
+                <div style="background:rgba(255,0,60,0.05);border:1px dashed var(--support-crimson);border-radius:5px;padding:1rem;">
+                    <label style="color:var(--neon-red);font-size:0.8rem;display:block;margin-bottom:4px;">🔒 NOTAS PRIVADAS DA ADMINISTRAÇÃO (Apenas Mestres podem ver)</label>
+                    <textarea id="org-f-notas" rows="4" placeholder="Segredos, agendas ocultas, inteligência confidencial..." style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea>
+                </div>
+                <label style="display:flex;align-items:center;gap:8px;color:#aaa;font-size:0.85rem;cursor:pointer;">
+                    <input type="checkbox" id="org-f-visivel" checked style="accent-color:var(--neon-red);">
+                    Publicar Organização (visível para todos os jogadores)
+                </label>
+            </div>
+            <div style="display:flex;gap:0.8rem;margin-top:1.5rem;justify-content:flex-end;">
+                <button onclick="closeOrgModal()" style="background:none;border:1px solid #333;color:#aaa;padding:0.5rem 1.2rem;border-radius:3px;cursor:pointer;">Cancelar</button>
+                <button onclick="saveOrgFromModal()" style="background:var(--neon-red);border:none;color:#fff;padding:0.5rem 1.4rem;border-radius:3px;cursor:pointer;font-weight:bold;">Salvar Organização</button>
+            </div>
+        </div>
+    </div>`;
+}
+
+function openOrgModal(id) {
+    if (!isSupreme()) return;
+    const overlay = document.getElementById('org-modal-overlay');
+    if (!overlay) return;
+    if (id) {
+        const o = getOrganizacoes().find(x => x.id === id);
+        if (!o) return;
+        document.getElementById('org-modal-title').textContent = '✎ EDITAR ORGANIZAÇÃO';
+        document.getElementById('org-f-id').value         = o.id;
+        document.getElementById('org-f-nome').value       = o.nome || '';
+        document.getElementById('org-f-tipo').value       = o.tipo || '';
+        document.getElementById('org-f-influencia').value = o.influencia || '';
+        document.getElementById('org-f-imagem').value     = o.imagemUrl || '';
+        document.getElementById('org-f-lider').value      = o.lider || '';
+        document.getElementById('org-f-sede').value       = o.sede || '';
+        document.getElementById('org-f-descricao').value  = o.descricao || '';
+        document.getElementById('org-f-notas').value      = o.notasAdmin || '';
+        document.getElementById('org-f-visivel').checked  = !!o.visivel;
+    } else {
+        document.getElementById('org-modal-title').textContent = 'NOVA ORGANIZAÇÃO';
+        ['id','nome','tipo','influencia','imagem','lider','sede','descricao','notas'].forEach(f =>
+            document.getElementById(`org-f-${f}`).value = '');
+        document.getElementById('org-f-visivel').checked = true;
+    }
+    overlay.style.display = 'flex';
+}
+
+function closeOrgModal(e) {
+    const overlay = document.getElementById('org-modal-overlay');
+    if (!e || e.target === overlay) { if (overlay) overlay.style.display = 'none'; }
+}
+
+function saveOrgFromModal() {
+    const nome = document.getElementById('org-f-nome').value.trim();
+    if (!nome) return alert('Preencha o nome da organização.');
+    saveOrganizacao({
+        id:         document.getElementById('org-f-id').value || null,
+        nome,
+        tipo:       document.getElementById('org-f-tipo').value,
+        influencia: document.getElementById('org-f-influencia').value,
+        imagemUrl:  document.getElementById('org-f-imagem').value,
+        lider:      document.getElementById('org-f-lider').value,
+        sede:       document.getElementById('org-f-sede').value,
+        descricao:  document.getElementById('org-f-descricao').value,
+        notasAdmin: document.getElementById('org-f-notas').value,
+        visivel:    document.getElementById('org-f-visivel').checked
+    });
+    const overlay = document.getElementById('org-modal-overlay');
+    if (overlay) overlay.style.display = 'none';
+}
+
+function toggleOrgVisivel(id) {
+    const orgs = getOrganizacoes();
+    const o = orgs.find(x => x.id === id);
+    if (!o) return;
+    o.visivel = !o.visivel;
+    window.dbCache.organizacoes = orgs;
+    dbSaveOneItem('organizacoes', o.id, o);
+    renderPage('organizacoes');
+}
