@@ -1911,11 +1911,24 @@ function getApprovals() {
     return window.dbCache.approvals || [];
 }
 
-// Salva fila de aprovacoes (cada aprovacao individualmente)
+// Salva fila de aprovações (sincroniza dbCache e Firestore)
 function saveApprovals(apps) {
+    const oldApps = window.dbCache.approvals || [];
     window.dbCache.approvals = apps;
-    apps.forEach((app, i) => {
-        const id = app.id || app.charId || `approval_${i}`;
+
+    // Remove do Firestore qualquer aprovação que não esteja mais na lista
+    oldApps.forEach(oldApp => {
+        const oldId = oldApp.id || oldApp.charId || `approval_${oldApp.username}_${oldApp.slot}`;
+        const exists = apps.some(a => (a.id || a.charId || `approval_${a.username}_${a.slot}`) === oldId);
+        if (!exists) {
+            dbRemoveItem('approvals', oldId);
+        }
+    });
+
+    // Salva/atualiza as aprovações ativas
+    apps.forEach((app) => {
+        const id = app.id || app.charId || `approval_${app.username}_${app.slot}`;
+        app.id = id;
         dbSaveOneItem('approvals', id, app);
     });
 }
@@ -2696,39 +2709,29 @@ function submitForApproval() {
         return; // Bloqueia totalmente o envio
     }
 
-    // ══ VERIFICAÇÃO DE BALANCEAMENTO POR NÍVEL (DESATIVADA TEMPORARIAMENTE) ══
-    /*
-    const nivel = parseInt(charData.nivelPoder) || 1;
-    const balanceResult = analyzePowerBalance(
-        charData.nomePoder || '',
-        charData.categoriaPoder || 'Meta-Poder',
-        charData.tipoPoder || 'Emissão',
-        charData.descPoder || '',
-        nivel
-    );
-    if (balanceResult.status === 'overpowered') {
-        const confirmar = confirm(
-            `⚠️ ALERTA DE BALANCEAMENTO\n\n` +
-            `${balanceResult.veredicto}\n\n` +
-            `${balanceResult.analiseDetalhada}\n\n` +
-            `Recarga sugerida: ${balanceResult.cooldownSugerido}\n` +
-            `Custo sugerido: ${balanceResult.custoSugerido}\n\n` +
-            `A ficha será enviada com status "Pendente" mas os Mestres farão nerf antes da aprovação.\n\nDeseja enviar mesmo assim?`
-        );
-        if (!confirmar) return;
-        charData.balanceAlert = balanceResult.veredicto;
-    }
-    */
-
+    // Se a conta for Mestre Supremo / Admin, aprova diretamente ou envia para a fila
     charData.status = 'pendente';
     allChars[session.username][`char${activeCharSlot}`] = charData;
     saveCharacters(allChars);
 
     const approvals = getApprovals();
-    approvals.push({ username: session.username, slot: activeCharSlot, charData });
+    // Evita duplicatas na fila de aprovação
+    const existingIdx = approvals.findIndex(a => a.username === session.username && a.slot === activeCharSlot);
+    const appItem = {
+        id: `approval_${session.username}_${activeCharSlot}`,
+        username: session.username,
+        slot: activeCharSlot,
+        charData
+    };
+
+    if (existingIdx >= 0) {
+        approvals[existingIdx] = appItem;
+    } else {
+        approvals.push(appItem);
+    }
     saveApprovals(approvals);
 
-    alert('Ficha enviada para a Central de Aprovação dos Mestres Supremos!');
+    alert('Ficha enviada para a Central de Aprovação com sucesso!');
     renderPerfil();
 }
 
@@ -3841,7 +3844,16 @@ function renderMissoesPage() {
                         </select>
                     </div>
                 </div>
-                <div><label style="color:#aaa;font-size:0.8rem;">URL da Imagem / Banner</label><input id="missao-f-imagem" type="url" placeholder="https://..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                <div>
+                    <label style="color:#aaa;font-size:0.8rem;">Imagem / Banner da Missão</label>
+                    <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+                        <input id="missao-f-imagem" type="text" placeholder="URL da imagem (https://...) ou escolha um arquivo local" style="flex:1;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;">
+                        <label style="background:rgba(255,0,60,0.15);border:1px solid var(--neon-red);color:#fff;padding:0.5rem 0.8rem;border-radius:3px;cursor:pointer;font-size:0.8rem;white-space:nowrap;">
+                            📁 Carregar Foto
+                            <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event, 'missao-f-imagem')">
+                        </label>
+                    </div>
+                </div>
                 <div><label style="color:#aaa;font-size:0.8rem;">📖 Briefing / Detalhes Públicos do Plot</label><textarea id="missao-f-briefing" rows="5" placeholder="Informações públicas da missão para os jogadores..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;resize:vertical;box-sizing:border-box;"></textarea></div>
                 <div><label style="color:#aaa;font-size:0.8rem;">🏆 Recompensa</label><input id="missao-f-recompensa" type="text" placeholder="Ex: 500 EXP, 200 GP, 50 PR" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
                 <div style="background:rgba(255,0,60,0.05);border:1px dashed var(--support-crimson);border-radius:5px;padding:1rem;">
@@ -4059,7 +4071,16 @@ function renderOrganizacoesPage() {
                     </div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
-                    <div><label style="color:#aaa;font-size:0.8rem;">URL do Logo / Imagem</label><input id="org-f-imagem" type="url" placeholder="https://..." style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
+                    <div>
+                        <label style="color:#aaa;font-size:0.8rem;">Logo / Imagem da Organização</label>
+                        <div style="display:flex;gap:6px;align-items:center;margin-top:4px;">
+                            <input id="org-f-imagem" type="text" placeholder="URL ou Arquivo Local" style="flex:1;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.6rem;border-radius:3px;box-sizing:border-box;">
+                            <label style="background:rgba(255,0,60,0.15);border:1px solid var(--neon-red);color:#fff;padding:0.5rem 0.6rem;border-radius:3px;cursor:pointer;font-size:0.75rem;white-space:nowrap;">
+                                📁 Foto
+                                <input type="file" accept="image/*" style="display:none;" onchange="handleImageUpload(event, 'org-f-imagem')">
+                            </label>
+                        </div>
+                    </div>
                     <div><label style="color:#aaa;font-size:0.8rem;">Líder / Figuras de Destaque</label><input id="org-f-lider" type="text" placeholder="Ex: Dr. Marcus Vane" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
                 </div>
                 <div><label style="color:#aaa;font-size:0.8rem;">Sede / Base de Operações</label><input id="org-f-sede" type="text" placeholder="Ex: Delly, Torre Central" style="width:100%;margin-top:4px;background:#000;border:1px solid #333;color:#fff;padding:0.5rem 0.8rem;border-radius:3px;box-sizing:border-box;"></div>
@@ -4140,4 +4161,20 @@ function toggleOrgVisivel(id) {
     window.dbCache.organizacoes = orgs;
     dbSaveOneItem('organizacoes', o.id, o);
     renderPage('organizacoes');
+}
+
+// Handler genérico para upload de imagens locais (converte para Data URI / Base64)
+function handleImageUpload(e, targetInputId) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 3 * 1024 * 1024) {
+        alert('A imagem escolhida é muito grande. Escolha uma imagem de até 3MB.');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        const input = document.getElementById(targetInputId);
+        if (input) input.value = evt.target.result;
+    };
+    reader.readAsDataURL(file);
 }
