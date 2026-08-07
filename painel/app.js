@@ -733,13 +733,47 @@ const pages = {
                     </div>
                 </div>
 
-                <!-- ════ REGISTRO DE META-HUMANOS ════ -->
+                <!-- ════ REGISTRO DE META-HUMANOS E PODERES REGISTRADOS ════ -->
                 <div>
-                    <h2 class="neon-text" style="font-size: 1.4rem; margin-bottom: 1rem;">&#x1F4CB; REGISTRO DE META-HUMANOS</h2>
-                    <div style="padding: 1.5rem; background: #000; border: 1px solid var(--support-crimson); border-radius: 4px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; text-align: center;">
-                        <span style="font-size: 2rem; display: block; margin-bottom: 0.8rem;">&#x1F5C2;</span>
-                        <p>Nenhum registro disponível ainda. Os Mestres podem adicionar Meta-Humanos conhecidos e suas habilidades aqui.</p>
-                    </div>
+                    <h2 class="neon-text" style="font-size: 1.4rem; margin-bottom: 1rem;">📋 REGISTRO DE META-HUMANOS E PODERES EM USO</h2>
+                    ${(() => {
+                        const allChars = getCharacters();
+                        const approvedList = [];
+                        for (const u in allChars) {
+                            for (const slotKey in allChars[u]) {
+                                const c = allChars[u][slotKey];
+                                if (c && c.status === 'aprovado' && c.nome) {
+                                    approvedList.push({ ...c, owner: u });
+                                }
+                            }
+                        }
+                        if (approvedList.length === 0) {
+                            return `
+                            <div style="padding: 1.5rem; background: #000; border: 1px solid var(--support-crimson); border-radius: 4px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; text-align: center;">
+                                <span style="font-size: 2rem; display: block; margin-bottom: 0.8rem;">🗂️</span>
+                                <p>Nenhum personagem com ficha aprovada registrado no momento.</p>
+                            </div>`;
+                        }
+                        return `
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                            ${approvedList.map(c => `
+                                <div style="background:#0a0a0a; border:1px solid var(--support-crimson); border-left:4px solid var(--neon-red); border-radius:6px; padding:1rem;">
+                                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                                        <div>
+                                            <strong style="color:#fff; font-size:1.05rem; display:block;">${c.nome} ${c.codinome ? `(${c.codinome})` : ''}</strong>
+                                            <span style="color:var(--neon-red); font-size:0.8rem;">${c.classe || 'Meta-Humano'} — Ranque ${c.ranque || 'Bronze'}</span>
+                                        </div>
+                                        <span class="supreme-tag" style="font-size:0.65rem;">${c.owner}</span>
+                                    </div>
+                                    <div style="background:#000; border:1px solid #1a0000; border-radius:4px; padding:0.6rem 0.8rem; margin-top:8px;">
+                                        <strong style="color:#ffd700; font-size:0.8rem; display:block;">⚡ PODER REGISTRADO: ${c.nomePoder || 'Não Especificado'}</strong>
+                                        <span style="color:#888; font-size:0.75rem;">Categoria: ${c.categoriaPoder || 'Meta-Poder'} ${c.tipoPoder ? `[${c.tipoPoder}]` : ''}</span>
+                                        ${c.descPoder ? `<p style="color:#aaa; font-size:0.82rem; margin:6px 0 0; line-height:1.5;">${c.descPoder}</p>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>`;
+                    })()}
                 </div>
             </div>
         `
@@ -2363,7 +2397,7 @@ function renderApprovalsSection(container) {
                                     ${isSupreme() ? `
                                     <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                                         <button class="res-btn" style="background:#006600;color:#fff;" onclick="approveFicha(${realIndex})">✅ APROVAR FICHA</button>
-                                        <button class="res-btn" style="background:#aa7700;color:#fff;" onclick="nerfFicha(${realIndex})">⚠️ SOLICITAR EDIÇÃO</button>
+                                        <button class="res-btn" style="background:#aa7700;color:#fff;" onclick="openBalanceModal(${realIndex})">⚖️ BALANCEAR / EDITAR</button>
                                         <button class="res-btn remove-btn" onclick="rejectFicha(${realIndex})">❌ RECUSAR</button>
                                     </div>` : `
                                     <span style="color:#777;font-size:0.85rem;">⏳ Aguardando avaliação dos Mestres Supremos...</span>`}
@@ -2732,26 +2766,148 @@ function rejectFicha(index) {
     renderPerfilSection();
 }
 
-function nerfFicha(index) {
-    const feedback = prompt('Digite as observações de alteração/nerf para o jogador:');
-    if (!feedback) return;
-
+function openBalanceModal(index) {
     const approvals = getApprovals();
     const app = approvals[index];
-    if (!app) return;
+    if (!app || !app.charData) return alert('Ficha não encontrada.');
+    const c = app.charData;
 
-    const allChars = getCharacters();
-    if (allChars[app.username] && allChars[app.username][`char${app.slot}`]) {
-        allChars[app.username][`char${app.slot}`].status = 'revisao';
-        allChars[app.username][`char${app.slot}`].feedback = feedback;
-        saveCharacters(allChars);
+    let modal = document.getElementById('balance-modal-overlay');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'balance-modal-overlay';
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:1rem;';
+        document.body.appendChild(modal);
     }
 
+    modal.innerHTML = `
+        <div style="background:#0a0a0a;border:2px solid var(--neon-red);border-radius:8px;width:100%;max-width:700px;padding:1.8rem;max-height:92vh;overflow-y:auto;box-shadow:0 0 40px rgba(255,0,60,0.2);" onclick="event.stopPropagation()">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;border-bottom:1px solid var(--support-crimson);padding-bottom:8px;">
+                <h3 style="color:var(--neon-red);font-family:'Orbitron',monospace;font-size:1.1rem;margin:0;letter-spacing:1px;">⚖️ BALANCEAR / EDITAR FICHA (${app.username})</h3>
+                <button onclick="closeBalanceModal()" style="background:none;border:none;color:#aaa;font-size:1.4rem;cursor:pointer;">✕</button>
+            </div>
+            
+            <input type="hidden" id="bal-index" value="${index}">
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;">
+                    <div><label style="color:#aaa;font-size:0.78rem;">Nome *</label><input id="bal-nome" type="text" value="${c.nome||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem;border-radius:3px;box-sizing:border-box;"></div>
+                    <div><label style="color:#aaa;font-size:0.78rem;">Codinome</label><input id="bal-codinome" type="text" value="${c.codinome||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem;border-radius:3px;box-sizing:border-box;"></div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;">
+                    <div><label style="color:#aaa;font-size:0.78rem;">Classe</label>
+                        <select id="bal-classe" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem;border-radius:3px;">
+                            ${['Herói','Vilão','Anti-Herói','Vigilante','Civil'].map(cl => `<option value="${cl}" ${(c.classe||'Herói')===cl?'selected':''}>${cl}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div><label style="color:#aaa;font-size:0.78rem;">Ranque</label>
+                        <input id="bal-ranque" type="text" value="${c.ranque||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem;border-radius:3px;box-sizing:border-box;">
+                    </div>
+                    <div><label style="color:#aaa;font-size:0.78rem;">Idade</label>
+                        <input id="bal-idade" type="text" value="${c.idade||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.45rem;border-radius:3px;box-sizing:border-box;">
+                    </div>
+                </div>
+
+                <div style="background:#050505;border:1px solid var(--support-crimson);border-radius:5px;padding:0.9rem;">
+                    <strong style="color:var(--neon-red);font-size:0.8rem;display:block;margin-bottom:8px;">⭐ PODER E ESPECIALIDADE</strong>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:8px;">
+                        <div><label style="color:#aaa;font-size:0.75rem;">Nome do Poder</label><input id="bal-nomePoder" type="text" value="${c.nomePoder||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;box-sizing:border-box;"></div>
+                        <div><label style="color:#aaa;font-size:0.75rem;">Tipo do Poder</label><input id="bal-tipoPoder" type="text" value="${c.tipoPoder||''}" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;box-sizing:border-box;"></div>
+                    </div>
+                    <div><label style="color:#aaa;font-size:0.75rem;">Descrição do Poder</label><textarea id="bal-descPoder" rows="3" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;resize:vertical;box-sizing:border-box;">${c.descPoder||''}</textarea></div>
+                </div>
+
+                <div style="background:#050505;border:1px solid #1a0000;border-radius:5px;padding:0.9rem;">
+                    <strong style="color:var(--neon-red);font-size:0.8rem;display:block;margin-bottom:8px;">📊 ATRIBUTOS (Nv. 00 ao 07)</strong>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;">
+                        <div><label style="color:#aaa;font-size:0.72rem;">Força (00-07)</label>
+                            <select id="bal-forca" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
+                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.forca||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div><label style="color:#aaa;font-size:0.72rem;">Resistência (00-07)</label>
+                            <select id="bal-resistencia" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
+                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.resistencia||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div><label style="color:#aaa;font-size:0.72rem;">Velocidade (00-07)</label>
+                            <select id="bal-velocidade" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
+                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.velocidade||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div><label style="color:#aaa;font-size:0.72rem;">Agilidade (00-07)</label>
+                            <select id="bal-agilidade" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
+                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.agilidade||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div style="grid-column:span 2;"><label style="color:#aaa;font-size:0.72rem;">Poder/Especialidade (00-07)</label>
+                            <select id="bal-poderLevel" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;">
+                                ${[0,1,2,3,4,5,6,7].map(n => `<option value="${n}" ${(c.poderLevel||0)==n?'selected':''}>${String(n).padStart(2,'0')}</option>`).join('')}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div><label style="color:#aaa;font-size:0.78rem;">📖 História do Personagem</label><textarea id="bal-historia" rows="4" style="width:100%;background:#000;border:1px solid #333;color:#fff;padding:0.4rem;border-radius:3px;resize:vertical;box-sizing:border-box;">${c.historia||''}</textarea></div>
+            </div>
+
+            <div style="display:flex;gap:0.8rem;margin-top:1.5rem;justify-content:flex-end;border-top:1px solid #1a0000;padding-top:1rem;">
+                <button onclick="closeBalanceModal()" style="background:none;border:1px solid #333;color:#aaa;padding:0.5rem 1.2rem;border-radius:3px;cursor:pointer;">Cancelar</button>
+                <button onclick="saveAndApproveBalance()" style="background:#006600;border:none;color:#fff;padding:0.5rem 1.5rem;border-radius:3px;cursor:pointer;font-weight:bold;font-family:'Orbitron',monospace;">✅ SALVAR & APROVAR FICHA</button>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'flex';
+}
+
+function closeBalanceModal() {
+    const modal = document.getElementById('balance-modal-overlay');
+    if (modal) modal.style.display = 'none';
+}
+
+function saveAndApproveBalance() {
+    const index = parseInt(document.getElementById('bal-index').value);
+    const approvals = getApprovals();
+    const app = approvals[index];
+    if (!app) return alert('Solicitação não encontrada.');
+
+    const allChars = getCharacters();
+    if (!allChars[app.username] || !allChars[app.username][`char${app.slot}`]) {
+        return alert('Ficha do jogador não encontrada.');
+    }
+
+    const targetChar = allChars[app.username][`char${app.slot}`];
+
+    // Atualiza com os valores editados pelo Mestre no balanceamento
+    targetChar.nome        = document.getElementById('bal-nome').value.trim() || targetChar.nome;
+    targetChar.codinome    = document.getElementById('bal-codinome').value.trim();
+    targetChar.classe      = document.getElementById('bal-classe').value;
+    targetChar.ranque      = document.getElementById('bal-ranque').value.trim() || targetChar.ranque;
+    targetChar.idade       = document.getElementById('bal-idade').value.trim();
+    targetChar.nomePoder   = document.getElementById('bal-nomePoder').value.trim();
+    targetChar.tipoPoder   = document.getElementById('bal-tipoPoder').value.trim();
+    targetChar.descPoder   = document.getElementById('bal-descPoder').value.trim();
+    targetChar.forca       = parseInt(document.getElementById('bal-forca').value) || 0;
+    targetChar.resistencia = parseInt(document.getElementById('bal-resistencia').value) || 0;
+    targetChar.velocidade  = parseInt(document.getElementById('bal-velocidade').value) || 0;
+    targetChar.agilidade   = parseInt(document.getElementById('bal-agilidade').value) || 0;
+    targetChar.poderLevel  = parseInt(document.getElementById('bal-poderLevel').value) || 0;
+    targetChar.historia    = document.getElementById('bal-historia').value.trim();
+    targetChar.status      = 'aprovado';
+
+    // Salva ficha atualizada do personagem
+    allChars[app.username][`char${app.slot}`] = targetChar;
+    saveCharacters(allChars);
+
+    // Remove da fila de aprovações pendentes
     approvals.splice(index, 1);
     saveApprovals(approvals);
-    alert('Ficha enviada de volta para revisão!');
+
+    closeBalanceModal();
+    alert(`Ficha de "${targetChar.nome}" balanceada e APROVADA com sucesso!`);
     renderPerfilSection();
 }
+
 
 // Aciona a Matriz de Balanceamento Local de Poderes
 function runPowerBalancer() {
